@@ -1,0 +1,53 @@
+{
+  "test_cases": [
+    {
+      "id": "POST-tppAccountRequest",
+      "name": "POST /tppAccountRequest",
+      "requests": [
+        {
+          "id": "POST-tpp",
+          "description": "POST /tppAccountRequest",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppAccountRequest",
+          "path": "/tppAccountRequest",
+          "method": "post",
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfsp1",
+            "Accept": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
+            "FSPIOP-Destination": "dfsp2",
+            "FSPIOP-URI": "/tppAccountRequest"
+          },
+          "body": {
+            "accountRequestId": "b51ec534-ee48-4575-b6a9-ead2955b8069",
+            "partyItentifier": "16135551212",
+            "authChannels": [
+              "WEB"
+            ],
+            "callbackUri": "http://localhost:3000/callback"
+          }
+        }
+      ],
+      "fileInfo": {
+        "path": "tests/tpp-api-svc/tests.json"
+      },
+      "meta": {
+        "info": "POST /tppAccountRequest"
+      }
+    }
+  ]
+}
