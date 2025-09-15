@@ -69,3 +69,5 @@ typings/
 # VSCode directory
 .vscode
 node_modules
+
+.DS_Store
