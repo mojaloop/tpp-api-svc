@@ -1,0 +1,158 @@
+{
+  "name": "tpp-api-svc",
+  "description": "An asynchronous pass through third party request API for PISP use-cases.",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "author": "Mojaloop",
+  "contributors": [
+    "Shashikant Hirugade <shashi.mojaloop@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mojaloop/tpp-api-svc.git"
+  },
+  "bugs": "http://github.com/mojaloop/tpp-api-svc/issues",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
+  "engines": {
+    "node": ">=22.x"
+  },
+  "pre-commit": [
+    "dep:check",
+    "lint",
+    "test:coverage-check"
+  ],
+  "main": "./server",
+  "scripts": {
+    "start": "node src/index.js api",
+    "test": "npm run test:unit",
+    "test:unit": "jest --testMatch '**/test/unit/**/*.test.js'",
+    "test:unit1": "jest --testMatch '**/test/unit/**/handlers/tppAccountRequest.test.js'",
+    "test:xunit": "npm run test:unit",
+    "test:junit": "JEST_JUNIT_OUTPUT_DIR='./test/results' JEST_JUNIT_OUTPUT_NAME='junit.xml' jest --reporters=default --reporters=jest-junit --testMatch '**/test/unit/**/*.test.js'",
+    "test:coverage": "jest --coverage --coverageThreshold='{}' --testMatch '**/test/unit/**/*.test.js'",
+    "test:coverage-check": "jest --coverage --testMatch '**/test/unit/**/*.test.js'",
+    "test:functional": "echo 'No functional tests defined'",
+    "test:integration": "echo 'No integration tests defined'",
+    "lint": "npm run standard",
+    "lint:fix": "npm run standard:fix",
+    "generate-docs": "npx jsdoc -c jsdoc.json",
+    "standard": "npx standard",
+    "standard:fix": "npx standard --fix",
+    "build": "docker build -t tpp-api-svc:local -f ./Dockerfile ../",
+    "run": "docker run -p 3003:3003 --rm --link db:mysql tpp-api-svc:local",
+    "package-lock": "docker run --rm -it tpp-api-svc:local cat package-lock.json > package-lock.json",
+    "docker:up": "docker-compose -f docker-compose.yml -f docker-compose.base.yml up",
+    "docker:stop": "docker-compose -f docker-compose.yml -f docker-compose.base.yml stop",
+    "audit:fix": "npm audit fix",
+    "audit:check": "npx audit-ci --config ./audit-ci.jsonc",
+    "license:list": "license-checker . --excludePackages `cat .licenseignore | grep '^[^#;]' | awk 'BEGIN { ORS=\"\" } { print p$0\";\"; } END { print \n }'` --production --csv",
+    "license:check": "npm run license:list -- --failOn `cat .licensebanned | grep '^[^#;]' | awk 'BEGIN { ORS=\"\" } { print p$0\";\"; } END { print \n }'`",
+    "dep:check": "npx ncu -e 2",
+    "dep:update": "npx ncu -u",
+    "release": "standard-version --releaseCommitMessageFormat 'chore(release): {{currentTag}} [skip ci]'",
+    "snapshot": "standard-version --no-verify --skip.changelog --prerelease snapshot --releaseCommitMessageFormat 'chore(snapshot): {{currentTag}}'"
+  },
+  "dependencies": {
+    "@hapi/boom": "10.0.1",
+    "@hapi/good": "9.0.1",
+    "@hapi/hapi": "21.4.3",
+    "@hapi/inert": "7.1.0",
+    "@hapi/vision": "7.0.3",
+    "@mojaloop/central-services-error-handling": "13.1.1",
+    "@mojaloop/central-services-health": "15.1.0",
+    "@mojaloop/central-services-logger": "11.9.3",
+    "@mojaloop/central-services-metrics": "12.7.1",
+    "@mojaloop/central-services-shared": "18.33.0",
+    "@mojaloop/event-sdk": "14.7.0",
+    "ajv": "8.17.1",
+    "ajv-keywords": "5.1.0",
+    "blipp": "4.0.2",
+    "commander": "14.0.1",
+    "docdash": "2.0.2",
+    "hapi-swagger": "17.3.2",
+    "joi": "18.0.1",
+    "mustache": "4.2.0",
+    "parse-strings-in-object": "2.0.0",
+    "rc": "1.2.8"
+  },
+  "overrides": {
+    "form-data": "4.0.4",
+    "on-headers": "1.1.0",
+    "hapi-swagger": {
+      "joi": "18.0.1"
+    },
+    "json-schema-faker@0.5.9": {
+      "json-schema-ref-parser": "npm:@apidevtools/json-schema-ref-parser@latest"
+    },
+    "ansi-regex": "5.0.1",
+    "cross-spawn": "7.0.6",
+    "jsonpath-plus": "10.3.0",
+    "jsonpointer": "5.0.0",
+    "jsonwebtoken": "9.0.0",
+    "postcss": {
+      "nanoid": "^3.3.8"
+    },
+    "shins": {
+      "ajv": "6.12.3",
+      "ejs": "3.1.10",
+      "path-to-regexp": "0.1.12",
+      "sanitize-html": "2.12.1",
+      "markdown-it": "12.3.2"
+    },
+    "undici": "6.21.2",
+    "widdershins": {
+      "swagger2openapi": "7.0.8",
+      "markdown-it": "12.3.2"
+    },
+    "yargs-parser": "21.1.1"
+  },
+  "devDependencies": {
+    "@mojaloop/ml-testing-toolkit-shared-lib": "14.2.0",
+    "@types/jest": "30.0.0",
+    "audit-ci": "^7.1.0",
+    "get-port": "5.1.1",
+    "jest": "30.1.3",
+    "jest-junit": "16.0.0",
+    "jsdoc": "4.0.4",
+    "license-checker": "25.0.1",
+    "npm-audit-resolver": "3.0.0-RC.0",
+    "npm-check-updates": "18.1.1",
+    "pre-commit": "1.2.2",
+    "replace": "^1.2.2",
+    "sinon": "21.0.0",
+    "standard": "17.1.2",
+    "standard-version": "^9.5.0"
+  },
+  "nyc": {
+    "temp-directory": "./.nyc_output",
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 90,
+    "statements": 90,
+    "functions": 90,
+    "branches": 90,
+    "all": true,
+    "include": [
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "exclude": [
+      "**/node_modules/**"
+    ]
+  },
+  "standard-version": {
+    "scripts": {
+      "postchangelog": "replace '\\[mojaloop/#(\\d+)\\]\\(https://github.com/mojaloop/(.*)/issues/(\\d+)\\)' '[mojaloop/#$1](https://github.com/mojaloop/project/issues/$1)' CHANGELOG.md"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "order": [
+    {
+      "name": "golden_path",
+      "type": "folder",
+      "labels": [
+        "std-gp"
+      ]
+    },
+    {
+      "name": "p2p.json",
+      "type": "file",
+      "labels": [
+        "std"
+      ]
+    },
+    {
+      "name": "tpp-api-svc",
+      "type": "folder"
+    }
+  ]
+}

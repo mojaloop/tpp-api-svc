@@ -1,0 +1,27 @@
+[
+    {
+      "id": "errorInformation.errorCode",
+      "pattern": "600[1-9]"
+    },
+    {
+      "id": "errorInformation.errorDescription",
+      "pattern": "This is a mock error description"
+    },
+    {
+      "id": "accountRequestId",
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    },
+    {
+      "id": "authChannel",
+      "pattern": "WEB|OTP"
+    },
+    {
+        "id": "authUri",
+        "pattern": "https://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,}/auth(/\\w+)*(\\?[a-zA-Z0-9\\-\\.=]+)?(#\\w+)?"
+    },
+    {
+        "id": "callbackUri",
+        "pattern": "https://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,}/callback(/\\w+)*(\\?[a-zA-Z0-9\\-\\.=]+)?(#\\w+)?"
+    }
+    
+]
