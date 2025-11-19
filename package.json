@@ -84,6 +84,7 @@
   "overrides": {
     "form-data": "4.0.4",
     "on-headers": "1.1.0",
+    "glob": "11.1.0",
     "hapi-swagger": {
       "joi": "18.0.2"
     },
