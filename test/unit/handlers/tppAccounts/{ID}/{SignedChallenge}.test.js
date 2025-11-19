@@ -40,21 +40,21 @@ jest.mock('@mojaloop/central-services-logger', () => {
 const Sinon = require('sinon')
 const Hapi = require('@hapi/hapi')
 
-const Mockgen = require('../../../util/mockgen.js')
-const Helper = require('../../../util/helper.js')
-const Handler = require('../../../../src/domain/tppAccountRequest')
-const Config = require('../../../../src/lib/config.js')
+const Mockgen = require('../../../../util/mockgen.js')
+const Helper = require('../../../../util/helper.js')
+const Handler = require('../../../../../src/domain/tppAccounts.js')
+const Config = require('../../../../../src/lib/config.js')
 
 let sandbox
 const server = new Hapi.Server()
 
 /**
- * Tests for /tppAccountRequest/{ID}
- */
-describe('/tppAccountRequest/{ID}', () => {
+  * Tests for /TppAccounts/{ID}
+  */
+describe('/tppAccounts/{ID}/{SignedChallenge}', () => {
   // URI
-  const resource = 'tppAccountRequest'
-  const path = `/${resource}/{ID}`
+  const resource = 'tppAccounts'
+  const path = `/${resource}/{ID}/{SignedChallenge}`
 
   beforeAll(async () => {
     sandbox = Sinon.createSandbox()
@@ -66,7 +66,7 @@ describe('/tppAccountRequest/{ID}', () => {
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountRequest = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccounts = jest.fn().mockResolvedValue()
   })
 
   afterEach(() => {
@@ -144,61 +144,15 @@ describe('/tppAccountRequest/{ID}', () => {
         headers
       }
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccounts.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccounts).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccounts.mock.results[0].value).rejects.toThrow(err)
       expect(response.statusCode).toBe(202)
-    })
-  })
-
-  describe('PUT', () => {
-    // HTTP Method
-    const method = 'put'
-
-    it('returns a 200 response code', async () => {
-      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
-
-      // Arrange
-      const options = {
-        method,
-        url: path,
-        headers: request.headers,
-        payload: request.body
-      }
-
-      // Act
-      const response = await server.inject(options)
-
-      // Assert
-      expect(response.statusCode).toBe(200)
-    })
-
-    it('handles when error is thrown', async () => {
-      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
-
-      // Arrange
-      const options = {
-        method,
-        url: path,
-        headers: request.headers,
-        payload: request.body
-      }
-
-      const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
-
-      // Act
-      const response = await server.inject(options)
-
-      // Assert
-      expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
     })
   })
 })

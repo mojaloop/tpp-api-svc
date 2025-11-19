@@ -32,6 +32,9 @@
 const OpenapiBackend = require('@mojaloop/central-services-shared').Util.OpenapiBackend
 const tppAccountRequest = require('./tppAccountRequest')
 const tppAccountRequestId = require('./tppAccountRequest/{ID}')
+const tppAccountsIdGet = require('./tppAccounts/{ID}/{SignedChallenge}')
+const tppAccountsId = require('./tppAccounts/{ID}')
+const tppAccountsErrorByID = require('./tppAccounts/{ID}/error')
 const tppAccountRequestErrorByID = require('./tppAccountRequest/{ID}/error')
 const health = require('./health')
 
@@ -41,6 +44,9 @@ module.exports = {
   GetAccountRequest: tppAccountRequestId.get,
   UpdateAccountRequest: tppAccountRequestId.put,
   AuthorisingAccountRequest: tppAccountRequest.post,
+  GetAccountsByUserId: tppAccountsIdGet.get,
+  UpdateAccountsByUserId: tppAccountsId.put,
+  UpdateAccountsByUserIdError: tppAccountsErrorByID.put,
   validationFail: OpenapiBackend.validationFail,
   notFound: OpenapiBackend.notFound,
   methodNotAllowed: OpenapiBackend.methodNotAllowed

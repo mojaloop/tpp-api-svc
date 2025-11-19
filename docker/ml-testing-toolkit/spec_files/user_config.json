@@ -33,6 +33,11 @@
         "method": "put",
         "path": "/tppAccountRequest",
         "endpoint": "http://tpp-api-svc:4003"
+      },
+      {
+        "method": "put",
+        "path": "/tppAccounts",
+        "endpoint": "http://tpp-api-svc:4003"
       }
     ]
   },

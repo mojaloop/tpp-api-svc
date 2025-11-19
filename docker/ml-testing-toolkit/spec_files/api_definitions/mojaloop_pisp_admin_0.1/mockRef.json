@@ -13,15 +13,27 @@
     },
     {
       "id": "authChannel",
-      "pattern": "WEB|OTP"
+      "pattern": "OTP"
+    },
+    {
+        "id": "authToken",
+        "pattern": "[0-9]{6}"
     },
     {
         "id": "authUri",
-        "pattern": "https://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,}/auth(/\\w+)*(\\?[a-zA-Z0-9\\-\\.=]+)?(#\\w+)?"
+        "pattern": "https://auth-server:3000/auth"
     },
     {
         "id": "callbackUri",
-        "pattern": "https://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,}/callback(/\\w+)*(\\?[a-zA-Z0-9\\-\\.=]+)?(#\\w+)?"
+        "pattern": "https://auth-server:3000/callback"
+    },
+    {
+        "id": "accounts.accountNickname",
+        "pattern": "^(?!\\s*$)[\\w .,'-]{1,128}$"
+    },
+    {
+        "id": "accounts.address",
+        "pattern": "^([0-9A-Za-z_~\\-\\.]+[0-9A-Za-z_~\\-])$"
     }
     
 ]

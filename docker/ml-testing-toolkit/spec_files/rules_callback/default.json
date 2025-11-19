@@ -4641,5 +4641,55 @@
     },
     "type": "callback",
     "version": 1
+  },
+  {
+    "ruleId": 259,
+    "priority": 1,
+    "description": "get /tppAccounts/{ID}/{SignedChallenge}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "mojaloop_pisp_admin",
+      "asynchronous": true,
+      "prefix": "/tpp",
+      "additionalApi": true,
+      "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+      "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+      "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+      "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+      "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/tppAccounts/{ID}/{SignedChallenge}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "get"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/tppAccounts/{ID}",
+      "params": {
+        "scripts": {
+          "scriptingEngine": "postman"
+        },
+        "headers": {
+          "Content-Type": "{$request.headers.content-type}",
+          "Date": "{$request.headers.date}",
+          "FSPIOP-Source": "{$request.headers.fspiop-destination}",
+          "FSPIOP-URI": "/tppAccounts/{$request.params.ID}"
+        }
+      },
+      "type": "MOCK_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
   }
 ]

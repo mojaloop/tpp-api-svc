@@ -91,7 +91,8 @@ const registerPlugins = async (server, openAPIBackend) => {
 
     // configure FSPIOP resources
     const resources = [
-      'tppAccountRequest' // TODO: Need define and add proper resources
+      'tppAccountRequest', // TODO: Need define and add proper resources
+      'tppAccounts' // TODO: Need define and add proper resources
     ]
 
     // return FSPIOPHeaderValidation plugin options

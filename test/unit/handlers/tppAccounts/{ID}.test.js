@@ -31,7 +31,7 @@
 
 jest.mock('@mojaloop/central-services-logger', () => {
   return {
-    info: jest.fn(),
+    info: jest.fn(), // suppress info output
     debug: jest.fn(),
     error: jest.fn()
   }
@@ -40,64 +40,47 @@ jest.mock('@mojaloop/central-services-logger', () => {
 const Sinon = require('sinon')
 const Hapi = require('@hapi/hapi')
 
-const Mockgen = require('../../util/mockgen.js')
-const Helper = require('../../util/helper.js')
-const Handler = require('../../../src/domain/tppAccountRequest')
-const Config = require('../../../src/lib/config.js')
+const Mockgen = require('../../../util/mockgen.js')
+const Helper = require('../../../util/helper.js')
+const Handler = require('../../../../src/domain/tppAccounts.js')
+const Config = require('../../../../src/lib/config.js')
 
 let sandbox
 const server = new Hapi.Server()
 
 /**
- * Tests for /tppAccountRequest
+ * Tests for /TppAccounts/{ID}
  */
-describe('/tppAccountRequest', () => {
+describe('/tppAccounts/{ID}', () => {
   // URI
-  const resource = 'tppAccountRequest'
-  const path = `/${resource}`
+  const resource = 'tppAccounts'
+  const path = `/${resource}/{ID}`
 
   beforeAll(async () => {
     sandbox = Sinon.createSandbox()
     await Helper.serverSetup(server)
   })
 
-  beforeEach(() => {
-    Handler.forwardTppAccountRequest = jest.fn().mockResolvedValue()
-  })
-
   afterAll(() => {
     server.stop()
+  })
+
+  beforeEach(() => {
+    Handler.forwardTppAccounts = jest.fn().mockResolvedValue()
   })
 
   afterEach(() => {
     sandbox.restore()
   })
 
-  describe('POST', () => {
+  describe('PUT', () => {
     // HTTP Method
-    const method = 'post'
-    // Override request refs because OpenApiRequestGenerator is unable to generate unicode test data
-    const overrideReq = {
-      request: [
-        {
-          id: 'callbackUri',
-          type: 'string',
-          format: 'uri',
-          const: 'http://localhost:3000/callback'
-        },
-        {
-          id: 'partyItentifier',
-          type: 'string',
-          const: '16135551212'
-        }
-      ]
-    }
+    const method = 'put'
 
-    it('returns a 202 response code', async () => {
-      // Generate request
-      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS, overrideReq)
+    it('returns a 200 response code', async () => {
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
 
-      // Setup request opts
+      // Arrange
       const options = {
         method,
         url: path,
@@ -109,14 +92,13 @@ describe('/tppAccountRequest', () => {
       const response = await server.inject(options)
 
       // Assert
-      expect(response.statusCode).toBe(202)
+      expect(response.statusCode).toBe(200)
     })
 
-    it('handles when forwardTppAccountRequest throws error', async () => {
-      // Generate request
-      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS, overrideReq)
+    it('handles when error is thrown', async () => {
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
 
-      // Setup request opts
+      // Arrange
       const options = {
         method,
         url: path,
@@ -125,15 +107,15 @@ describe('/tppAccountRequest', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccounts.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
-      expect(response.statusCode).toBe(202)
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(response.statusCode).toBe(200)
+      expect(Handler.forwardTppAccounts).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccounts.mock.results[0].value).rejects.toThrow(err)
     })
   })
 })
