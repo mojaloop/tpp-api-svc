@@ -200,5 +200,30 @@ describe('/tppAccountRequest/{ID}', () => {
       expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
       expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
     })
+    it('returns an error response and logs when getSpanTags throws', async () => {
+      const LibUtil = require('../../../../src/lib/util') // same path your handler uses
+      // Make getSpanTags throw so the handler's try block fails and goes to the catch
+      const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
+        throw new Error('forced getSpanTags error')
+      })
+
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers,
+        payload: request.body
+      }
+
+      const response = await server.inject(options)
+
+      // The handler re-formats and re-throws as an FSPIOP error; assert non-200 and that we logged the error
+      expect(response.statusCode).not.toBe(200)
+      expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
+
+      // cleanup
+      spy.mockRestore()
+    })
   })
 })
