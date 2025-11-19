@@ -118,7 +118,7 @@ describe('/tppAccounts/{ID}', () => {
       expect(Handler.forwardTppAccounts.mock.results[0].value).rejects.toThrow(err)
     })
     it('returns an error response and logs when getSpanTags throws', async () => {
-      const LibUtil = require('../../../../src/lib/util') // same path your handler uses
+      const LibUtil = require('../../../../src/lib/util')
       // Make getSpanTags throw so the handler's try block fails and goes to the catch
       const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
         throw new Error('forced getSpanTags error')
