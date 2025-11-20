@@ -83,7 +83,7 @@ const APIRoutes = (api) => [
     path: '/tppAccountRequest/{ID}/error',
     handler: (req, h) => handleRequest(api, req, h),
     config: {
-      tags: ['api', 'transactioRequests', 'sampled'],
+      tags: ['api', 'tppAccountRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request error by ID'
     }
   },
@@ -94,6 +94,33 @@ const APIRoutes = (api) => [
     config: {
       tags: ['api', 'tppAccountRequest', 'sampled'],
       description: 'GET Thirdparty Account Requests by ID'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/tppAccounts/{ID}/{SignedChallenge}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppAccounts', 'sampled'],
+      description: 'GET Thirdparty Accounts by ID'
+    }
+  },
+  {
+    method: 'PUT',
+    path: '/tppAccounts/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppAccounts', 'sampled'],
+      description: 'PUT Thirdparty Accounts by ID'
+    }
+  },
+  {
+    method: 'PUT',
+    path: '/tppAccounts/{ID}/error',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppAccounts', 'sampled'],
+      description: 'PUT Thirdparty Accounts error by ID'
     }
   }
 ]

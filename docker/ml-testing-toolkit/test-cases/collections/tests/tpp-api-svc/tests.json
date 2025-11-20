@@ -1,11 +1,23 @@
 {
+  "options": {
+    "breakOnError": false,
+    "transformerName": "none",
+    "generateIDType": "ulid"
+  },
+  "name": "tests_tpp-api-svc",
   "test_cases": [
     {
-      "id": "POST-tppAccountRequest",
-      "name": "POST /tppAccountRequest",
+      "id": "1",
+      "name": "TTP Tests",
+      "fileInfo": {
+        "path": "tests/tpp-api-svc/tests.json"
+      },
+      "meta": {
+        "info": "POST /tppAccountRequest"
+      },
       "requests": [
         {
-          "id": "POST-tpp",
+          "id": "1",
           "description": "POST /tppAccountRequest",
           "apiVersion": {
             "minorVersion": 1,
@@ -27,27 +39,76 @@
           "headers": {
             "Content-Type": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
             "Date": "{$function.generic.curDate}",
-            "FSPIOP-Source": "dfsp1",
+            "FSPIOP-Source": "dfspa",
             "Accept": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
-            "FSPIOP-Destination": "dfsp2",
+            "FSPIOP-Destination": "dfspb",
             "FSPIOP-URI": "/tppAccountRequest"
           },
           "body": {
             "accountRequestId": "b51ec534-ee48-4575-b6a9-ead2955b8069",
             "partyItentifier": "16135551212",
             "authChannels": [
-              "WEB"
+              "OTP"
             ],
-            "callbackUri": "http://localhost:3000/callback"
+            "callbackUri": "https://auth-server:3000/callback"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": [
+                  "expect(response.status).to.equal(202)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "2",
+          "description": "GET /tppAccounts/{ID}/{SignedChallenge}",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppAccounts/{ID}/{SignedChallenge}",
+          "path": "/tppAccounts/{$prev.1.request.body.accountRequestId}/{$prev.1.callback.body.authToken}",
+          "method": "get",
+          "params": {
+            "ID": "{$prev.1.request.body.accountRequestId}",
+            "SignedChallenge": "{$prev.1.callback.body.authToken}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppAccounts+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppAccounts+json;version=1.1",
+            "FSPIOP-URI": "/tppAccounts/{$prev.1.request.body.accountRequestId}/{$prev.1.callback.body.authToken}",
+            "FSPIOP-Destination": "dfspb"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": [
+                  "expect(response.status).to.equal(202)"
+                ]
+              }
+            ]
           }
         }
-      ],
-      "fileInfo": {
-        "path": "tests/tpp-api-svc/tests.json"
-      },
-      "meta": {
-        "info": "POST /tppAccountRequest"
-      }
+      ]
     }
   ]
 }

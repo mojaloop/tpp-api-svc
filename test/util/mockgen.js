@@ -101,7 +101,6 @@ const generateRequestHeaders = async (path, httpMethod, resource, protocolVersio
 
   const headers = await generator.generateRequestHeaders(path, httpMethod, jsfRefs)
   delete headers['Content-Length']
-  console.log(headers)
   return headers
 }
 
@@ -192,8 +191,6 @@ const generateRequest = async (path, httpMethod, resource, protocolVersions, ove
       localOverride.request = [...override.request]
     }
   }
-  console.log(localOverride)
-
   const headers = await generateRequestHeaders(path, httpMethod, resource, protocolVersions, localOverride.headers)
 
   let body

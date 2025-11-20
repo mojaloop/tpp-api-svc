@@ -223,9 +223,10 @@ paths:
           $ref: '#/components/responses/501'
         '503':
           $ref: '#/components/responses/503'
-  /tppAccounts/{ID}:
+  /tppAccounts/{ID}/{SignedChallenge}:
     parameters:
       - $ref: '#/components/parameters/ID'
+      - $ref: '#/components/parameters/SignedChallenge'
       - $ref: '#/components/parameters/Content-Type'
       - $ref: '#/components/parameters/Date'
       - $ref: '#/components/parameters/X-Forwarded-For'
@@ -267,6 +268,18 @@ paths:
           $ref: '#/components/responses/501'
         '503':
           $ref: '#/components/responses/503'
+  /tppAccounts/{ID}:
+    parameters:
+      - $ref: '#/components/parameters/ID'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Date'
+      - $ref: '#/components/parameters/X-Forwarded-For'
+      - $ref: '#/components/parameters/FSPIOP-Source'
+      - $ref: '#/components/parameters/FSPIOP-Destination'
+      - $ref: '#/components/parameters/FSPIOP-Encryption'
+      - $ref: '#/components/parameters/FSPIOP-Signature'
+      - $ref: '#/components/parameters/FSPIOP-URI'
+      - $ref: '#/components/parameters/FSPIOP-HTTP-Method'
     put:
       description: |
         The HTTP request `PUT /tppAccounts/{ID}` is used to return the list of potential accounts available for linking
@@ -283,12 +296,14 @@ paths:
             schema:
               $ref: '#/components/schemas/tppAccountsIDPutResponse'
             example:
-              - accountNickname: dfspa.user.nickname1
-                id: dfspa.username.1234
-                currency: ZAR
-              - accountNickname: dfspa.user.nickname2
-                id: dfspa.username.5678
-                currency: USD
+              
+              accounts:
+                - accountNickname: dfspa.user.nickname1
+                  address: dfspa.username.1234
+                  currency: USD
+                - accountNickname: dfspa.user.nickname2
+                  address: dfspa.username.5678
+                  currency: TZS
       responses:
         '200':
           $ref: '#/components/responses/200'
@@ -3585,6 +3600,13 @@ components:
       schema:
         type: string
       description: The identifier value.
+    SignedChallenge:
+      name: SignedChallenge
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The signed challenge value.
     Type:
       name: Type
       in: path

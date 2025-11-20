@@ -22,11 +22,7 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- * Crosslake
- - Lewis Daly <lewisd@crosslaketech.com>
-
- * ModusBox
- - Steven Oderayi <steven.oderayi@modusbox.com>
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
 
  --------------
  ******/
@@ -45,17 +41,17 @@ const Endpoint = require('@mojaloop/central-services-shared').Util.Endpoints
 const Request = require('@mojaloop/central-services-shared').Util.Request
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 
-const TppAccountRequest = require('../../../../src/domain/tppAccountRequest/tppAccountRequest')
-const TestHelper = require('../../../util/helper')
-const MockSpan = require('../../../util/mockgen').mockSpan
-const Config = require('../../../../src/lib/config')
+const TppAccounts = require('../../../src/domain/tppAccounts')
+const TestHelper = require('../../util/helper')
+const MockSpan = require('../../util/mockgen').mockSpan
+const Config = require('../../../src/lib/config')
 
 let sandbox
 let SpanMock = MockSpan()
 
-describe('tppAccountRequest', () => {
+describe('TppAccounts', () => {
   // URI
-  const resource = 'tppAccountRequest'
+  const resource = 'TppAccounts'
 
   beforeAll(() => {
     sandbox = Sinon.createSandbox()
@@ -66,8 +62,8 @@ describe('tppAccountRequest', () => {
     SpanMock = MockSpan()
   })
 
-  describe('forwardTppAccountRequest', () => {
-    it('forwards a POST request when the payload is undefined', async () => {
+  describe('forwardTppAccounts', () => {
+    it('forwards a GET request when the payload is undefined', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
       sandbox.stub(Request, 'sendRequest').resolves({
@@ -76,16 +72,17 @@ describe('tppAccountRequest', () => {
         statusText: 'Accepted'
       })
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
-        'post',
-        { ID: '12345' },
+        'get',
+        { ID: 'abcd' },
+        { SignedChallenge: '1234' },
         null,
         SpanMock
       ]
 
       // Act
-      const result = await TppAccountRequest.forwardTppAccountRequest(...options)
+      const result = await TppAccounts.forwardTppAccounts(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -94,26 +91,26 @@ describe('tppAccountRequest', () => {
     it('handles when the endpoint could not be found', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves(undefined)
-      sandbox.stub(TppAccountRequest, 'forwardTppAccountRequestError').resolves({})
+      sandbox.stub(TppAccounts, 'forwardTppAccountsError').resolves({})
       sandbox.stub(Request, 'sendRequest').resolves({
         ok: true,
         status: 202,
         statusText: 'Accepted'
       })
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
-        'post',
-        { ID: '12345' },
-        { accountRequestId: '12345' },
+        'get',
+        { ID: 'abcd' },
+        { SignedChallenge: '1234' },
         SpanMock
       ]
 
       // Act
-      const action = async () => TppAccountRequest.forwardTppAccountRequest(...options)
+      const action = async () => TppAccounts.forwardTppAccounts(...options)
 
       // Assert
-      await expect(action()).rejects.toThrow(/No FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE endpoint found for tppAccountRequest/)
+      await expect(action()).rejects.toThrow(/No FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE endpoint found for tppAccounts abcd for dfsp1/)
     })
 
     it('handles when the the request fails', async () => {
@@ -121,16 +118,16 @@ describe('tppAccountRequest', () => {
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
-        'post',
-        { ID: '12345' },
-        { accountRequestId: '12345' },
+        'get',
+        { ID: 'abcd' },
+        { SignedChallenge: '1234' },
         SpanMock
       ]
 
       // Act
-      const action = async () => TppAccountRequest.forwardTppAccountRequest(...options)
+      const action = async () => TppAccounts.forwardTppAccounts(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
@@ -145,7 +142,7 @@ describe('tppAccountRequest', () => {
         statusText: 'Accepted'
       })
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_GET,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'get',
         { },
@@ -154,7 +151,7 @@ describe('tppAccountRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountRequest.forwardTppAccountRequest(...options)
+      const result = await TppAccounts.forwardTppAccounts(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -169,15 +166,15 @@ describe('tppAccountRequest', () => {
         statusText: 'Accepted'
       })
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_GET,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'get',
-        { ID: '1234' },
-        { accountRequestId: '12345' }
+        { ID: 'abcd' },
+        { SignedChallenge: '1234' }
       ]
 
       // Act
-      const result = await TppAccountRequest.forwardTppAccountRequest(...options)
+      const result = await TppAccounts.forwardTppAccounts(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -187,24 +184,24 @@ describe('tppAccountRequest', () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
-      sandbox.stub(TppAccountRequest, 'forwardTppAccountRequestError').resolves(true)
+      sandbox.stub(TppAccounts, 'forwardTppAccountsError').resolves(true)
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
-        'post',
-        { ID: '12345' },
-        { accountRequestId: '12345' }
+        'get',
+        { ID: 'abcd' },
+        { SignedChallenge: '1234' }
       ]
 
       // Act
-      const action = async () => TppAccountRequest.forwardTppAccountRequest(...options)
+      const action = async () => TppAccounts.forwardTppAccounts(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
     })
   })
 
-  describe('forwardTppAccountRequestError', () => {
+  describe('forwardTppAccountsError', () => {
     it('sends the error request ', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
@@ -216,15 +213,15 @@ describe('tppAccountRequest', () => {
       const options = [
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         Enum.Http.Headers.FSPIOP.SOURCE,
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_PUT_ERROR,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR,
         Enum.Http.RestMethods.PUT,
-        '12345',
+        'abcd',
         ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, 'Could not find endpoint'),
         SpanMock
       ]
 
       // Act
-      const result = await TppAccountRequest.forwardTppAccountRequestError(...options)
+      const result = await TppAccounts.forwardTppAccountsError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -241,15 +238,15 @@ describe('tppAccountRequest', () => {
       const options = [
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         Enum.Http.Headers.FSPIOP.SOURCE,
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_PUT_ERROR,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR,
         Enum.Http.RestMethods.PUT,
-        '12345',
+        'abcd',
         undefined,
         SpanMock
       ]
 
       // Act
-      const result = await TppAccountRequest.forwardTppAccountRequestError(...options)
+      const result = await TppAccounts.forwardTppAccountsError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -266,7 +263,7 @@ describe('tppAccountRequest', () => {
       const options = [
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         Enum.Http.Headers.FSPIOP.SOURCE,
-        Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_PUT_ERROR,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR,
         Enum.Http.RestMethods.PUT,
         undefined,
         undefined,
@@ -274,7 +271,7 @@ describe('tppAccountRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountRequest.forwardTppAccountRequestError(...options)
+      const result = await TppAccounts.forwardTppAccountsError(...options)
 
       // Assert
       expect(result).toBe(true)

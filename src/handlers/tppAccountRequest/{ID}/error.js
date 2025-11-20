@@ -30,7 +30,7 @@
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
-const tppRequest = require('../../../domain/tppAccountRequest/tppAccountRequest')
+const tppAccountRequest = require('../../../domain/tppAccountRequest')
 const LibUtil = require('../../../lib/util')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
@@ -61,7 +61,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppRequest.forwardTppAccountRequestError(request.headers, request.headers['fspiop-destination'], Enum.EndPoints.FspEndpointTemplates.TP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, request.params.ID, request.payload, span).catch(err => {
+      tppAccountRequest.forwardTppAccountRequestError(request.headers, request.headers['fspiop-destination'], Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, request.params.ID, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppAccountRequestError takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAccountRequestError: ${LibUtil.getStackOrInspect(err)}`)
       })
