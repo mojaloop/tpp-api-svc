@@ -52,7 +52,61 @@
           }
         }
       }
-    }    
+    },
+    "/tppConsentRequests": {
+      "post": {
+        "fspid": "{$request.headers.fspiop-source}",
+        "successCallback": {
+          "method": "put",
+          "path": "/tppConsentRequests/{ID}",
+          "pathPattern": "/tppConsentRequests/{$request.body.consentRequestId}",
+          "headerOverride": {
+            "FSPIOP-Source": "{$request.headers.fspiop-destination}",
+            "FSPIOP-Destination": "{$request.headers.fspiop-source}",
+            "Content-Type": "{$session.negotiatedContentType}",
+            "Date": "{$request.headers.date}"
+          }
+        },
+        "errorCallback": {
+          "method": "put",
+          "path": "/tppConsentRequests/{ID}/error",
+          "pathPattern": "/tppConsentRequests/{$request.body.consentRequestId}/error",
+          "headerOverride": {
+            "FSPIOP-Source": "{$request.headers.fspiop-destination}",
+            "FSPIOP-Destination": "{$request.headers.fspiop-source}",
+            "Content-Type": "{$session.negotiatedContentType}",
+            "Date": "{$request.headers.date}"
+          }
+        }
+      }
+    },
+    "/tppConsentRequests/{ID}": {
+      "patch": {
+        "fspid": "{$request.headers.fspiop-source}",
+        "successCallback": {
+          "method": "post",
+          "path": "/tppConsents",
+          "pathPattern": "/tppConsents",
+          "headerOverride": {
+            "FSPIOP-Source": "{$request.headers.fspiop-destination}",
+            "FSPIOP-Destination": "{$request.headers.fspiop-source}",
+            "Content-Type": "{$session.negotiatedContentType}",
+            "Date": "{$request.headers.date}"
+          }
+        },
+        "errorCallback": {
+          "method": "put",
+          "path": "/tppConsentRequests/{ID}/error",
+          "pathPattern": "/tppConsentRequests/{$request.params.ID}/error",
+          "headerOverride": {
+            "FSPIOP-Source": "{$request.headers.fspiop-destination}",
+            "FSPIOP-Destination": "{$request.headers.fspiop-source}",
+            "Content-Type": "{$session.negotiatedContentType}",
+            "Date": "{$request.headers.date}"
+          }
+        }
+      }
+    }
 
 }
   

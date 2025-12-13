@@ -167,6 +167,15 @@ const APIRoutes = (api) => [
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PUT Thirdparty Consent Request error by ID'
     }
+  },
+  {
+    method: 'POST',
+    path: '/tppConsents',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppConsents', 'sampled'],
+      description: 'POST Thirdparty Consents'
+    }
   }
 ]
 
