@@ -36,6 +36,9 @@ const tppAccountsIdGet = require('./tppAccounts/{ID}/{SignedChallenge}')
 const tppAccountsId = require('./tppAccounts/{ID}')
 const tppAccountsErrorByID = require('./tppAccounts/{ID}/error')
 const tppAccountRequestErrorByID = require('./tppAccountRequest/{ID}/error')
+const tppConsentRequest = require('./tppConsentRequest')
+const tppConsentRequestId = require('./tppConsentRequest/{ID}')
+const tppConsentRequestErrorByID = require('./tppConsentRequest/{ID}/error')
 const health = require('./health')
 
 module.exports = {
@@ -44,6 +47,11 @@ module.exports = {
   GetAccountRequest: tppAccountRequestId.get,
   UpdateAccountRequest: tppAccountRequestId.put,
   AuthorisingAccountRequest: tppAccountRequest.post,
+  CreateConsentRequest: tppConsentRequest.post,
+  GetConsentRequestsById: tppConsentRequestId.get,
+  UpdateConsentRequest: tppConsentRequestId.put,
+  PatchConsentRequest: tppConsentRequestId.patch,
+  NotifyErrorConsentRequests: tppConsentRequestErrorByID.put,
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,
