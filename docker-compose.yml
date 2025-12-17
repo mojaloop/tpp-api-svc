@@ -43,7 +43,7 @@ services:
       - mojaloop-net
   tpp-api-svc:
     container_name: tpp-api-svc
-    image: mojaloop/tpp-api-svc:local
+    # image: mojaloop/tpp-api-svc:local
     build:
       context: .
     ports:

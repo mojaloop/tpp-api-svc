@@ -33,7 +33,6 @@ const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Enum = require('@mojaloop/central-services-shared').Enum
 const { Endpoints, Request, HeaderValidation } = require('@mojaloop/central-services-shared').Util
 const EventSdk = require('@mojaloop/event-sdk')
-const Mustache = require('mustache')
 const util = require('util')
 
 const Config = require('../lib/config.js')

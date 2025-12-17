@@ -34,7 +34,6 @@ const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
 const tppConsent = require('../domain/tppConsent')
-const LibUtil = require('../lib/util')
 
 /**
  * Operations on /tppConsents
