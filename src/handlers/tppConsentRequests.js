@@ -33,7 +33,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequest(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequest(tppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppConsentRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequest: ${LibUtil.getStackOrInspect(err)}`)
       })

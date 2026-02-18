@@ -33,7 +33,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequest(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequest(tppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppConsentRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
@@ -67,7 +67,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequest(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequest(tppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppConsentRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
@@ -101,7 +101,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequest(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PATCH, request.headers, Enum.Http.RestMethods.PATCH, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequest(tppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_PATCH, request.headers, Enum.Http.RestMethods.PATCH, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppConsentRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
