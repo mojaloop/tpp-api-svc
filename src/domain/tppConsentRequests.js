@@ -28,8 +28,8 @@ const EndpointPaths = {
  *
  * @returns {boolean}
  */
-const forwardTppConsentRequest = async (path, headers, method, params, payload, span = null) => {
-  const childSpan = span ? span.getChild('forwardTppConsentRequest') : undefined
+const forwardTppConsentRequests = async (path, headers, method, params, payload, span = null) => {
+  const childSpan = span ? span.getChild('forwardTppConsentRequests') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
@@ -39,11 +39,11 @@ const forwardTppConsentRequest = async (path, headers, method, params, payload, 
 
   try {
     endpoint = await Endpoints.getEndpoint(Config.SWITCH_ENDPOINT, destination, Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE)
-    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppConsentRequest ${consentRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
+    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppConsentRequests ${consentRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
     if (!endpoint) {
       // we didnt get an endpoint for the payee dfsp!
       // make an error callback to the initiator
-      throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppConsentRequest ${consentRequestId} for ${Enum.Http.Headers.FSPIOP.DESTINATION}`, method.toUpperCase() !== Enum.Http.RestMethods.GET ? payload : undefined, source)
+      throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppConsentRequests ${consentRequestId} for ${Enum.Http.Headers.FSPIOP.DESTINATION}`, method.toUpperCase() !== Enum.Http.RestMethods.GET ? payload : undefined, source)
     }
     const url = Mustache.render(endpoint + path, {
       ID: consentRequestId
@@ -63,7 +63,7 @@ const forwardTppConsentRequest = async (path, headers, method, params, payload, 
   } catch (err) {
     Logger.info(`Error forwarding tpp consent request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppConsentRequestError(headers, source, EndpointPaths.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, consentRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppConsentRequestsError(headers, source, EndpointPaths.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, consentRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -75,23 +75,23 @@ const forwardTppConsentRequest = async (path, headers, method, params, payload, 
 }
 
 /**
- * Forwards tppConsentRequest errors to error endpoint
+ * Forwards tppConsentRequests errors to error endpoint
  *
  * @returns {undefined}
  */
-const forwardTppConsentRequestError = async (headers, to, path, method, consentRequestId, payload, span = null) => {
-  const childSpan = span ? span.getChild('forwardTppConsentRequestError') : undefined
+const forwardTppConsentRequestsError = async (headers, to, path, method, consentRequestId, payload, span = null) => {
+  const childSpan = span ? span.getChild('forwardTppConsentRequestsError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
   try {
     endpoint = await Endpoints.getEndpoint(Config.SWITCH_ENDPOINT, to, Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE)
-    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppConsentRequest ${consentRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
+    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppConsentRequests ${consentRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
 
     if (!endpoint) {
       // we didnt get an endpoint for the payee dfsp!
       // make an error callback to the initiator
-      throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppConsentRequest ${consentRequestId} for ${to}`, payload, source)
+      throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppConsentRequests ${consentRequestId} for ${to}`, payload, source)
     }
     const url = Mustache.render(endpoint + path, {
       ID: consentRequestId
@@ -121,7 +121,7 @@ const forwardTppConsentRequestError = async (headers, to, path, method, consentR
 }
 
 module.exports = {
-  forwardTppConsentRequest,
-  forwardTppConsentRequestError,
+  forwardTppConsentRequests,
+  forwardTppConsentRequestsError,
   EndpointPaths // Export for use in handlers
 }

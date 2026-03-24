@@ -60,7 +60,7 @@ describe('tppConsentRequests', () => {
     SpanMock = MockSpan()
   })
 
-  describe('forwardTppConsentRequest', () => {
+  describe('forwardTppConsentRequests', () => {
     it('forwards a POST request when the payload is undefined', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
@@ -79,7 +79,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequest(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -103,7 +103,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequest(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -127,7 +127,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequest(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -151,7 +151,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequest(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -160,7 +160,7 @@ describe('tppConsentRequests', () => {
     it('handles when the endpoint could not be found', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves(undefined)
-      sandbox.stub(TppConsentRequests, 'forwardTppConsentRequestError').resolves({})
+      sandbox.stub(TppConsentRequests, 'forwardTppConsentRequestsError').resolves({})
       sandbox.stub(Request, 'sendRequest').resolves({
         ok: true,
         status: 202,
@@ -176,7 +176,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const action = async () => TppConsentRequests.forwardTppConsentRequest(...options)
+      const action = async () => TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/No FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE endpoint found for tppConsentRequest/)
@@ -196,7 +196,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const action = async () => TppConsentRequests.forwardTppConsentRequest(...options)
+      const action = async () => TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
@@ -220,7 +220,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequest(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -243,7 +243,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequest(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -253,7 +253,7 @@ describe('tppConsentRequests', () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
-      sandbox.stub(TppConsentRequests, 'forwardTppConsentRequestError').resolves(true)
+      sandbox.stub(TppConsentRequests, 'forwardTppConsentRequestsError').resolves(true)
       const options = [
         TppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
@@ -263,14 +263,14 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const action = async () => TppConsentRequests.forwardTppConsentRequest(...options)
+      const action = async () => TppConsentRequests.forwardTppConsentRequests(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
     })
   })
 
-  describe('forwardTppConsentRequestError', () => {
+  describe('forwardTppConsentRequestsError', () => {
     it('sends the error request', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
@@ -290,7 +290,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequestError(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequestsError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -315,7 +315,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequestError(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequestsError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -340,7 +340,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequestError(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequestsError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -364,7 +364,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const result = await TppConsentRequests.forwardTppConsentRequestError(...options)
+      const result = await TppConsentRequests.forwardTppConsentRequestsError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -389,7 +389,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const action = async () => TppConsentRequests.forwardTppConsentRequestError(...options)
+      const action = async () => TppConsentRequests.forwardTppConsentRequestsError(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/No FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE endpoint found for tppConsentRequest/)
@@ -410,7 +410,7 @@ describe('tppConsentRequests', () => {
       ]
 
       // Act
-      const action = async () => TppConsentRequests.forwardTppConsentRequestError(...options)
+      const action = async () => TppConsentRequests.forwardTppConsentRequestsError(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)

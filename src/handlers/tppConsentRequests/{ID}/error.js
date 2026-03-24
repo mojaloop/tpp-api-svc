@@ -33,9 +33,9 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequest(tppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_PUT_ERROR, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppConsentRequest takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppConsentRequest: ${LibUtil.getStackOrInspect(err)}`)
+      tppConsentRequests.forwardTppConsentRequestsError(tppConsentRequests.EndpointPaths.TPP_CONSENT_REQUEST_PUT_ERROR, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+        // Do nothing with the error - forwardTppConsentRequests takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.OK.CODE)
