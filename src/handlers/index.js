@@ -36,6 +36,9 @@ const tppAccountsIdGet = require('./tppAccounts/{ID}/{SignedChallenge}')
 const tppAccountsId = require('./tppAccounts/{ID}')
 const tppAccountsErrorByID = require('./tppAccounts/{ID}/error')
 const tppAccountRequestErrorByID = require('./tppAccountRequest/{ID}/error')
+const tppConsentRequests = require('./tppConsentRequests')
+const tppConsentRequestsId = require('./tppConsentRequests/{ID}')
+const tppConsentRequestsErrorByID = require('./tppConsentRequests/{ID}/error')
 const health = require('./health')
 
 module.exports = {
@@ -47,6 +50,11 @@ module.exports = {
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,
+  CreateConsentRequest: tppConsentRequests.post,
+  GetConsentRequestsById: tppConsentRequestsId.get,
+  UpdateConsentRequest: tppConsentRequestsId.put,
+  PatchConsentRequest: tppConsentRequestsId.patch,
+  NotifyErrorConsentRequests: tppConsentRequestsErrorByID.put,
   validationFail: OpenapiBackend.validationFail,
   notFound: OpenapiBackend.notFound,
   methodNotAllowed: OpenapiBackend.methodNotAllowed
