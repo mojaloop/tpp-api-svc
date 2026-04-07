@@ -4596,7 +4596,7 @@
   {
     "ruleId": 258,
     "priority": 1,
-    "description": "post /tppAccountRequest",
+    "description": "post /tppAccountsRequest",
     "apiVersion": {
       "minorVersion": 1,
       "majorVersion": 0,
@@ -4615,7 +4615,7 @@
         {
           "fact": "operationPath",
           "operator": "equal",
-          "value": "/tppAccountRequest"
+          "value": "/tppAccountsRequest"
         },
         {
           "fact": "method",
@@ -4626,13 +4626,13 @@
     },
     "event": {
       "method": "put",
-      "path": "/tppAccountRequest/{ID}",
+      "path": "/tppAccountsRequest/{ID}",
       "params": {
         "scripts": {
           "scriptingEngine": "postman"
         },
         "headers": {
-          "Content-Type": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
+          "Content-Type": "application/vnd.interoperability.tppAccountsRequest+json;version=1.1",
           "Date": "{$request.headers.date}",
           "FSPIOP-Source": "{$request.headers.fspiop-destination}"
         }
