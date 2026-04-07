@@ -33,7 +33,7 @@ const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
-const tppAccountRequest = require('../../domain/tppAccountRequest')
+const tppAccountRequest = require('../../domain/tppAccountsRequest')
 const LibUtil = require('../../lib/util')
 
 /**

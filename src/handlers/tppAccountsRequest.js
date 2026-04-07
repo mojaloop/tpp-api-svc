@@ -33,16 +33,16 @@ const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
-const tppAccountRequest = require('../domain/tppAccountRequest')
+const tppAccountsRequest = require('../domain/tppAccountsRequest')
 const LibUtil = require('../lib/util')
 
 /**
- * Operations on /tppAccountRequest
+ * Operations on /tppAccountsRequest
  */
 module.exports = {
   /**
    * summary: AuthorisingAccountRequest
-   * description: The `/tppAccountRequest` resource is used to request consent from a user
+   * description: The `/tppAccountsRequest` resource is used to request consent from a user
    *     for access to their accounts information. This resource must be called before
    *     the /tppAccounts resource can be queried which provides the account information.
    * parameters: body, accept, content-length, content-type, date, x-forwarded-for, fspiop-source, fspiop-destination, fspiop-encryption, fspiop-signature, fspiop-uri, fspiop-http-method
@@ -51,8 +51,8 @@ module.exports = {
    */
   post: async (context, request, h) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_account_requests_post',
-      'Post tpp account request',
+      'tpp_accounts_requests_post',
+      'Post tpp accounts request',
       ['success']
     ).startTimer()
     const span = request.span
@@ -63,7 +63,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountRequest.forwardTppAccountRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
+      tppAccountsRequest.forwardTppAccountRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppAccountRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAccountRequest: ${LibUtil.getStackOrInspect(err)}`)
       })

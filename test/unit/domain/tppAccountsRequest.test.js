@@ -41,7 +41,7 @@ const Endpoint = require('@mojaloop/central-services-shared').Util.Endpoints
 const Request = require('@mojaloop/central-services-shared').Util.Request
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 
-const TppAccountRequest = require('../../../src/domain/tppAccountRequest')
+const TppAccountRequest = require('../../../src/domain/tppAccountsRequest')
 const TestHelper = require('../../util/helper')
 const MockSpan = require('../../util/mockgen').mockSpan
 const Config = require('../../../src/lib/config')
