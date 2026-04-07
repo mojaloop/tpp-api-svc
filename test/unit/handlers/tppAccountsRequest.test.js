@@ -31,7 +31,7 @@
 
 jest.mock('@mojaloop/central-services-logger', () => {
   return {
-    info: jest.fn(), // suppress info output
+    info: jest.fn(),
     debug: jest.fn(),
     error: jest.fn()
   }
@@ -40,27 +40,29 @@ jest.mock('@mojaloop/central-services-logger', () => {
 const Sinon = require('sinon')
 const Hapi = require('@hapi/hapi')
 
-const Mockgen = require('../../../../util/mockgen.js')
-const Helper = require('../../../../util/helper')
-const Handler = require('../../../../../src/domain/tppAccountRequest')
-const Config = require('../../../../../src/lib/config')
+const Mockgen = require('../../util/mockgen.js')
+const Helper = require('../../util/helper.js')
+const Handler = require('../../../src/domain/tppAccountsRequest')
+const Config = require('../../../src/lib/config.js')
 
 let sandbox
 const server = new Hapi.Server()
 
-describe('/tppAccountRequest/{ID}/error', () => {
+/**
+ * Tests for /tppAccountsRequest
+ */
+describe('/tppAccountsRequest', () => {
   // URI
-  const resource = 'tppAccountRequest'
-  const path = `/${resource}/{ID}/error`
+  const resource = 'tppAccountsRequest'
+  const path = `/${resource}`
 
   beforeAll(async () => {
     sandbox = Sinon.createSandbox()
-    // sandbox.stub(Handler, 'forwardTppAccountRequestError').returns(Promise.resolve())
     await Helper.serverSetup(server)
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountRequestError = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccountRequest = jest.fn().mockResolvedValue()
   })
 
   afterAll(() => {
@@ -71,14 +73,31 @@ describe('/tppAccountRequest/{ID}/error', () => {
     sandbox.restore()
   })
 
-  describe('PUT', () => {
+  describe('POST', () => {
     // HTTP Method
-    const method = 'put'
+    const method = 'post'
+    // Override request refs because OpenApiRequestGenerator is unable to generate unicode test data
+    const overrideReq = {
+      request: [
+        {
+          id: 'callbackUri',
+          type: 'string',
+          format: 'uri',
+          const: 'http://localhost:3000/callback'
+        },
+        {
+          id: 'partyItentifier',
+          type: 'string',
+          const: '16135551212'
+        }
+      ]
+    }
 
-    it('handles a PUT', async () => {
-      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+    it('returns a 202 response code', async () => {
+      // Generate request
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS, overrideReq)
 
-      // Arrange
+      // Setup request opts
       const options = {
         method,
         url: path,
@@ -90,13 +109,14 @@ describe('/tppAccountRequest/{ID}/error', () => {
       const response = await server.inject(options)
 
       // Assert
-      expect(response.statusCode).toBe(200)
+      expect(response.statusCode).toBe(202)
     })
 
-    it('handles when error is thrown', async () => {
-      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+    it('handles when forwardTppAccountRequest throws error', async () => {
+      // Generate request
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS, overrideReq)
 
-      // Arrange
+      // Setup request opts
       const options = {
         method,
         url: path,
@@ -105,15 +125,15 @@ describe('/tppAccountRequest/{ID}/error', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequestError.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
-      expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountRequestError).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequestError.mock.results[0].value).rejects.toThrow(err)
+      expect(response.statusCode).toBe(202)
+      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
     })
   })
 })

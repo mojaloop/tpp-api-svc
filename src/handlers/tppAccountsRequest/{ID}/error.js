@@ -30,7 +30,7 @@
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
-const tppAccountRequest = require('../../../domain/tppAccountRequest')
+const tppAccountRequest = require('../../../domain/tppAccountsRequest')
 const LibUtil = require('../../../lib/util')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')

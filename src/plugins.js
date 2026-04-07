@@ -89,10 +89,10 @@ const registerPlugins = async (server, openAPIBackend) => {
       supportedProtocolAcceptVersions.push(version.toString())
     }
 
-    // configure FSPIOP resources
+    // configure FSPIOP resources (must match first path segment, e.g. /tppAccountsRequest/...)
     const resources = [
-      'tppAccountRequest', // TODO: Need define and add proper resources
-      'tppAccounts' // TODO: Need define and add proper resources
+      'tppAccountsRequest',
+      'tppAccounts'
     ]
 
     // return FSPIOPHeaderValidation plugin options
