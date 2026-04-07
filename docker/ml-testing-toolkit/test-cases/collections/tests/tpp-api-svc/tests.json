@@ -13,12 +13,12 @@
         "path": "tests/tpp-api-svc/tests.json"
       },
       "meta": {
-        "info": "POST /tppAccountRequest"
+        "info": "POST /tppAccountsRequest"
       },
       "requests": [
         {
           "id": "1",
-          "description": "POST /tppAccountRequest",
+          "description": "POST /tppAccountsRequest",
           "apiVersion": {
             "minorVersion": 1,
             "majorVersion": 0,
@@ -32,17 +32,17 @@
             "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
             "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
           },
-          "operationPath": "/tppAccountRequest",
-          "path": "/tppAccountRequest",
+          "operationPath": "/tppAccountsRequest",
+          "path": "/tppAccountsRequest",
           "method": "post",
           "url": "http://tpp-api-svc:4003",
           "headers": {
-            "Content-Type": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
+            "Content-Type": "application/vnd.interoperability.tppAccountsRequest+json;version=1.1",
             "Date": "{$function.generic.curDate}",
             "FSPIOP-Source": "dfspa",
-            "Accept": "application/vnd.interoperability.tppAccountRequest+json;version=1.1",
+            "Accept": "application/vnd.interoperability.tppAccountsRequest+json;version=1.1",
             "FSPIOP-Destination": "dfspb",
-            "FSPIOP-URI": "/tppAccountRequest"
+            "FSPIOP-URI": "/tppAccountsRequest"
           },
           "body": {
             "accountRequestId": "b51ec534-ee48-4575-b6a9-ead2955b8069",
