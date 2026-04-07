@@ -62,37 +62,37 @@ const APIRoutes = (api) => [
   },
   {
     method: 'POST',
-    path: '/tppAccountRequest',
+    path: '/tppAccountsRequest',
     handler: (req, h) => handleRequest(api, req, h),
     config: {
-      tags: ['api', 'tppAccountRequest', 'sampled'],
+      tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'POST Thirdparty Account Request'
     }
   },
   {
     method: 'PUT',
-    path: '/tppAccountRequest/{ID}',
+    path: '/tppAccountsRequest/{ID}',
     handler: (req, h) => handleRequest(api, req, h),
     config: {
-      tags: ['api', 'tppAccountRequest', 'sampled'],
+      tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request by ID'
     }
   },
   {
     method: 'PUT',
-    path: '/tppAccountRequest/{ID}/error',
+    path: '/tppAccountsRequest/{ID}/error',
     handler: (req, h) => handleRequest(api, req, h),
     config: {
-      tags: ['api', 'tppAccountRequest', 'sampled'],
+      tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request error by ID'
     }
   },
   {
     method: 'GET',
-    path: '/tppAccountRequest/{ID}',
+    path: '/tppAccountsRequest/{ID}',
     handler: (req, h) => handleRequest(api, req, h),
     config: {
-      tags: ['api', 'tppAccountRequest', 'sampled'],
+      tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'GET Thirdparty Account Requests by ID'
     }
   },

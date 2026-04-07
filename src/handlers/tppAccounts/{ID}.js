@@ -37,7 +37,7 @@ const tppAccounts = require('../../domain/tppAccounts')
 const LibUtil = require('../../lib/util')
 
 /**
- * Operations on /tppAccountRequest/{ID}
+ * Operations on /tppAccountsRequest/{ID}
  */
 module.exports = {
   /**
