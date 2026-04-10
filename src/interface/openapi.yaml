@@ -56,8 +56,8 @@ paths:
     post:
       tags:
         - accountRequest
-      operationId: AuthorisingAccountRequest
-      summary: AuthorisingAccountRequest
+      operationId: AuthorisingAccountsRequest
+      summary: AuthorisingAccountsRequest
       description: |
         The `/tppAccountsRequest` resource is used to request consent from a user 
         for access to their accounts information. This resource must be called before 

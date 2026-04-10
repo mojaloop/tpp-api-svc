@@ -41,7 +41,7 @@ const LibUtil = require('../lib/util')
  */
 module.exports = {
   /**
-   * summary: AuthorisingAccountRequest
+   * summary: AuthorisingAccountsRequest
    * description: The `/tppAccountsRequest` resource is used to request consent from a user
    *     for access to their accounts information. This resource must be called before
    *     the /tppAccounts resource can be queried which provides the account information.

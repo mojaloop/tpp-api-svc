@@ -43,7 +43,7 @@ module.exports = {
   NotifyErrorAccountRequest: tppAccountRequestErrorByID.put,
   GetAccountRequest: tppAccountRequestId.get,
   UpdateAccountRequest: tppAccountRequestId.put,
-  AuthorisingAccountRequest: tppAccountsRequest.post,
+  AuthorisingAccountsRequest: tppAccountsRequest.post,
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,
