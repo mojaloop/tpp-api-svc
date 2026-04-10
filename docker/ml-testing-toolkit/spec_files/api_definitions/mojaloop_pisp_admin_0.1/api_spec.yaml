@@ -56,8 +56,8 @@ paths:
     post:
       tags:
         - accountRequest
-      operationId: AuthorisingAccountRequest
-      summary: AuthorisingAccountRequest
+      operationId: AuthorisingAccountsRequest
+      summary: AuthorisingAccountsRequest
       description: |
         The `/tppAccountsRequest` resource is used to request consent from a user 
         for access to their accounts information. This resource must be called before 
@@ -71,7 +71,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tppAccountRequestPostRequest'
+              $ref: '#/components/schemas/tppAccountsRequestPostRequest'
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -156,7 +156,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tppAccountRequestPutResponse'
+              $ref: '#/components/schemas/tppAccountsRequestPutResponse'
       responses:
         '202':
           $ref: '#/components/responses/202'
@@ -2559,14 +2559,14 @@ components:
       maxLength: 512
       description: |
         The API data type Uri is a JSON string in a canonical format that is restricted by a regular expression for interoperability reasons.
-    tppAccountRequestPostRequest:
+    tppAccountsRequestPostRequest:
       title: AccountRequestPostRequest
       type: object
       description: |-
         Used by: PISP
         The /tppAccountsRequest resource is used to request consent from a user for access to their accounts information. This resource must be called before the /tppAccounts resource can be queried which provides the account information. 
         Callback and data model for POST /tppAccountsRequest:
-        Callback: PUT /tppAccountRequests/{ID} Error callback: PUT /tppAccountRequests/{ID}/error Data model - see below url
+        Callback: PUT /tppAccountsRequests/{ID} Error callback: PUT /tppAccountsRequests/{ID}/error Data model - see below url
         https://github.com/mojaloop/documentation/blob/main/website/versioned_docs/v2.0.0/api/thirdparty/data-models.md#31212-post-accountrequest
       properties:
         accountRequestId:
@@ -2598,8 +2598,8 @@ components:
       type: string
       pattern: ^[A-Za-z0-9-_]+[=]{0,2}$
       description: The API data type BinaryString is a JSON String. The string is a base64url  encoding of a string of raw bytes, where padding (character ‘=’) is added at the end of the data if needed to ensure that the string is a multiple of 4 characters. The length restriction indicates the allowed number of characters.
-    tppAccountRequestPutResponse:
-      title: AccountRequestPutResponse
+    tppAccountsRequestPutResponse:
+      title: AccountsRequestPutResponse
       type: object
       description: |-
         Used by: PISP
