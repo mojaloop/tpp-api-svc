@@ -62,7 +62,7 @@ describe('/tppAccountsRequest', () => {
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountRequest = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccountsRequest = jest.fn().mockResolvedValue()
   })
 
   afterAll(() => {
@@ -112,7 +112,7 @@ describe('/tppAccountsRequest', () => {
       expect(response.statusCode).toBe(202)
     })
 
-    it('handles when forwardTppAccountRequest throws error', async () => {
+    it('handles when forwardTppAccountsRequest throws error', async () => {
       // Generate request
       const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS, overrideReq)
 
@@ -125,15 +125,15 @@ describe('/tppAccountsRequest', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
       expect(response.statusCode).toBe(202)
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
     })
   })
 })

@@ -43,12 +43,12 @@ const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
 /**
- * Forwards tppAccountRequests endpoint requests to destination FSP for processing
+ * Forwards tppAccountsRequests endpoint requests to destination FSP for processing
  *
  * @returns {boolean}
  */
-const forwardTppAccountRequest = async (path, headers, method, params, payload, span = null) => {
-  const childSpan = span ? span.getChild('forwardTppAccountRequest') : undefined
+const forwardTppAccountsRequest = async (path, headers, method, params, payload, span = null) => {
+  const childSpan = span ? span.getChild('forwardTppAccountsRequest') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
@@ -88,7 +88,7 @@ const forwardTppAccountRequest = async (path, headers, method, params, payload, 
   } catch (err) {
     Logger.info(`Error forwarding tpp account request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppAccountRequestError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppAccountsRequestError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -104,8 +104,8 @@ const forwardTppAccountRequest = async (path, headers, method, params, payload, 
  *
  * @returns {undefined}
  */
-const forwardTppAccountRequestError = async (headers, to, path, method, accountRequestId, payload, span = null) => {
-  const childSpan = span ? span.getChild('forwardTppAccountRequestError') : undefined
+const forwardTppAccountsRequestError = async (headers, to, path, method, accountRequestId, payload, span = null) => {
+  const childSpan = span ? span.getChild('forwardTppAccountsRequestError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
@@ -152,6 +152,6 @@ const forwardTppAccountRequestError = async (headers, to, path, method, accountR
 }
 
 module.exports = {
-  forwardTppAccountRequest,
-  forwardTppAccountRequestError
+  forwardTppAccountsRequest: forwardTppAccountsRequest,
+  forwardTppAccountsRequestError: forwardTppAccountsRequestError
 }
