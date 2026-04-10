@@ -63,9 +63,9 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountsRequest.forwardTppAccountRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppAccountRequest takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppAccountRequest: ${LibUtil.getStackOrInspect(err)}`)
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
+        // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.ACCEPTED.CODE)

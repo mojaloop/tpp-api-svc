@@ -30,7 +30,7 @@
 'use strict'
 
 const OpenapiBackend = require('@mojaloop/central-services-shared').Util.OpenapiBackend
-const tppAccountRequest = require('./tppAccountsRequest')
+const tppAccountsRequest = require('./tppAccountsRequest')
 const tppAccountRequestId = require('./tppAccountsRequest/{ID}')
 const tppAccountsIdGet = require('./tppAccounts/{ID}/{SignedChallenge}')
 const tppAccountsId = require('./tppAccounts/{ID}')
@@ -43,7 +43,7 @@ module.exports = {
   NotifyErrorAccountRequest: tppAccountRequestErrorByID.put,
   GetAccountRequest: tppAccountRequestId.get,
   UpdateAccountRequest: tppAccountRequestId.put,
-  AuthorisingAccountRequest: tppAccountRequest.post,
+  AuthorisingAccountRequest: tppAccountsRequest.post,
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,

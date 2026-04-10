@@ -62,7 +62,7 @@ describe('tppAccountsRequest', () => {
     SpanMock = MockSpan()
   })
 
-  describe('forwardTppAccountRequest', () => {
+  describe('forwardTppAccountsRequest', () => {
     it('forwards a POST request when the payload is undefined', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
@@ -81,7 +81,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountsRequest.forwardTppAccountRequest(...options)
+      const result = await TppAccountsRequest.forwardTppAccountsRequest(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -90,7 +90,7 @@ describe('tppAccountsRequest', () => {
     it('handles when the endpoint could not be found', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves(undefined)
-      sandbox.stub(TppAccountsRequest, 'forwardTppAccountRequestError').resolves({})
+      sandbox.stub(TppAccountsRequest, 'forwardTppAccountsRequestError').resolves({})
       sandbox.stub(Request, 'sendRequest').resolves({
         ok: true,
         status: 202,
@@ -106,7 +106,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const action = async () => TppAccountsRequest.forwardTppAccountRequest(...options)
+      const action = async () => TppAccountsRequest.forwardTppAccountsRequest(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/No FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE endpoint found for tppAccountsRequest/)
@@ -126,7 +126,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const action = async () => TppAccountsRequest.forwardTppAccountRequest(...options)
+      const action = async () => TppAccountsRequest.forwardTppAccountsRequest(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
@@ -150,7 +150,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountsRequest.forwardTppAccountRequest(...options)
+      const result = await TppAccountsRequest.forwardTppAccountsRequest(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -173,7 +173,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountsRequest.forwardTppAccountRequest(...options)
+      const result = await TppAccountsRequest.forwardTppAccountsRequest(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -183,7 +183,7 @@ describe('tppAccountsRequest', () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
-      sandbox.stub(TppAccountsRequest, 'forwardTppAccountRequestError').resolves(true)
+      sandbox.stub(TppAccountsRequest, 'forwardTppAccountsRequestError').resolves(true)
       const options = [
         Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
@@ -193,14 +193,14 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const action = async () => TppAccountsRequest.forwardTppAccountRequest(...options)
+      const action = async () => TppAccountsRequest.forwardTppAccountsRequest(...options)
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
     })
   })
 
-  describe('forwardTppAccountRequestError', () => {
+  describe('forwardTppAccountsRequestError', () => {
     it('sends the error request ', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
@@ -220,7 +220,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountsRequest.forwardTppAccountRequestError(...options)
+      const result = await TppAccountsRequest.forwardTppAccountsRequestError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -245,7 +245,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountsRequest.forwardTppAccountRequestError(...options)
+      const result = await TppAccountsRequest.forwardTppAccountsRequestError(...options)
 
       // Assert
       expect(result).toBe(true)
@@ -270,7 +270,7 @@ describe('tppAccountsRequest', () => {
       ]
 
       // Act
-      const result = await TppAccountsRequest.forwardTppAccountRequestError(...options)
+      const result = await TppAccountsRequest.forwardTppAccountsRequestError(...options)
 
       // Assert
       expect(result).toBe(true)

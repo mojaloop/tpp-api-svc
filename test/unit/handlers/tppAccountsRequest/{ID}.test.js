@@ -66,7 +66,7 @@ describe('/tppAccountsRequest/{ID}', () => {
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountRequest = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccountsRequest = jest.fn().mockResolvedValue()
   })
 
   afterEach(() => {
@@ -144,14 +144,14 @@ describe('/tppAccountsRequest/{ID}', () => {
         headers
       }
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
       expect(response.statusCode).toBe(202)
     })
   })
@@ -190,15 +190,15 @@ describe('/tppAccountsRequest/{ID}', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
       expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
     })
     it('returns an error response and logs when getSpanTags throws', async () => {
       const LibUtil = require('../../../../src/lib/util.js')
