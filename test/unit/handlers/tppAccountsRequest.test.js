@@ -86,7 +86,7 @@ describe('/tppAccountsRequest', () => {
           const: 'http://localhost:3000/callback'
         },
         {
-          id: 'partyItentifier',
+          id: 'partyIdentifier',
           type: 'string',
           const: '16135551212'
         }
