@@ -22,9 +22,9 @@ COPY package.json package-lock.json* /opt/app/
 
 RUN npm ci
 
-COPY src /opt/app/src
-COPY config /opt/app/config
-COPY test /opt/app/test
+COPY dist/src /opt/app/src
+COPY dist/config /opt/app/config
+COPY dist/test /opt/app/test
 
 FROM node:${NODE_VERSION}
 WORKDIR /opt/app

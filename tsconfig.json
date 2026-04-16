@@ -1,0 +1,28 @@
+{
+  "include": [
+    "src",
+    "test",
+    "jest.config.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "allowJs": true,
+    "rootDir": "./",
+    "rootDirs": [
+      "src",
+      "test"
+    ],
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": [
+      "esnext"
+    ],
+    "noImplicitAny": true,
+  }
+}
