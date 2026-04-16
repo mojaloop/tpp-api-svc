@@ -4691,5 +4691,55 @@
     },
     "type": "callback",
     "version": 1
+  },
+  {
+    "ruleId": 260,
+    "priority": 1,
+    "description": "post /tppConsentRequests",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "mojaloop_pisp_admin",
+      "asynchronous": true,
+      "prefix": "/tpp",
+      "additionalApi": true,
+      "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+      "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+      "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+      "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+      "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/tppConsentRequests"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/tppConsentRequests/{ID}",
+      "params": {
+        "scripts": {
+          "scriptingEngine": "postman"
+        },
+        "headers": {
+          "Content-Type": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+          "Date": "{$request.headers.date}",
+          "FSPIOP-Source": "{$request.headers.fspiop-destination}",
+          "FSPIOP-URI": "/tppConsentRequests/{$request.body.consentRequestId}"
+        }
+      },
+      "type": "MOCK_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
   }
 ]

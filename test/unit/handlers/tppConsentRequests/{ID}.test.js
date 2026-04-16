@@ -108,6 +108,28 @@ describe('/tppConsentRequests/{ID}', () => {
       expect(Handler.forwardTppConsentRequests).toHaveBeenCalledTimes(1)
       expect(Handler.forwardTppConsentRequests.mock.results[0].value).rejects.toThrow(err)
     })
+
+    it('returns an error response and logs when getSpanTags throws', async () => {
+      const LibUtil = require('../../../../src/lib/util')
+      const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
+        throw new Error('forced getSpanTags error')
+      })
+
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).not.toBe(202)
+      expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
+
+      spy.mockRestore()
+    })
   })
 
   describe('PUT', () => {
@@ -216,6 +238,29 @@ describe('/tppConsentRequests/{ID}', () => {
       expect(response.statusCode).toBe(202)
       expect(Handler.forwardTppConsentRequests).toHaveBeenCalledTimes(1)
       expect(Handler.forwardTppConsentRequests.mock.results[0].value).rejects.toThrow(err)
+    })
+
+    it('returns an error response and logs when getSpanTags throws', async () => {
+      const LibUtil = require('../../../../src/lib/util')
+      const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
+        throw new Error('forced getSpanTags error')
+      })
+
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers,
+        payload: request.body
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).not.toBe(202)
+      expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
+
+      spy.mockRestore()
     })
   })
 })
