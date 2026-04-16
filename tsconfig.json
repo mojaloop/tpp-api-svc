@@ -23,6 +23,6 @@
     "lib": [
       "esnext"
     ],
-    "noImplicitAny": false,
+    "noImplicitAny": true,
   }
 }
