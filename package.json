@@ -61,14 +61,14 @@
   "dependencies": {
     "@hapi/boom": "10.0.1",
     "@hapi/good": "9.0.1",
-    "@hapi/hapi": "21.4.7",
+    "@hapi/hapi": "21.4.8",
     "@hapi/inert": "7.1.0",
     "@hapi/vision": "7.0.3",
     "@mojaloop/central-services-error-handling": "13.1.6",
     "@mojaloop/central-services-health": "15.2.2",
     "@mojaloop/central-services-logger": "11.10.4",
     "@mojaloop/central-services-metrics": "12.8.5",
-    "@mojaloop/central-services-shared": "18.35.6",
+    "@mojaloop/central-services-shared": "18.35.7",
     "@mojaloop/event-sdk": "14.8.3",
     "ajv": "8.18.0",
     "ajv-keywords": "5.1.0",
@@ -76,7 +76,7 @@
     "commander": "14.0.3",
     "docdash": "2.0.2",
     "hapi-swagger": "17.3.2",
-    "joi": "18.1.1",
+    "joi": "18.1.2",
     "mustache": "4.2.0",
     "parse-strings-in-object": "2.0.0",
     "rc": "1.2.8"
@@ -86,7 +86,7 @@
     "on-headers": "1.1.0",
     "glob": "11.1.0",
     "hapi-swagger": {
-      "joi": "18.1.1"
+      "joi": "18.1.2"
     },
     "json-schema-faker@0.5.9": {
       "json-schema-ref-parser": "npm:@apidevtools/json-schema-ref-parser@latest"
@@ -126,10 +126,10 @@
     "jsdoc": "4.0.5",
     "license-checker": "25.0.1",
     "npm-audit-resolver": "3.0.0-RC.0",
-    "npm-check-updates": "19.6.5",
+    "npm-check-updates": "21.0.3",
     "pre-commit": "1.2.2",
     "replace": "^1.2.2",
-    "sinon": "21.0.3",
+    "sinon": "21.1.2",
     "standard": "17.1.2",
     "standard-version": "^9.5.0"
   },
