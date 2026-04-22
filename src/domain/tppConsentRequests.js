@@ -14,14 +14,6 @@ const { getStackOrInspect } = require('../lib/util.js')
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
-// Endpoint path templates (until they're added to central-services-shared)
-const EndpointPaths = {
-  TPP_CONSENT_REQUEST_POST: '/tppConsentRequests',
-  TPP_CONSENT_REQUEST_GET: '/tppConsentRequests/{{ID}}',
-  TPP_CONSENT_REQUEST_PUT: '/tppConsentRequests/{{ID}}',
-  TPP_CONSENT_REQUEST_PATCH: '/tppConsentRequests/{{ID}}',
-  TPP_CONSENT_REQUEST_PUT_ERROR: '/tppConsentRequests/{{ID}}/error'
-}
 
 /**
  * Forwards tppConsentRequests endpoint requests to destination FSP for processing
@@ -63,7 +55,7 @@ const forwardTppConsentRequests = async (path, headers, method, params, payload,
   } catch (err) {
     Logger.info(`Error forwarding tpp consent request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppConsentRequestsError(headers, source, EndpointPaths.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, consentRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppConsentRequestsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, consentRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -122,6 +114,5 @@ const forwardTppConsentRequestsError = async (headers, to, path, method, consent
 
 module.exports = {
   forwardTppConsentRequests,
-  forwardTppConsentRequestsError,
-  EndpointPaths // Export for use in handlers
+  forwardTppConsentRequestsError
 }
