@@ -50,8 +50,8 @@ describe('util', () => {
   describe('getSpanTags', () => {
     it('create correct span tags', () => {
       // Arrange
-      const headers = Helper.defaultHeaders('tppAccountRequest', Config.PROTOCOL_VERSIONS)
-      const operationType = 'tppAccountRequest'
+      const headers = Helper.defaultHeaders('tppAccountsRequest', Config.PROTOCOL_VERSIONS)
+      const operationType = 'tppAccountsRequest'
       const operationAction = 'POST'
       const accountRequestId = undefined
       const expected = {
@@ -71,7 +71,7 @@ describe('util', () => {
     it('create correct span tags when headers are not set', () => {
       // Arrange
       const headers = null
-      const operationType = 'tppAccountRequest'
+      const operationType = 'tppAccountsRequest'
       const operationAction = 'POST'
       const accountRequestId = undefined
       const expected = {

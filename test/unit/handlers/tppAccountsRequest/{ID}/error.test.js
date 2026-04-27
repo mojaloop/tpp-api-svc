@@ -42,25 +42,25 @@ const Hapi = require('@hapi/hapi')
 
 const Mockgen = require('../../../../util/mockgen.js')
 const Helper = require('../../../../util/helper')
-const Handler = require('../../../../../src/domain/tppAccountRequest')
+const Handler = require('../../../../../src/domain/tppAccountsRequest')
 const Config = require('../../../../../src/lib/config')
 
 let sandbox
 const server = new Hapi.Server()
 
-describe('/tppAccountRequest/{ID}/error', () => {
+describe('/tppAccountsRequest/{ID}/error', () => {
   // URI
-  const resource = 'tppAccountRequest'
+  const resource = 'tppAccountsRequest'
   const path = `/${resource}/{ID}/error`
 
   beforeAll(async () => {
     sandbox = Sinon.createSandbox()
-    // sandbox.stub(Handler, 'forwardTppAccountRequestError').returns(Promise.resolve())
+    // sandbox.stub(Handler, 'forwardTppAccountsRequestError').returns(Promise.resolve())
     await Helper.serverSetup(server)
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountRequestError = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccountsRequestError = jest.fn().mockResolvedValue()
   })
 
   afterAll(() => {
@@ -105,15 +105,15 @@ describe('/tppAccountRequest/{ID}/error', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequestError.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequestError.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
       expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountRequestError).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequestError.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequestError).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequestError.mock.results[0].value).rejects.toThrow(err)
     })
   })
 })
