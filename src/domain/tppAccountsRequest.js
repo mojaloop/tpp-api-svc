@@ -152,6 +152,6 @@ const forwardTppAccountsRequestError = async (headers, to, path, method, account
 }
 
 module.exports = {
-  forwardTppAccountsRequest: forwardTppAccountsRequest,
-  forwardTppAccountsRequestError: forwardTppAccountsRequestError
+  forwardTppAccountsRequest,
+  forwardTppAccountsRequestError
 }
