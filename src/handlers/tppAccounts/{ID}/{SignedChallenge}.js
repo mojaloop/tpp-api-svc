@@ -43,7 +43,7 @@ module.exports = {
   /**
     * summary: GetAccountsByUserId
     * description: The HTTP request GET /tppAccounts/{ID}/{SignedChallenge} is used to retrieve the list of potential accounts available for linking.
-    * The request {ID} is the accountRequestID and the {SignedChallenge} is the signed challenge that resulted from the POST /tppAccountRequest/ callback.
+    * The request {ID} is the accountRequestID and the {SignedChallenge} is the signed challenge that resulted from the POST /tppAccountsRequest/ callback.
     * parameters: accept
     * produces: application/json
     * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503

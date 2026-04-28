@@ -30,12 +30,12 @@
 'use strict'
 
 const OpenapiBackend = require('@mojaloop/central-services-shared').Util.OpenapiBackend
-const tppAccountRequest = require('./tppAccountRequest')
-const tppAccountRequestId = require('./tppAccountRequest/{ID}')
+const tppAccountsRequest = require('./tppAccountsRequest')
+const tppAccountsRequestId = require('./tppAccountsRequest/{ID}')
 const tppAccountsIdGet = require('./tppAccounts/{ID}/{SignedChallenge}')
 const tppAccountsId = require('./tppAccounts/{ID}')
 const tppAccountsErrorByID = require('./tppAccounts/{ID}/error')
-const tppAccountRequestErrorByID = require('./tppAccountRequest/{ID}/error')
+const tppAccountsRequestErrorByID = require('./tppAccountsRequest/{ID}/error')
 const tppConsentRequests = require('./tppConsentRequests')
 const tppConsentRequestsId = require('./tppConsentRequests/{ID}')
 const tppConsentRequestsErrorByID = require('./tppConsentRequests/{ID}/error')
@@ -43,10 +43,10 @@ const health = require('./health')
 
 module.exports = {
   HealthGet: health.get,
-  NotifyErrorAccountRequest: tppAccountRequestErrorByID.put,
-  GetAccountRequest: tppAccountRequestId.get,
-  UpdateAccountRequest: tppAccountRequestId.put,
-  AuthorisingAccountRequest: tppAccountRequest.post,
+  NotifyErrorAccountRequest: tppAccountsRequestErrorByID.put,
+  GetAccountRequest: tppAccountsRequestId.get,
+  UpdateAccountRequest: tppAccountsRequestId.put,
+  AuthorisingAccountsRequest: tppAccountsRequest.post,
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,

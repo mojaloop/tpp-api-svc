@@ -42,18 +42,18 @@ const Hapi = require('@hapi/hapi')
 
 const Mockgen = require('../../../util/mockgen.js')
 const Helper = require('../../../util/helper.js')
-const Handler = require('../../../../src/domain/tppAccountRequest')
+const Handler = require('../../../../src/domain/tppAccountsRequest')
 const Config = require('../../../../src/lib/config.js')
 
 let sandbox
 const server = new Hapi.Server()
 
 /**
- * Tests for /tppAccountRequest/{ID}
+ * Tests for /tppAccountsRequest/{ID}
  */
-describe('/tppAccountRequest/{ID}', () => {
+describe('/tppAccountsRequest/{ID}', () => {
   // URI
-  const resource = 'tppAccountRequest'
+  const resource = 'tppAccountsRequest'
   const path = `/${resource}/{ID}`
 
   beforeAll(async () => {
@@ -66,7 +66,7 @@ describe('/tppAccountRequest/{ID}', () => {
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountRequest = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccountsRequest = jest.fn().mockResolvedValue()
   })
 
   afterEach(() => {
@@ -144,14 +144,14 @@ describe('/tppAccountRequest/{ID}', () => {
         headers
       }
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
       expect(response.statusCode).toBe(202)
     })
   })
@@ -190,18 +190,18 @@ describe('/tppAccountRequest/{ID}', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
       expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
     })
     it('returns an error response and logs when getSpanTags throws', async () => {
-      const LibUtil = require('../../../../src/lib/util')
+      const LibUtil = require('../../../../src/lib/util.js')
       // Make getSpanTags throw so the handler's try block fails and goes to the catch
       const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
         throw new Error('forced getSpanTags error')

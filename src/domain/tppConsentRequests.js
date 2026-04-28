@@ -14,7 +14,6 @@ const { getStackOrInspect } = require('../lib/util.js')
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
-
 /**
  * Forwards tppConsentRequests endpoint requests to destination FSP for processing
  *

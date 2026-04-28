@@ -1,11 +1,11 @@
 {
-    "/tppAccountRequest": {
+    "/tppAccountsRequest": {
       "post": {
         "fspid": "{$request.headers.fspiop-source}",
         "successCallback": {
           "method": "put",
-          "path": "/tppAccountRequest/{ID}",
-          "pathPattern": "/tppAccountRequest/{$request.body.accountRequestId}",
+          "path": "/tppAccountsRequest/{ID}",
+          "pathPattern": "/tppAccountsRequest/{$request.body.accountRequestId}",
           "headerOverride": {
             "FSPIOP-Source": "{$request.headers.fspiop-destination}",
             "FSPIOP-Destination": "{$request.headers.fspiop-source}",
@@ -15,8 +15,8 @@
         },
         "errorCallback": {
           "method": "put",
-          "path": "/tppAccountRequest/{ID}/error",
-          "pathPattern": "/tppAccountRequest/{$request.body.accountRequestId}/error",
+          "path": "/tppAccountsRequest/{ID}/error",
+          "pathPattern": "/tppAccountsRequest/{$request.body.accountRequestId}/error",
           "headerOverride": {
             "FSPIOP-Source": "{$request.headers.fspiop-destination}",
             "FSPIOP-Destination": "{$request.headers.fspiop-source}",

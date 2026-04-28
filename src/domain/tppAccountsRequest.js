@@ -43,12 +43,12 @@ const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
 /**
- * Forwards tppAccountRequests endpoint requests to destination FSP for processing
+ * Forwards tppAccountsRequests endpoint requests to destination FSP for processing
  *
  * @returns {boolean}
  */
-const forwardTppAccountRequest = async (path, headers, method, params, payload, span = null) => {
-  const childSpan = span ? span.getChild('forwardTppAccountRequest') : undefined
+const forwardTppAccountsRequest = async (path, headers, method, params, payload, span = null) => {
+  const childSpan = span ? span.getChild('forwardTppAccountsRequest') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
@@ -59,11 +59,16 @@ const forwardTppAccountRequest = async (path, headers, method, params, payload, 
   try {
     // endpoint = 'http://mojaloop-testing-toolkit:4040/tpp' // FOR TESTING PURPOSES WITH TTK
     endpoint = await Endpoints.getEndpoint(Config.SWITCH_ENDPOINT, destination, Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE)
-    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppAccountRequest ${accountRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
+    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppAccountsRequest ${accountRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
     if (!endpoint) {
       // we didnt get an endpoint for the payee dfsp!
       // make an error callback to the initiator
-      throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppAccountRequest ${accountRequestId} for ${Enum.Http.Headers.FSPIOP.DESTINATION}`, method.toUpperCase() !== Enum.Http.RestMethods.GET ? payload : undefined, source)
+      throw ErrorHandler.Factory.createFSPIOPError(
+        ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR,
+        `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppAccountsRequest ${accountRequestId} for ${Enum.Http.Headers.FSPIOP.DESTINATION}`,
+        method.toUpperCase() !== Enum.Http.RestMethods.GET ? payload : undefined,
+        source
+      )
     }
     const url = Mustache.render(endpoint + path, {
       ID: accountRequestId
@@ -83,7 +88,7 @@ const forwardTppAccountRequest = async (path, headers, method, params, payload, 
   } catch (err) {
     Logger.info(`Error forwarding tpp account request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppAccountRequestError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppAccountsRequestError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -95,24 +100,29 @@ const forwardTppAccountRequest = async (path, headers, method, params, payload, 
 }
 
 /**
- * Forwards tppAccountRequest errors to error endpoint
+ * Forwards tppAccountsRequest errors to error endpoint
  *
  * @returns {undefined}
  */
-const forwardTppAccountRequestError = async (headers, to, path, method, accountRequestId, payload, span = null) => {
-  const childSpan = span ? span.getChild('forwardTppAccountRequestError') : undefined
+const forwardTppAccountsRequestError = async (headers, to, path, method, accountRequestId, payload, span = null) => {
+  const childSpan = span ? span.getChild('forwardTppAccountsRequestError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
   try {
     // endpoint = 'http://mojaloop-testing-toolkit:4040/tpp' // FOR TESTING PURPOSES WITH TTK
     endpoint = await Endpoints.getEndpoint(Config.SWITCH_ENDPOINT, to, Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE)
-    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppAccountRequest ${accountRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
+    Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppAccountsRequest ${accountRequestId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
 
     if (!endpoint) {
       // we didnt get an endpoint for the payee dfsp!
       // make an error callback to the initiator
-      throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppAccountRequest ${accountRequestId} for ${to}`, payload, source)
+      throw ErrorHandler.Factory.createFSPIOPError(
+        ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR,
+        `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppAccountsRequest ${accountRequestId} for ${to}`,
+        payload,
+        source
+      )
     }
     const url = Mustache.render(endpoint + path, {
       ID: accountRequestId
@@ -142,6 +152,6 @@ const forwardTppAccountRequestError = async (headers, to, path, method, accountR
 }
 
 module.exports = {
-  forwardTppAccountRequest,
-  forwardTppAccountRequestError
+  forwardTppAccountsRequest,
+  forwardTppAccountsRequestError
 }

@@ -33,16 +33,16 @@ const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
-const tppAccountRequest = require('../../domain/tppAccountRequest')
+const tppAccountsRequest = require('../../domain/tppAccountsRequest')
 const LibUtil = require('../../lib/util')
 
 /**
- * Operations on /tppAccountRequest/{ID}
+ * Operations on /tppAccountsRequest/{ID}
  */
 module.exports = {
   /**
    * summary: GetAccountRequest
-   * description: The `GET /tppAccountRequest/{ID}` is used to request status of POST /tppAccountRequest/ call. The *{ID}* in the URI should contain the accountRequestId that was assigned to the request by the PISP when the PISP originated the request. The result is return via the PUT callback.
+   * description: The `GET /tppAccountsRequest/{ID}` is used to request status of POST /tppAccountsRequest/ call. The *{ID}* in the URI should contain the accountRequestId that was assigned to the request by the PISP when the PISP originated the request. The result is return via the PUT callback.
    * parameters: accept
    * produces: application/json
    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
@@ -61,9 +61,9 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountRequest.forwardTppAccountRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppAccountRequest takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppAccountRequest: ${LibUtil.getStackOrInspect(err)}`)
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
+        // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.ACCEPTED.CODE)
@@ -95,9 +95,9 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountRequest.forwardTppAccountRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppAccountRequest takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppAccountRequest: ${LibUtil.getStackOrInspect(err)}`)
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+        // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.OK.CODE)

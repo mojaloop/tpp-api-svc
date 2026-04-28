@@ -31,7 +31,7 @@
       },
       {
         "method": "put",
-        "path": "/tppAccountRequest",
+        "path": "/tppAccountsRequest",
         "endpoint": "http://tpp-api-svc:4003"
       },
       {
