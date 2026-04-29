@@ -1,3 +1,32 @@
+/*****
+ License
+ --------------
+ Copyright © 2020-2025 Mojaloop Foundation
+ The Mojaloop files are made available by the Mojaloop Foundation under the Apache License, Version 2.0 (the "License") and you may not use these files except in compliance with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, the Mojaloop files are distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+ Contributors
+ --------------
+ This is the official list of the Mojaloop project contributors for this file.
+ Names of the original copyright holders (individuals or organizations)
+ should be listed with a '*' in the first column. People who have
+ contributed from an organization can be listed under the organization
+ that actually holds the copyright for their contributions (see the
+ Mojaloop Foundation for an example). Those individuals should have
+ their names indented and be marked with a '-'. Email address can be added
+ optionally within square brackets <email>.
+
+ * Mojaloop Foundation
+ - Name Surname <name.surname@mojaloop.io>
+
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+
+ --------------
+ ******/
+
 'use strict'
 
 const Logger = require('@mojaloop/central-services-logger')
@@ -40,6 +69,7 @@ const forwardTppConsentRequests = async (path, headers, method, params, payload,
       ID: consentRequestId
     })
 
+    
     Logger.info(`Forwarding tpp consent request to endpoint: ${url}`)
 
     const response = await Request.sendRequest({ url, headers, source, destination, method, payload: method.toUpperCase() !== Enum.Http.RestMethods.GET ? payloadLocal : undefined, responseType, span: childSpan, hubNameRegex })
@@ -68,7 +98,7 @@ const forwardTppConsentRequests = async (path, headers, method, params, payload,
 /**
  * Forwards tppConsentRequests errors to error endpoint
  *
- * @returns {undefined}
+ * @returns {boolean}
  */
 const forwardTppConsentRequestsError = async (headers, to, path, method, consentRequestId, payload, span = null) => {
   const childSpan = span ? span.getChild('forwardTppConsentRequestsError') : undefined
