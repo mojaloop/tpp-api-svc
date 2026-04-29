@@ -69,7 +69,6 @@ const forwardTppConsentRequests = async (path, headers, method, params, payload,
       ID: consentRequestId
     })
 
-    
     Logger.info(`Forwarding tpp consent request to endpoint: ${url}`)
 
     const response = await Request.sendRequest({ url, headers, source, destination, method, payload: method.toUpperCase() !== Enum.Http.RestMethods.GET ? payloadLocal : undefined, responseType, span: childSpan, hubNameRegex })
@@ -120,7 +119,7 @@ const forwardTppConsentRequestsError = async (headers, to, path, method, consent
 
     Logger.info(`Forwarding tpp consent request error to endpoint: ${url}`)
 
-    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, childSpan, hubNameRegex })
+    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex })
 
     Logger.info(`Forwarding tpp consent request error for ${consentRequestId} from ${source} to ${to} got response ${response.status} ${response.statusText}`)
 
