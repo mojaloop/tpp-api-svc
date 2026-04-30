@@ -62,6 +62,51 @@ const APIRoutes = (api) => [
   },
   {
     method: 'POST',
+    path: '/tppConsentRequests',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppConsentRequests', 'sampled'],
+      description: 'POST Thirdparty Consent Request'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/tppConsentRequests/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppConsentRequests', 'sampled'],
+      description: 'GET Thirdparty Consent Request by ID'
+    }
+  },
+  {
+    method: 'PUT',
+    path: '/tppConsentRequests/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppConsentRequests', 'sampled'],
+      description: 'PUT Thirdparty Consent Request by ID'
+    }
+  },
+  {
+    method: 'PATCH',
+    path: '/tppConsentRequests/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppConsentRequests', 'sampled'],
+      description: 'PATCH Thirdparty Consent Request by ID'
+    }
+  },
+  {
+    method: 'PUT',
+    path: '/tppConsentRequests/{ID}/error',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppConsentRequests', 'sampled'],
+      description: 'PUT Thirdparty Consent Request error by ID'
+    }
+  },
+  {
+    method: 'POST',
     path: '/tppAccountsRequest',
     handler: (req, h) => handleRequest(api, req, h),
     config: {

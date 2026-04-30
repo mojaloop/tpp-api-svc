@@ -74,7 +74,7 @@ const serverSetup = async (server) => {
 
   // use as a catch-all handler
   server.route({
-    method: ['GET', 'POST', 'PUT', 'DELETE'],
+    method: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     path: '/{path*}',
     handler: (req, h) => {
       return api.handleRequest(

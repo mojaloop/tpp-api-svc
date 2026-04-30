@@ -107,6 +107,199 @@
               }
             ]
           }
+        },
+        {
+          "id": "3",
+          "description": "POST /tppConsentRequests - Third-Party to tpp-api-svc",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppConsentRequests",
+          "path": "/tppConsentRequests",
+          "method": "post",
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+            "FSPIOP-Destination": "dfspb",
+            "FSPIOP-URI": "/tppConsentRequests"
+          },
+          "body": {
+            "consentRequestId": "{$function.generic.generateUUID}",
+            "partyIdInfo": {
+              "partyIdType": "MSISDN",
+              "partyIdentifier": "16135551212"
+            },
+            "scopes": [
+              {
+                "address": "dfspa.username.1234",
+                "actions": ["ACCOUNTS_TRANSFER", "ACCOUNTS_GET_BALANCE"]
+              }
+            ],
+            "authChannels": ["WEB"],
+            "callbackUri": "pisp-app://callback"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": ["expect(response.status).to.equal(202)"]
+              }
+            ]
+          }
+        },
+        {
+          "id": "4",
+          "description": "PUT /tppConsentRequests/{ID} - DFSP sends auth channel info to tpp-api-svc",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppConsentRequests/{ID}",
+          "path": "/tppConsentRequests/{$prev.3.request.body.consentRequestId}",
+          "method": "put",
+          "params": {
+            "ID": "{$prev.3.request.body.consentRequestId}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "FSPIOP-Destination": "pisp",
+            "FSPIOP-URI": "/tppConsentRequests/{$prev.3.request.body.consentRequestId}"
+          },
+          "body": {
+            "scopes": [
+              {
+                "address": "dfspa.username.1234",
+                "actions": ["ACCOUNTS_GET_BALANCE", "ACCOUNTS_TRANSFER"]
+              }
+            ],
+            "authChannels": ["OTP"],
+            "callbackUri": "pisp-app://callback"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 200",
+                "exec": ["expect(response.status).to.equal(200)"]
+              }
+            ]
+          }
+        },
+        {
+          "id": "5",
+          "description": "PATCH /tppConsentRequests/{ID} - PISP sends authToken to tpp-api-svc",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppConsentRequests/{ID}",
+          "path": "/tppConsentRequests/{$prev.3.request.body.consentRequestId}",
+          "method": "patch",
+          "params": {
+            "ID": "{$prev.3.request.body.consentRequestId}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+            "Accept": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "FSPIOP-Destination": "dfspb",
+            "FSPIOP-URI": "/tppConsentRequests/{$prev.3.request.body.consentRequestId}"
+          },
+          "body": {
+            "authToken": "123456"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": ["expect(response.status).to.equal(202)"]
+              }
+            ]
+          }
+        },
+        {
+          "id": "6",
+          "description": "PUT /tppConsentRequests/{ID}/error - DFSP sends error to tpp-api-svc",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppConsentRequests/{ID}/error",
+          "path": "/tppConsentRequests/{$prev.3.request.body.consentRequestId}/error",
+          "method": "put",
+          "params": {
+            "ID": "{$prev.3.request.body.consentRequestId}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppConsentRequests+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "FSPIOP-Destination": "pisp",
+            "FSPIOP-URI": "/tppConsentRequests/{$prev.3.request.body.consentRequestId}/error"
+          },
+          "body": {
+            "errorInformation": {
+              "errorCode": "7200",
+              "errorDescription": "Generic Thirdparty account linking error"
+            }
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 200",
+                "exec": ["expect(response.status).to.equal(200)"]
+              }
+            ]
+          }
         }
       ]
     }
