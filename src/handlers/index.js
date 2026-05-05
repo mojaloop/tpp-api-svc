@@ -39,6 +39,8 @@ const tppAccountsRequestErrorByID = require('./tppAccountsRequest/{ID}/error')
 const tppConsentRequests = require('./tppConsentRequests')
 const tppConsentRequestsId = require('./tppConsentRequests/{ID}')
 const tppConsentRequestsErrorByID = require('./tppConsentRequests/{ID}/error')
+const tppConsents = require('./tppConsents')
+const tppConsentsId = require('./tppConsents/{ID}')
 const health = require('./health')
 
 module.exports = {
@@ -50,6 +52,9 @@ module.exports = {
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,
+  PostConsents: tppConsents.post,
+  GetConsent: tppConsentsId.get,
+  DeleteConsentByID: tppConsentsId.delete,
   CreateConsentRequest: tppConsentRequests.post,
   GetConsentRequestsById: tppConsentRequestsId.get,
   UpdateConsentRequest: tppConsentRequestsId.put,
