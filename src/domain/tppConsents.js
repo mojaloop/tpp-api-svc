@@ -23,7 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Devarsh Shah <devarshshah2608@gmail.com>
  --------------
  ******/
 'use strict'
@@ -41,12 +41,6 @@ const { getStackOrInspect } = require('../lib/util.js')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
-const EndpointPaths = {
-  TPP_CONSENTS_POST: '/tppConsents',
-  TPP_CONSENTS_GET: '/tppConsents/{{ID}}',
-  TPP_CONSENTS_DELETE: '/tppConsents/{{ID}}',
-  TPP_CONSENTS_PUT_ERROR: '/tppConsents/{{ID}}/error'
-}
 /**
  * Forwards tppConsents endpoint requests to destination FSP for processing
  *
@@ -88,7 +82,7 @@ const forwardTppConsents = async (path, headers, method, params, payload, span =
   } catch (err) {
     Logger.info(`Error forwarding tpp consents to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppConsentsError(headers, source, EndpointPaths.TPP_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppConsentsError(headers, source, Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -147,7 +141,6 @@ const forwardTppConsentsError = async (headers, to, path, method, consentId, pay
 }
 
 module.exports = {
-  EndpointPaths,
   forwardTppConsents,
   forwardTppConsentsError
 }

@@ -72,7 +72,7 @@ describe('tppConsents', () => {
         statusText: 'Accepted'
       })
       const options = [
-        TppConsents.EndpointPaths.TPP_CONSENTS_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -97,7 +97,7 @@ describe('tppConsents', () => {
         statusText: 'Accepted'
       })
       const options = [
-        TppConsents.EndpointPaths.TPP_CONSENTS_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -117,7 +117,7 @@ describe('tppConsents', () => {
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
       const options = [
-        TppConsents.EndpointPaths.TPP_CONSENTS_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -141,7 +141,7 @@ describe('tppConsents', () => {
         statusText: 'Accepted'
       })
       const options = [
-        TppConsents.EndpointPaths.TPP_CONSENTS_GET,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'get',
         { },
@@ -165,7 +165,7 @@ describe('tppConsents', () => {
         statusText: 'Accepted'
       })
       const options = [
-        TppConsents.EndpointPaths.TPP_CONSENTS_GET,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_GET,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'get',
         { ID: '1234' },
@@ -185,7 +185,7 @@ describe('tppConsents', () => {
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
       sandbox.stub(TppConsents, 'forwardTppConsentsError').resolves(true)
       const options = [
-        TppConsents.EndpointPaths.TPP_CONSENTS_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -212,7 +212,7 @@ describe('tppConsents', () => {
       const options = [
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         Enum.Http.Headers.FSPIOP.SOURCE,
-        TppConsents.EndpointPaths.TPP_CONSENTS_PUT_ERROR,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_PUT_ERROR,
         Enum.Http.RestMethods.PUT,
         '12345',
         ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, 'Could not find endpoint'),
@@ -237,7 +237,7 @@ describe('tppConsents', () => {
       const options = [
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         Enum.Http.Headers.FSPIOP.SOURCE,
-        TppConsents.EndpointPaths.TPP_CONSENTS_PUT_ERROR,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_PUT_ERROR,
         Enum.Http.RestMethods.PUT,
         '12345',
         undefined,
@@ -262,7 +262,7 @@ describe('tppConsents', () => {
       const options = [
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         Enum.Http.Headers.FSPIOP.SOURCE,
-        TppConsents.EndpointPaths.TPP_CONSENTS_PUT_ERROR,
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_PUT_ERROR,
         Enum.Http.RestMethods.PUT,
         undefined,
         undefined,
