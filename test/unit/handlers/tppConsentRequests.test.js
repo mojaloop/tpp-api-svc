@@ -22,6 +22,7 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
+ - Devarsh Shah <devarshshah2608@gmail.com>
  --------------
  ******/
 

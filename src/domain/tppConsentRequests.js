@@ -22,8 +22,7 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Devarsh Shah <devarshshah2608@gmail.com>
  --------------
  ******/
 
