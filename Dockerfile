@@ -22,9 +22,12 @@ COPY package.json package-lock.json* /opt/app/
 
 RUN npm ci
 
+COPY tsconfig.json /opt/app/
 COPY src /opt/app/src
 COPY config /opt/app/config
-COPY test /opt/app/test
+
+RUN npm run build:ts
+RUN cp -r src/interface dist/interface
 
 FROM node:${NODE_VERSION}
 WORKDIR /opt/app
@@ -37,7 +40,10 @@ RUN ln -sf /dev/stdout ./logs/combined.log
 RUN adduser -D ml-user 
 USER ml-user
 
-COPY --chown=ml-user --from=builder /opt/app .
+COPY --chown=ml-user --from=builder /opt/app/package.json /opt/app/package-lock.json* ./
+COPY --chown=ml-user --from=builder /opt/app/node_modules ./node_modules
+COPY --chown=ml-user --from=builder /opt/app/dist ./dist
+COPY --chown=ml-user --from=builder /opt/app/config ./config
 RUN npm prune --production
 
 EXPOSE 4001

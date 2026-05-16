@@ -30,7 +30,7 @@
   ],
   "main": "./server",
   "scripts": {
-    "start": "node src/index.js api",
+    "start": "node dist/index.js api",
     "test": "npm run test:unit",
     "test:unit": "jest --testMatch '**/test/unit/**/*.test.{js,ts}'",
     "test:xunit": "npm run test:unit",
