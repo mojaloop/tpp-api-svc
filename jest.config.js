@@ -2,7 +2,7 @@ module.exports = {
   verbose: true,
   coverageProvider: 'v8',
   collectCoverageFrom: [
-    '**/src/**/**/*.js'
+    '**/src/**/**/*.{js,ts}'
   ],
   coverageThreshold: {
     global: {

@@ -32,11 +32,11 @@
   "scripts": {
     "start": "node src/index.js api",
     "test": "npm run test:unit",
-    "test:unit": "jest --testMatch '**/test/unit/**/*.test.js'",
+    "test:unit": "jest --testMatch '**/test/unit/**/*.test.{js,ts}'",
     "test:xunit": "npm run test:unit",
-    "test:junit": "JEST_JUNIT_OUTPUT_DIR='./test/results' JEST_JUNIT_OUTPUT_NAME='junit.xml' jest --reporters=default --reporters=jest-junit --testMatch '**/test/unit/**/*.test.js'",
-    "test:coverage": "jest --coverage --coverageThreshold='{}' --testMatch '**/test/unit/**/*.test.js'",
-    "test:coverage-check": "jest --coverage --testMatch '**/test/unit/**/*.test.js'",
+    "test:junit": "JEST_JUNIT_OUTPUT_DIR='./test/results' JEST_JUNIT_OUTPUT_NAME='junit.xml' jest --reporters=default --reporters=jest-junit --testMatch '**/test/unit/**/*.test.{js,ts}'",
+    "test:coverage": "jest --coverage --coverageThreshold='{}' --testMatch '**/test/unit/**/*.test.{js,ts}'",
+    "test:coverage-check": "jest --coverage --testMatch '**/test/unit/**/*.test.{js,ts}'",
     "test:functional": "echo 'No functional tests defined'",
     "test:integration": "echo 'No integration tests defined'",
     "lint": "npm run standard",
@@ -133,6 +133,7 @@
     "sinon": "22.0.0",
     "standard": "17.1.2",
     "standard-version": "^9.5.0",
+    "@babel/preset-typescript": "^7.28.5",
     "@types/node": "^25.8.0",
     "typescript": "^6.0.3"
   },
