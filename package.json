@@ -45,6 +45,8 @@
     "standard": "npx standard",
     "standard:fix": "npx standard --fix",
     "build": "docker build -t tpp-api-svc:local -f ./Dockerfile ../",
+    "build:ts": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "run": "docker run -p 3003:3003 --rm --link db:mysql tpp-api-svc:local",
     "package-lock": "docker run --rm -it tpp-api-svc:local cat package-lock.json > package-lock.json",
     "docker:up": "docker-compose -f docker-compose.yml -f docker-compose.base.yml up",
