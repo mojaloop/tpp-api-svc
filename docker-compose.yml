@@ -51,7 +51,7 @@ services:
     networks:
       - mojaloop-net
     volumes:
-      - ./config:/opt/tpp-api-svc/config
+      - ./config:/opt/app/config
     environment:
       - LOG_LEVEL=debug
     healthcheck:
