@@ -28,6 +28,7 @@ COPY config /opt/app/config
 
 RUN npm run build:ts
 RUN cp -r src/interface dist/interface
+RUN find dist -name '*.map' -delete
 
 FROM node:${NODE_VERSION}
 WORKDIR /opt/app
