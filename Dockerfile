@@ -46,5 +46,5 @@ COPY --chown=ml-user --from=builder /opt/app/dist ./dist
 COPY --chown=ml-user --from=builder /opt/app/config ./config
 RUN npm prune --production
 
-EXPOSE 4001
+EXPOSE 4003
 CMD ["npm", "run", "start"]
