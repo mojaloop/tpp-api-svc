@@ -28,7 +28,6 @@
     "lint",
     "test:coverage-check"
   ],
-  "main": "./server",
   "scripts": {
     "start": "node dist/index.js api",
     "test": "npm run test:unit",
