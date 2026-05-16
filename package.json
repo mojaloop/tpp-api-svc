@@ -132,7 +132,9 @@
     "replace": "^1.2.2",
     "sinon": "22.0.0",
     "standard": "17.1.2",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "@types/node": "^25.8.0",
+    "typescript": "^6.0.3"
   },
   "nyc": {
     "temp-directory": "./.nyc_output",
