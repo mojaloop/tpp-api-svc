@@ -38,12 +38,19 @@ const Consents = __importStar(require("./handlers/consents"));
 const Transactions = __importStar(require("./handlers/transactions"));
 const Authorizations = __importStar(require("./handlers/authorizations"));
 const Accounts = __importStar(require("./handlers/accounts"));
+const tppAccountsRequest_1 = require("./schemas/tppAccountsRequest");
 function registerDfspSimulatorRoutes(server) {
     server.route([
         {
             method: 'POST',
             path: '/tppAccountsRequest',
-            handler: Accounts.postTppAccountsRequest
+            handler: Accounts.postTppAccountsRequest,
+            options: {
+                validate: {
+                    headers: tppAccountsRequest_1.tppAccountsRequestPostHeaders,
+                    payload: tppAccountsRequest_1.tppAccountsRequestPostPayload
+                }
+            }
         },
         {
             method: 'PUT',
