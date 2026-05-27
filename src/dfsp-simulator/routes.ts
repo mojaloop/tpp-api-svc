@@ -7,6 +7,14 @@ import {
   tppAccountsRequestPostHeaders,
   tppAccountsRequestPostPayload
 } from './schemas/tppAccountsRequest'
+import {
+  tppConsentsIdPutHeaders,
+  tppConsentsIdPutPayload
+} from './schemas/tppConsentsId'
+import {
+  tppAuthorizationsIdPutHeaders,
+  tppAuthorizationsIdPutPayload
+} from './schemas/tppAuthorizationsId'
 
 export default function registerDfspSimulatorRoutes(server: any) {
   server.route([
@@ -23,8 +31,14 @@ export default function registerDfspSimulatorRoutes(server: any) {
     },
     {
       method: 'PUT',
-      path: '/consents/{id}',
-      handler: Consents.putConsent
+      path: '/tppConsents/{ID}',
+      handler: Consents.putConsent,
+      options: {
+        validate: {
+          headers: tppConsentsIdPutHeaders,
+          payload: tppConsentsIdPutPayload
+        }
+      }
     },
     {
       method: 'PUT',
@@ -33,8 +47,14 @@ export default function registerDfspSimulatorRoutes(server: any) {
     },
     {
       method: 'PUT',
-      path: '/thirdpartyRequests/authorizations/{id}',
-      handler: Authorizations.putAuthorization
+      path: '/tppAuthorizations/{ID}',
+      handler: Authorizations.putAuthorization,
+      options: {
+        validate: {
+          headers: tppAuthorizationsIdPutHeaders,
+          payload: tppAuthorizationsIdPutPayload
+        }
+      }
     }
   ])
 }

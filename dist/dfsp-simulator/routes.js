@@ -39,6 +39,8 @@ const Transactions = __importStar(require("./handlers/transactions"));
 const Authorizations = __importStar(require("./handlers/authorizations"));
 const Accounts = __importStar(require("./handlers/accounts"));
 const tppAccountsRequest_1 = require("./schemas/tppAccountsRequest");
+const tppConsentsId_1 = require("./schemas/tppConsentsId");
+const tppAuthorizationsId_1 = require("./schemas/tppAuthorizationsId");
 function registerDfspSimulatorRoutes(server) {
     server.route([
         {
@@ -54,8 +56,14 @@ function registerDfspSimulatorRoutes(server) {
         },
         {
             method: 'PUT',
-            path: '/consents/{id}',
-            handler: Consents.putConsent
+            path: '/tppConsents/{ID}',
+            handler: Consents.putConsent,
+            options: {
+                validate: {
+                    headers: tppConsentsId_1.tppConsentsIdPutHeaders,
+                    payload: tppConsentsId_1.tppConsentsIdPutPayload
+                }
+            }
         },
         {
             method: 'PUT',
@@ -64,8 +72,14 @@ function registerDfspSimulatorRoutes(server) {
         },
         {
             method: 'PUT',
-            path: '/thirdpartyRequests/authorizations/{id}',
-            handler: Authorizations.putAuthorization
+            path: '/tppAuthorizations/{ID}',
+            handler: Authorizations.putAuthorization,
+            options: {
+                validate: {
+                    headers: tppAuthorizationsId_1.tppAuthorizationsIdPutHeaders,
+                    payload: tppAuthorizationsId_1.tppAuthorizationsIdPutPayload
+                }
+            }
         }
     ]);
 }
