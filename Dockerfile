@@ -24,6 +24,7 @@ RUN npm ci
 
 COPY tsconfig.json /opt/app/
 COPY src /opt/app/src
+COPY dist /opt/app/dist
 COPY config /opt/app/config
 
 RUN npm run build
