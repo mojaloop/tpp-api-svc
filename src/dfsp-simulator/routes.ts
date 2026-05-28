@@ -1,5 +1,6 @@
 import * as Consents from './handlers/consents'
 import * as Authorizations from './handlers/authorizations'
+import * as Verifications from './handlers/verifications'
 
 import * as Accounts from './handlers/accounts'
 import {
@@ -26,6 +27,10 @@ import {
   tppAuthorizationsIdPutHeaders,
   tppAuthorizationsIdPutPayload
 } from './schemas/tppAuthorizationsId'
+import {
+  tppVerificationsIdPutHeaders,
+  tppVerificationsIdPutPayload
+} from './schemas/tppVerificationsId'
 
 export default function registerDfspSimulatorRoutes(server: any) {
   server.route([
@@ -92,6 +97,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppAuthorizationsIdPutHeaders,
           payload: tppAuthorizationsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppVerifications/{ID}',
+      handler: Verifications.putVerification,
+      options: {
+        validate: {
+          headers: tppVerificationsIdPutHeaders,
+          payload: tppVerificationsIdPutPayload
         }
       }
     }
