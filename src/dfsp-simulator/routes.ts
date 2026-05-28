@@ -11,6 +11,10 @@ import {
   tppConsentRequestsPostPayload
 } from './schemas/tppConsentRequests'
 import {
+  tppConsentRequestsIdPatchHeaders,
+  tppConsentRequestsIdPatchPayload
+} from './schemas/tppConsentRequestsId'
+import {
   tppConsentsIdPutHeaders,
   tppConsentsIdPutPayload
 } from './schemas/tppConsentsId'
@@ -40,6 +44,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppConsentRequestsPostHeaders,
           payload: tppConsentRequestsPostPayload
+        }
+      }
+    },
+    {
+      method: 'PATCH',
+      path: '/tppConsentRequests/{ID}',
+      handler: Consents.patchConsentRequest,
+      options: {
+        validate: {
+          headers: tppConsentRequestsIdPatchHeaders,
+          payload: tppConsentRequestsIdPatchPayload
         }
       }
     },
