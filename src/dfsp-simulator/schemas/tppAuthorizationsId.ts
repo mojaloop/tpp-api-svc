@@ -1,5 +1,11 @@
 import Joi from 'joi'
-import { BinaryString, ExtensionList } from './common'
+import {
+  BinaryString,
+  ExtensionList,
+  FIDOClientDataJSON,
+  FIDOCredentialId,
+  FIDOPublicKeyType
+} from './common'
 
 const AuthorizationResponseTypeRejected = Joi.string().valid('REJECTED').required()
 const AuthorizationResponseTypeAccepted = Joi.string().valid('ACCEPTED').required()
@@ -8,15 +14,15 @@ const SignedPayloadTypeFIDO = Joi.string().valid('FIDO').required()
 const SignedPayloadTypeGeneric = Joi.string().valid('GENERIC').required()
 
 const FIDOPublicKeyCredentialAssertion = Joi.object({
-  id: Joi.string().min(59).max(118).required(),
-  rawId: Joi.string().min(59).max(118).required(),
+  id: FIDOCredentialId.required(),
+  rawId: FIDOCredentialId.required(),
   response: Joi.object({
     authenticatorData: Joi.string().min(49).max(256).required(),
-    clientDataJSON: Joi.string().min(121).max(512).required(),
+    clientDataJSON: FIDOClientDataJSON,
     signature: Joi.string().min(59).max(256).required(),
     userHandle: Joi.string().min(1).max(88).optional()
   }).required(),
-  type: Joi.string().valid('public-key').required()
+  type: FIDOPublicKeyType
 })
 
 const SignedPayloadFIDO = Joi.object({

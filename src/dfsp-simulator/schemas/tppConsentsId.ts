@@ -1,22 +1,12 @@
 import Joi from 'joi'
-import { BinaryString, ExtensionList } from './common'
-
-const AccountAddress = Joi.string()
-  .pattern(/^([0-9A-Za-z_~\-\.]+[0-9A-Za-z_~\-])$/)
-  .min(1)
-  .max(1023)
-  .required()
-
-const ScopeAction = Joi.string().valid(
-  'ACCOUNTS_GET_BALANCE',
-  'ACCOUNTS_TRANSFER',
-  'ACCOUNTS_STATEMENT'
-)
-
-const Scope = Joi.object({
-  address: AccountAddress,
-  actions: Joi.array().items(ScopeAction).min(1).max(32).required()
-})
+import {
+  BinaryString,
+  ExtensionList,
+  FIDOClientDataJSON,
+  FIDOCredentialId,
+  FIDOPublicKeyType,
+  Scope
+} from './common'
 
 const ConsentStatusIssued = Joi.string().valid('ISSUED')
 const CredentialType = Joi.string().valid('FIDO', 'GENERIC').required()
@@ -27,13 +17,13 @@ const GenericCredential = Joi.object({
 })
 
 const FIDOPublicKeyCredentialAttestation = Joi.object({
-  id: Joi.string().min(59).max(118).required(),
-  rawId: Joi.string().min(59).max(118).optional(),
+  id: FIDOCredentialId.required(),
+  rawId: FIDOCredentialId.optional(),
   response: Joi.object({
-    clientDataJSON: Joi.string().min(121).max(512).required(),
+    clientDataJSON: FIDOClientDataJSON,
     attestationObject: Joi.string().min(306).max(2048).required()
   }).required(),
-  type: Joi.string().valid('public-key').required()
+  type: FIDOPublicKeyType
 })
 
 const SignedCredential = Joi.object({
