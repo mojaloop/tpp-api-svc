@@ -24,12 +24,13 @@ RUN npm ci
 
 COPY tsconfig.json /opt/app/
 COPY src /opt/app/src
-COPY dist /opt/app/dist
 COPY config /opt/app/config
 
 RUN npm run build
 RUN cp -r src/interface dist/interface
 RUN find dist -name '*.map' -delete
+
+RUN npm run build:dfsp
 
 FROM node:${NODE_VERSION}
 WORKDIR /opt/app
