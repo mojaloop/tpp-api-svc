@@ -1,5 +1,4 @@
 import * as Consents from './handlers/consents'
-import * as Transactions from './handlers/transactions'
 import * as Authorizations from './handlers/authorizations'
 
 import * as Accounts from './handlers/accounts'
@@ -39,11 +38,6 @@ export default function registerDfspSimulatorRoutes(server: any) {
           payload: tppConsentsIdPutPayload
         }
       }
-    },
-    {
-      method: 'PUT',
-      path: '/thirdpartyRequests/transactions/{id}',
-      handler: Transactions.putTransaction
     },
     {
       method: 'PUT',
