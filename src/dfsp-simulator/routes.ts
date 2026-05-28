@@ -7,6 +7,10 @@ import {
   tppAccountsRequestPostPayload
 } from './schemas/tppAccountsRequest'
 import {
+  tppConsentRequestsPostHeaders,
+  tppConsentRequestsPostPayload
+} from './schemas/tppConsentRequests'
+import {
   tppConsentsIdPutHeaders,
   tppConsentsIdPutPayload
 } from './schemas/tppConsentsId'
@@ -25,6 +29,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppAccountsRequestPostHeaders,
           payload: tppAccountsRequestPostPayload
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppConsentRequests',
+      handler: Consents.postConsentRequest,
+      options: {
+        validate: {
+          headers: tppConsentRequestsPostHeaders,
+          payload: tppConsentRequestsPostPayload
         }
       }
     },

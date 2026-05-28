@@ -8,3 +8,7 @@ export async function putConsent(request: Request, h: ResponseToolkit) {
     status: 'ACCEPTED'
   }).code(200)
 }
+
+export async function postConsentRequest(_request: Request, h: ResponseToolkit) {
+  return h.response().code(202)
+}
