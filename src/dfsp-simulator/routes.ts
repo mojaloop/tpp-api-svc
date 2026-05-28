@@ -7,6 +7,10 @@ import {
   tppAccountsRequestPostPayload
 } from './schemas/tppAccountsRequest'
 import {
+  tppAccountsIdSignedChallengeGetHeaders,
+  tppAccountsIdSignedChallengeGetParams
+} from './schemas/tppAccountsIdSignedChallenge'
+import {
   tppConsentRequestsPostHeaders,
   tppConsentRequestsPostPayload
 } from './schemas/tppConsentRequests'
@@ -33,6 +37,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppAccountsRequestPostHeaders,
           payload: tppAccountsRequestPostPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppAccounts/{ID}/{SignedChallenge}',
+      handler: Accounts.getTppAccountsByIdAndSignedChallenge,
+      options: {
+        validate: {
+          headers: tppAccountsIdSignedChallengeGetHeaders,
+          params: tppAccountsIdSignedChallengeGetParams
         }
       }
     },
