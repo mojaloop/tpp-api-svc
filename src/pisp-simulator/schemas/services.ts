@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { ExtensionList } from './common'
+import { ExtensionList, ErrorInformation } from './common'
 
 const FspId = Joi.string().min(1).max(32)
 
@@ -24,15 +24,6 @@ export const servicesServiceTypePutHeaders = Joi.object({
 
 export const servicesServiceTypePutPayload = Joi.object({
   providers: Joi.array().items(FspId).min(0).max(256).required(),
-  extensionList: ExtensionList.optional()
-})
-
-const ErrorCode = Joi.string().pattern(/^[1-9]\d{3}$/)
-const ErrorDescription = Joi.string().min(1).max(128)
-
-const ErrorInformation = Joi.object({
-  errorCode: ErrorCode.required(),
-  errorDescription: ErrorDescription.required(),
   extensionList: ExtensionList.optional()
 })
 

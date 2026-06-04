@@ -56,3 +56,12 @@ export const Scope = Joi.object({
 export const FIDOCredentialId = Joi.string().min(59).max(118)
 export const FIDOClientDataJSON = Joi.string().min(121).max(512).required()
 export const FIDOPublicKeyType = Joi.string().valid('public-key').required()
+
+export const ErrorCode = Joi.string().pattern(/^[1-9]\d{3}$/)
+export const ErrorDescription = Joi.string().min(1).max(128)
+
+export const ErrorInformation = Joi.object({
+  errorCode: ErrorCode.required(),
+  errorDescription: ErrorDescription.required(),
+  extensionList: ExtensionList.optional()
+})
