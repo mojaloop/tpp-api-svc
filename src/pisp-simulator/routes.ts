@@ -1,6 +1,7 @@
 import * as Health from './handlers/health'
 import * as Services from './handlers/services'
 import * as AccountsRequest from './handlers/accountsRequest'
+import * as Accounts from './handlers/accounts'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -13,6 +14,12 @@ import {
   tppAccountsRequestIdPutPayload,
   tppAccountsRequestIdErrorPutPayload
 } from './schemas/tppAccountsRequestId'
+import {
+  tppAccountsIdPutHeaders,
+  tppAccountsIdPutParams,
+  tppAccountsIdPutPayload,
+  tppAccountsIdErrorPutPayload
+} from './schemas/tppAccountsId'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -66,6 +73,30 @@ export default function registerPispSimulatorRoutes(server: any) {
           headers: tppAccountsRequestIdPutHeaders,
           params: tppAccountsRequestIdPutParams,
           payload: tppAccountsRequestIdErrorPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppAccounts/{ID}',
+      handler: Accounts.putTppAccountsById,
+      options: {
+        validate: {
+          headers: tppAccountsIdPutHeaders,
+          params: tppAccountsIdPutParams,
+          payload: tppAccountsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppAccounts/{ID}/error',
+      handler: Accounts.putTppAccountsByIdError,
+      options: {
+        validate: {
+          headers: tppAccountsIdPutHeaders,
+          params: tppAccountsIdPutParams,
+          payload: tppAccountsIdErrorPutPayload
         }
       }
     }
