@@ -30,6 +30,8 @@ RUN npm run build
 RUN cp -r src/interface dist/interface
 RUN find dist -name '*.map' -delete
 
+RUN npm run build:pisp
+
 FROM node:${NODE_VERSION}
 WORKDIR /opt/app
 
