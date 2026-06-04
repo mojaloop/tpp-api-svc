@@ -27,15 +27,23 @@
  --------------
  ******/
 'use strict'
+import { Enum } from '@mojaloop/central-services-shared';
+import { 
+  type Request,
+  type ResponseToolkit
+} from '@hapi/hapi';
+import {
+  type Span
+} from '@mojaloop/event-sdk';
 
 const EventSdk = require('@mojaloop/event-sdk')
-const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
 const tppAccountsRequest = require('../domain/tppAccountsRequest')
 const LibUtil = require('../lib/util')
 
+type TraceableRequest = Request & { span: Span }
 /**
  * Operations on /tppAccountsRequest
  */
@@ -49,13 +57,13 @@ module.exports = {
    * produces: application/json
    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  post: async (context, request, h) => {
+  post: async (_context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_accounts_requests_post',
       'Post tpp accounts request',
       ['success']
     ).startTimer()
-    const span = request.span
+    const span = request.span;
     try {
       const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.POST)
       span.setTags(tags)
@@ -63,7 +71,14 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
+      tppAccountsRequest.forwardTppAccountsRequest(
+        (<any> Enum.EndPoints.FspEndpointTemplates).TPP_ACCOUNTS_REQUEST_POST,
+        request.headers,
+        Enum.Http.RestMethods.POST,
+        request.params,
+        request.payload,
+        span
+      ).catch((err: Error) => {
         // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
