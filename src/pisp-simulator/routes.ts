@@ -2,6 +2,7 @@ import * as Health from './handlers/health'
 import * as Services from './handlers/services'
 import * as AccountsRequest from './handlers/accountsRequest'
 import * as Accounts from './handlers/accounts'
+import * as ConsentRequests from './handlers/consentRequests'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -20,6 +21,13 @@ import {
   tppAccountsIdPutPayload,
   tppAccountsIdErrorPutPayload
 } from './schemas/tppAccountsId'
+import {
+  tppConsentRequestsIdPutHeaders,
+  tppConsentRequestsIdPutParams,
+  tppConsentRequestsIdPutPayload,
+  tppConsentRequestsIdPatchPayload,
+  tppConsentRequestsIdErrorPutPayload
+} from './schemas/tppConsentRequestsId'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -97,6 +105,42 @@ export default function registerPispSimulatorRoutes(server: any) {
           headers: tppAccountsIdPutHeaders,
           params: tppAccountsIdPutParams,
           payload: tppAccountsIdErrorPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppConsentRequests/{ID}',
+      handler: ConsentRequests.putTppConsentRequestsById,
+      options: {
+        validate: {
+          headers: tppConsentRequestsIdPutHeaders,
+          params: tppConsentRequestsIdPutParams,
+          payload: tppConsentRequestsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PATCH',
+      path: '/tppConsentRequests/{ID}',
+      handler: ConsentRequests.patchTppConsentRequestsById,
+      options: {
+        validate: {
+          headers: tppConsentRequestsIdPutHeaders,
+          params: tppConsentRequestsIdPutParams,
+          payload: tppConsentRequestsIdPatchPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppConsentRequests/{ID}/error',
+      handler: ConsentRequests.putTppConsentRequestsByIdError,
+      options: {
+        validate: {
+          headers: tppConsentRequestsIdPutHeaders,
+          params: tppConsentRequestsIdPutParams,
+          payload: tppConsentRequestsIdErrorPutPayload
         }
       }
     }
