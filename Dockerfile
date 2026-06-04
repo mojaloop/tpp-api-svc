@@ -26,7 +26,7 @@ COPY tsconfig.json /opt/app/
 COPY src /opt/app/src
 COPY config /opt/app/config
 
-RUN npm run build:ts
+RUN npm run build
 RUN cp -r src/interface dist/interface
 RUN find dist -name '*.map' -delete
 
