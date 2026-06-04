@@ -60,7 +60,7 @@
     "dep:update": "npx ncu -u",
     "release": "standard-version --releaseCommitMessageFormat 'chore(release): {{currentTag}} [skip ci]'",
     "snapshot": "standard-version --no-verify --skip.changelog --prerelease snapshot --releaseCommitMessageFormat 'chore(snapshot): {{currentTag}}'",
-    "build:dfsp": "tsc"
+    "build:pisp": "tsc"
   },
   "dependencies": {
     "@hapi/boom": "10.0.1",
