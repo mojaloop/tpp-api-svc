@@ -139,11 +139,20 @@ export const PartyPersonalInfo = Joi.object({
 
 export const PartyName = Joi.string().min(1).max(128)
 
+export const Account = Joi.object({
+  address: AccountAddress.optional(),
+  currency: Currency.required(),
+  accountNickname: Name.optional()
+})
+
+export const AccountList = Joi.array().items(Account).min(1)
+
 export const Party = Joi.object({
   partyIdInfo: PartyIdInfo.required(),
   merchantClassificationCode: MerchantClassificationCode.optional(),
   name: PartyName.optional(),
-  personalInfo: PartyPersonalInfo.optional()
+  personalInfo: PartyPersonalInfo.optional(),
+  accounts: AccountList.optional()
 })
 
 export const Amount = Joi.string().pattern(/^([0]|([1-9][0-9]{0,17}))([.][0-9]{0,3}[1-9])?$/)

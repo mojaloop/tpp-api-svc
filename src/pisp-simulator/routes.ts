@@ -5,6 +5,7 @@ import * as Accounts from './handlers/accounts'
 import * as ConsentRequests from './handlers/consentRequests'
 import * as Consents from './handlers/consents'
 import * as Authorizations from './handlers/authorizations'
+import * as Parties from './handlers/parties'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -41,6 +42,11 @@ import {
   tppAuthorizationsIdParams,
   tppAuthorizationsIdErrorPutPayload
 } from './schemas/tppAuthorizations'
+import {
+  partiesHeaders,
+  partiesTypeIdGetParams,
+  partiesTypeIdPutPayload
+} from './schemas/parties'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -210,6 +216,29 @@ export default function registerPispSimulatorRoutes(server: any) {
           headers: tppAuthorizationsHeaders,
           params: tppAuthorizationsIdParams,
           payload: tppAuthorizationsIdErrorPutPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/parties/{Type}/{ID}/{SubId?}',
+      handler: Parties.getParties,
+      options: {
+        validate: {
+          headers: partiesHeaders,
+          params: partiesTypeIdGetParams
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/parties/{Type}/{ID}/{SubId?}',
+      handler: Parties.putParties,
+      options: {
+        validate: {
+          headers: partiesHeaders,
+          params: partiesTypeIdGetParams,
+          payload: partiesTypeIdPutPayload
         }
       }
     }
