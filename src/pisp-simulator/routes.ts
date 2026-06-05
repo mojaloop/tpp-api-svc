@@ -4,6 +4,7 @@ import * as AccountsRequest from './handlers/accountsRequest'
 import * as Accounts from './handlers/accounts'
 import * as ConsentRequests from './handlers/consentRequests'
 import * as Consents from './handlers/consents'
+import * as Authorizations from './handlers/authorizations'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -34,6 +35,12 @@ import {
   tppConsentsPostPayload,
   tppConsentsIdGetParams
 } from './schemas/tppConsents'
+import {
+  tppAuthorizationsHeaders,
+  tppAuthorizationsPostPayload,
+  tppAuthorizationsIdParams,
+  tppAuthorizationsIdErrorPutPayload
+} from './schemas/tppAuthorizations'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -169,6 +176,40 @@ export default function registerPispSimulatorRoutes(server: any) {
         validate: {
           headers: tppConsentsHeaders,
           params: tppConsentsIdGetParams
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppAuthorizations',
+      handler: Authorizations.postTppAuthorizations,
+      options: {
+        validate: {
+          headers: tppAuthorizationsHeaders,
+          payload: tppAuthorizationsPostPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppAuthorizations/{ID}',
+      handler: Authorizations.getTppAuthorizationsById,
+      options: {
+        validate: {
+          headers: tppAuthorizationsHeaders,
+          params: tppAuthorizationsIdParams
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppAuthorizations/{ID}/error',
+      handler: Authorizations.putTppAuthorizationsByIdError,
+      options: {
+        validate: {
+          headers: tppAuthorizationsHeaders,
+          params: tppAuthorizationsIdParams,
+          payload: tppAuthorizationsIdErrorPutPayload
         }
       }
     }
