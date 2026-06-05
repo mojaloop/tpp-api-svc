@@ -3,6 +3,7 @@ import * as Services from './handlers/services'
 import * as AccountsRequest from './handlers/accountsRequest'
 import * as Accounts from './handlers/accounts'
 import * as ConsentRequests from './handlers/consentRequests'
+import * as Consents from './handlers/consents'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -28,6 +29,11 @@ import {
   tppConsentRequestsIdPatchPayload,
   tppConsentRequestsIdErrorPutPayload
 } from './schemas/tppConsentRequestsId'
+import {
+  tppConsentsHeaders,
+  tppConsentsPostPayload,
+  tppConsentsIdGetParams
+} from './schemas/tppConsents'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -141,6 +147,28 @@ export default function registerPispSimulatorRoutes(server: any) {
           headers: tppConsentRequestsIdPutHeaders,
           params: tppConsentRequestsIdPutParams,
           payload: tppConsentRequestsIdErrorPutPayload
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppConsents',
+      handler: Consents.postTppConsents,
+      options: {
+        validate: {
+          headers: tppConsentsHeaders,
+          payload: tppConsentsPostPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppConsents/{ID}',
+      handler: Consents.getTppConsentsById,
+      options: {
+        validate: {
+          headers: tppConsentsHeaders,
+          params: tppConsentsIdGetParams
         }
       }
     }
