@@ -7,6 +7,7 @@ import * as Consents from './handlers/consents'
 import * as Authorizations from './handlers/authorizations'
 import * as Parties from './handlers/parties'
 import * as Transfers from './handlers/tppTransfers'
+import * as TransactionRequests from './handlers/tppTransactionRequests'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -55,6 +56,12 @@ import {
   tppTransfersIdPutPayload,
   tppTransfersIdErrorPutPayload
 } from './schemas/tppTransfers'
+import {
+  tppTransactionRequestsHeaders,
+  tppTransactionRequestsIdParams,
+  tppTransactionRequestsIdPutPayload,
+  tppTransactionRequestsIdErrorPutPayload
+} from './schemas/tppTransactionRequests'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -293,6 +300,30 @@ export default function registerPispSimulatorRoutes(server: any) {
           headers: tppTransfersHeaders,
           params: tppTransfersIdParams,
           payload: tppTransfersIdErrorPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppTransactionRequests/{ID}',
+      handler: TransactionRequests.putTppTransactionRequestsById,
+      options: {
+        validate: {
+          headers: tppTransactionRequestsHeaders,
+          params: tppTransactionRequestsIdParams,
+          payload: tppTransactionRequestsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppTransactionRequests/{ID}/error',
+      handler: TransactionRequests.putTppTransactionRequestsByIdError,
+      options: {
+        validate: {
+          headers: tppTransactionRequestsHeaders,
+          params: tppTransactionRequestsIdParams,
+          payload: tppTransactionRequestsIdErrorPutPayload
         }
       }
     }

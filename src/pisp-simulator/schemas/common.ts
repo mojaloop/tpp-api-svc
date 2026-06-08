@@ -214,3 +214,5 @@ export const TransferState = Joi.string().valid(
   'COMMITTED',
   'ABORTED'
 )
+
+export const IlpCondition = Joi.string().pattern(/^[A-Za-z0-9-_]{43}$/)
