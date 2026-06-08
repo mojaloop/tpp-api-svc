@@ -6,6 +6,7 @@ import * as ConsentRequests from './handlers/consentRequests'
 import * as Consents from './handlers/consents'
 import * as Authorizations from './handlers/authorizations'
 import * as Parties from './handlers/parties'
+import * as Transfers from './handlers/tppTransfers'
 import {
   servicesServiceTypePutHeaders,
   servicesServiceTypePutParams,
@@ -47,6 +48,13 @@ import {
   partiesTypeIdGetParams,
   partiesTypeIdPutPayload
 } from './schemas/parties'
+import {
+  tppTransfersHeaders,
+  tppTransfersIdParams,
+  tppTransfersPostPayload,
+  tppTransfersIdPutPayload,
+  tppTransfersIdErrorPutPayload
+} from './schemas/tppTransfers'
 
 export default function registerPispSimulatorRoutes(server: any) {
   server.route([
@@ -239,6 +247,52 @@ export default function registerPispSimulatorRoutes(server: any) {
           headers: partiesHeaders,
           params: partiesTypeIdGetParams,
           payload: partiesTypeIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppTransfers/{ID}',
+      handler: Transfers.getTppTransfersById,
+      options: {
+        validate: {
+          headers: tppTransfersHeaders,
+          params: tppTransfersIdParams
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppTransfers',
+      handler: Transfers.postTppTransfers,
+      options: {
+        validate: {
+          headers: tppTransfersHeaders,
+          payload: tppTransfersPostPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppTransfers/{ID}',
+      handler: Transfers.putTppTransfersById,
+      options: {
+        validate: {
+          headers: tppTransfersHeaders,
+          params: tppTransfersIdParams,
+          payload: tppTransfersIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppTransfers/{ID}/error',
+      handler: Transfers.putTppTransfersByIdError,
+      options: {
+        validate: {
+          headers: tppTransfersHeaders,
+          params: tppTransfersIdParams,
+          payload: tppTransfersIdErrorPutPayload
         }
       }
     }

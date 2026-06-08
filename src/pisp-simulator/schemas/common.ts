@@ -193,3 +193,24 @@ export const TransactionType = Joi.object({
   refundInfo: Refund.optional(),
   balanceOfPayments: BalanceOfPayments.optional()
 })
+
+export const AuthenticationType = Joi.string().valid('OTP', 'QRCODE')
+
+export const AuthenticationValue = Joi.string().min(1).max(64)
+
+export const AuthenticationInfo = Joi.object({
+  authentication: AuthenticationType.required(),
+  authenticationValue: AuthenticationValue.required()
+})
+
+export const IlpFulfilment = Joi.string()
+  .pattern(/^[A-Za-z0-9-_]+[=]{0,2}$/)
+  .min(1)
+  .max(32)
+
+export const TransferState = Joi.string().valid(
+  'RECEIVED',
+  'RESERVED',
+  'COMMITTED',
+  'ABORTED'
+)
