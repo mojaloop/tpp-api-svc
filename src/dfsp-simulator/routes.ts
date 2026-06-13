@@ -96,6 +96,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
     },
     {
       method: 'PUT',
+      path: '/tppConsents',
+      handler: Consents.putConsents,
+      options: {
+        validate: {
+          headers: tppConsentsIdPutHeaders,
+          payload: tppConsentsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
       path: '/tppAuthorizations/{ID}',
       handler: Authorizations.putAuthorization,
       options: {

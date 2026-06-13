@@ -9,6 +9,10 @@ export async function putConsent(request: Request, h: ResponseToolkit) {
   }).code(200)
 }
 
+export async function putConsents(_request: Request, h: ResponseToolkit) {
+  return h.response().code(200)
+}
+
 export async function postConsentRequest(_request: Request, h: ResponseToolkit) {
   return h.response().code(202)
 }
