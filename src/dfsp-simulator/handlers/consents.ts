@@ -17,6 +17,10 @@ export async function patchConsent(_request: Request, h: ResponseToolkit) {
   return h.response().code(200)
 }
 
+export async function putConsentError(_request: Request, h: ResponseToolkit) {
+  return h.response().code(200)
+}
+
 export async function postConsentRequest(_request: Request, h: ResponseToolkit) {
   return h.response().code(202)
 }
