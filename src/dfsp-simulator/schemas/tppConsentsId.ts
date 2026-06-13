@@ -73,3 +73,33 @@ export const tppConsentsIdPutPayload = Joi.alternatives().try(
   ConsentsIDPutResponseSigned,
   ConsentsIDPutResponseVerified
 )
+
+const CredentialStateValue = Joi.string().valid(
+  'RECEIVED',
+  'PENDING',
+  'COMPLETED',
+  'REJECTED',
+  'VERIFIED'
+)
+
+export const tppConsentsIdPatchHeaders = Joi.object({
+  'content-type': Joi.string().required(),
+  'content-length': Joi.string().required(),
+  'date': Joi.string().required(),
+  'fspiop-source': Joi.string().required(),
+  'accept': Joi.string().required(),
+  'fspiop-destination': Joi.string().optional(),
+  'fspiop-encryption': Joi.string().optional(),
+  'fspiop-signature': Joi.string().optional(),
+  'fspiop-uri': Joi.string().optional(),
+  'fspiop-http-method': Joi.string().optional(),
+  'x-forwarded-for': Joi.string().optional()
+}).unknown(true)
+
+// JSON Merge Patch (RFC7386) per spec 3.5.3: every field optional.
+export const tppConsentsIdPatchPayload = Joi.object({
+  scopes: Joi.array().items(Scope).optional(),
+  consentState: CredentialStateValue.optional(),
+  credential: Joi.object().unknown(true).optional(),
+  extensionList: ExtensionList.optional()
+})

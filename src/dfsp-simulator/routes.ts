@@ -24,7 +24,9 @@ import {
 } from './schemas/tppConsentRequestsId'
 import {
   tppConsentsIdPutHeaders,
-  tppConsentsIdPutPayload
+  tppConsentsIdPutPayload,
+  tppConsentsIdPatchHeaders,
+  tppConsentsIdPatchPayload
 } from './schemas/tppConsentsId'
 import {
   tppAuthorizationsIdPutHeaders,
@@ -95,6 +97,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppConsentRequestsIdPatchHeaders,
           payload: tppConsentRequestsIdPatchPayload
+        }
+      }
+    },
+    {
+      method: 'PATCH',
+      path: '/tppConsents/{ID}',
+      handler: Consents.patchConsent,
+      options: {
+        validate: {
+          headers: tppConsentsIdPatchHeaders,
+          payload: tppConsentsIdPatchPayload
         }
       }
     },
