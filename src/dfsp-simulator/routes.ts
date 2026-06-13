@@ -36,7 +36,9 @@ import {
 } from './schemas/tppVerificationsId'
 import {
   tppTransactionRequestsPostHeaders,
-  tppTransactionRequestsPostPayload
+  tppTransactionRequestsPostPayload,
+  tppTransactionRequestsIdGetHeaders,
+  tppTransactionRequestsIdGetParams
 } from './schemas/tppTransactionRequests'
 
 export default function registerDfspSimulatorRoutes(server: any) {
@@ -137,6 +139,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppVerificationsIdPutHeaders,
           payload: tppVerificationsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppTransactionRequests/{ID}',
+      handler: TransactionRequests.getTransactionRequest,
+      options: {
+        validate: {
+          headers: tppTransactionRequestsIdGetHeaders,
+          params: tppTransactionRequestsIdGetParams
         }
       }
     },
