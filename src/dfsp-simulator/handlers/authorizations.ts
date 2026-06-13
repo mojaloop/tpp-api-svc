@@ -12,3 +12,7 @@ export async function putAuthorization(request: Request, h: ResponseToolkit) {
     }
   }).code(200)
 }
+
+export async function putAuthorizationError(_request: Request, h: ResponseToolkit) {
+  return h.response().code(200)
+}

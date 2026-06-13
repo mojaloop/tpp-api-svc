@@ -38,6 +38,10 @@ import {
   tppAuthorizationsIdPutPayload
 } from './schemas/tppAuthorizationsId'
 import {
+  tppAuthorizationsIdErrorPutHeaders,
+  tppAuthorizationsIdErrorPutParams
+} from './schemas/tppAuthorizationsIdError'
+import {
   tppVerificationsIdPutHeaders,
   tppVerificationsIdPutPayload
 } from './schemas/tppVerificationsId'
@@ -158,6 +162,18 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppAuthorizationsIdPutHeaders,
           payload: tppAuthorizationsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppAuthorizations/{ID}/error',
+      handler: Authorizations.putAuthorizationError,
+      options: {
+        validate: {
+          headers: tppAuthorizationsIdErrorPutHeaders,
+          params: tppAuthorizationsIdErrorPutParams,
+          payload: ErrorInformationObject
         }
       }
     },
