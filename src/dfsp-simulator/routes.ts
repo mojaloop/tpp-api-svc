@@ -46,6 +46,10 @@ import {
   tppVerificationsIdPutPayload
 } from './schemas/tppVerificationsId'
 import {
+  tppVerificationsIdErrorPutHeaders,
+  tppVerificationsIdErrorPutParams
+} from './schemas/tppVerificationsIdError'
+import {
   tppTransactionRequestsPostHeaders,
   tppTransactionRequestsPostPayload,
   tppTransactionRequestsIdGetHeaders,
@@ -196,6 +200,18 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppTransactionRequestsIdGetHeaders,
           params: tppTransactionRequestsIdGetParams
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppVerifications/{ID}/error',
+      handler: Verifications.putVerificationError,
+      options: {
+        validate: {
+          headers: tppVerificationsIdErrorPutHeaders,
+          params: tppVerificationsIdErrorPutParams,
+          payload: ErrorInformationObject
         }
       }
     },
