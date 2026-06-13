@@ -1,6 +1,7 @@
 import * as Consents from './handlers/consents'
 import * as Authorizations from './handlers/authorizations'
 import * as Verifications from './handlers/verifications'
+import * as TransactionRequests from './handlers/transactionRequests'
 
 import * as Accounts from './handlers/accounts'
 import {
@@ -31,6 +32,10 @@ import {
   tppVerificationsIdPutHeaders,
   tppVerificationsIdPutPayload
 } from './schemas/tppVerificationsId'
+import {
+  tppTransactionRequestsPostHeaders,
+  tppTransactionRequestsPostPayload
+} from './schemas/tppTransactionRequests'
 
 export default function registerDfspSimulatorRoutes(server: any) {
   server.route([
@@ -108,6 +113,17 @@ export default function registerDfspSimulatorRoutes(server: any) {
         validate: {
           headers: tppVerificationsIdPutHeaders,
           payload: tppVerificationsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppTransactionRequests',
+      handler: TransactionRequests.postTransactionRequest,
+      options: {
+        validate: {
+          headers: tppTransactionRequestsPostHeaders,
+          payload: tppTransactionRequestsPostPayload
         }
       }
     }
