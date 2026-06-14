@@ -27,7 +27,7 @@ describe('PUT /tppAccountsRequest/{ID}', () => {
     authUri: 'https://dfsp.example/auth/12345'
   }
 
-  it('returns 202 on a valid request', async () => {
+  it('returns 200 on a valid request', async () => {
     const response = await server.inject({
       method: 'PUT',
       url,
@@ -35,7 +35,7 @@ describe('PUT /tppAccountsRequest/{ID}', () => {
       payload: validPayload
     })
 
-    expect(response.statusCode).toBe(202)
+    expect(response.statusCode).toBe(200)
   })
 
   it('returns 400 when authChannel is not in the allowed enum', async () => {
