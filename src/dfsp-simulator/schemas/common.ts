@@ -187,6 +187,13 @@ export const TransactionType = Joi.object({
 
 export const AuthenticationType = Joi.string().valid('OTP', 'FIDO', 'QRCODE')
 
+export const AuthenticationValue = Joi.string().min(1).max(64)
+
+export const AuthenticationInfo = Joi.object({
+  authentication: AuthenticationType.required(),
+  authenticationValue: AuthenticationValue.required()
+})
+
 export const Note = Joi.string().min(1).max(128)
 
 export const ErrorCode = Joi.string().pattern(/^[1-9]\d{3}$/)
