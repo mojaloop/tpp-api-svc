@@ -1,3 +1,4 @@
+import * as Health from './handlers/health'
 import * as Consents from './handlers/consents'
 import * as Authorizations from './handlers/authorizations'
 import * as Verifications from './handlers/verifications'
@@ -63,6 +64,11 @@ import {
 
 export default function registerDfspSimulatorRoutes(server: any) {
   server.route([
+    {
+      method: 'GET',
+      path: '/health',
+      handler: Health.getHealth
+    },
     {
       method: 'POST',
       path: '/tppAccountsRequest',

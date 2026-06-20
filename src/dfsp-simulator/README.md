@@ -42,6 +42,8 @@ Source of truth for direction and payloads is the PISP v2.0 spec doc. The repo `
 | GET | `/tppTransactionRequests/{ID}` | 202 | PISP queries transaction-request status |
 | POST | `/tppTransfers` | 202 | PISP asks the DFSP to execute the transfer |
 
+There is also a `GET /health` route that returns `200 {"status":"OK"}`. It is an infrastructure endpoint for liveness checks, not one of the spec's TPP endpoints.
+
 Routes that are deliberately **not** hosted (the calls the DFSP sends rather than receives) are omitted by design, following the receive-only rule above.
 
 ## Layout
@@ -78,7 +80,7 @@ Unit tests import the routes directly, so no build step is needed to run them.
 
 ```sh
 npm run test:unit                       # full suite
-npx jest test/unit/dfsp-simulator       # simulator only (16 files, 32 tests)
+npx jest test/unit/dfsp-simulator       # simulator only (17 files, 33 tests)
 ```
 
 Each endpoint has a happy-path test and one validation-failure test.
