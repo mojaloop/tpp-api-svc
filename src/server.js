@@ -44,7 +44,7 @@ const Config = require('./lib/config.js')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 
-const { createDfspSimulatorServer } = require('./dfsp-simulator/server') // TTK server
+const { createDfspSimulatorServer } = require('./dfsp-simulator/server')
 
 /**
  * @function createServer
@@ -76,10 +76,6 @@ const createServer = async (port) => {
   server.route(Routes.APIRoutes(api))
   // TODO: follow instructions https://github.com/anttiviljami/openapi-backend/blob/master/DOCS.md#postresponsehandler-handler
 
-
-  //const registerDfspSimulator = require('../dist/dfsp-simulator').default
-  //registerDfspSimulator(server)
-
   await server.start()
   return server
 }
@@ -90,16 +86,14 @@ const initializeInstrumentation = () => {
   }
 }
 
-
 const initialize = async (port = Config.PORT) => {
   const server = await createServer(port)
   Logger.info(`Server running on ${server.info.host}:${server.info.port}`)
   await Endpoints.initializeCache(Config.ENDPOINT_CACHE_CONFIG, { hubName: Config.HUB_NAME, hubNameRegex })
   initializeInstrumentation()
 
-  // Arranca el DFSP Simulator en otro puerto
-  await createDfspSimulatorServer(5001) 
-  
+  await createDfspSimulatorServer(5001)
+
   return server
 }
 
@@ -107,5 +101,3 @@ module.exports = {
   createServer, // exported for testing only
   initialize
 }
-
-
