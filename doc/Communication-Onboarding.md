@@ -6,8 +6,7 @@ Where to reach the PISP v2.0 workstream — meetings and Slack channels.
 
 ## 1. Workstream Meeting
 
-The workstream holds a biweekly check-in meeting. Contact **Olivier Manzi** for an
-invitation.
+The workstream holds a biweekly check-in meeting. Contact **Olivier Manzi** via Mojaloop Slack for an invitation.
 
 ## 2. Slack Channels
 
