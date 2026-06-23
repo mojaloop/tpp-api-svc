@@ -11,7 +11,7 @@ access for all! This is the entry point to the onboarding docs.
 
 > These are living documents. If you have feedback or suggestions, please create an issue in the repo or open a PR to help improve them. Thank you
 
-## 1. Technical Onboarding
+### 1. Technical Onboarding
 
 Engineering introduction to the PISP v2.0 workstream and its topics.
 
@@ -20,7 +20,7 @@ Engineering introduction to the PISP v2.0 workstream and its topics.
   - [Issues and Board](./doc/Technical-Onboarding.md#2-issues-and-board)
   - [Setting Up Local Development Tools and Environment](./doc/Technical-Onboarding.md#3-setting-up-local-development-tools-and-environment)
 
-## 2. Communication Onboarding
+### 2. Communication Onboarding
 
 How to reach the workstream — meetings and Slack channels.
 
@@ -28,7 +28,7 @@ How to reach the workstream — meetings and Slack channels.
   - [Workstream Meeting](./doc/Communication-Onboarding.md#1-workstream-meeting)
   - [Slack Channels](./doc/Communication-Onboarding.md#2-slack-channels)
 
-## 3. Glossary
+### 3. Glossary
 
 Key terms and abbreviations used across the docs.
 
