@@ -4,6 +4,58 @@
   // Only use one of ["low": true, "moderate": true, "high": true, "critical": true]
   "moderate": true,
   "allowlist": [ // NOTE: Please add as much information as possible to any items added to the allowList
-    // Currently no fixes available for the following
+    // All advisories below are transitive (pulled in via up-to-date @mojaloop/* packages
+    // and dev/doc-generation tooling). `npm audit fix` applies no fix, and the only fix npm
+    // offers is `--force`, which downgrades core deps (e.g. @mojaloop/central-services-shared
+    // 18.x -> 6.4.1, @mojaloop/event-sdk -> 14.7) and breaks the build. Allowlisted until an
+    // upstream release drops the vulnerable transitive deps. Re-review on each dep bump.
+
+    // undici — via @mojaloop/central-services-shared -> shins -> cheerio -> undici
+    // (already `overridden`; cheerio/shins pin it inside the vulnerable <=6.26.0 range).
+    "GHSA-2mjp-6q6p-2qxm",
+    "GHSA-4992-7rv2-5pvq",
+    "GHSA-f269-vfmq-vjvj",
+    "GHSA-g9mf-h72j-4rw9",
+    "GHSA-p88m-4jfj-68fv",
+    "GHSA-v9p9-hfj2-hcw8",
+    "GHSA-vrm6-8vpv-qv8q",
+    "GHSA-vxpw-j846-p89q",
+
+    // protobufjs — via @mojaloop/event-sdk (fix requires downgrade to event-sdk@14.7, breaking).
+    "GHSA-f38q-mgvj-vph7",
+    "GHSA-jggg-4jg4-v7c6",
+    "GHSA-wcpc-wj8m-hjx6",
+
+    // @grpc/grpc-js — via @mojaloop/event-sdk (same breaking downgrade as above).
+    "GHSA-5375-pq7m-f5r2",
+    "GHSA-99f4-grh7-6pcq",
+
+    // convict — via @mojaloop/central-services-shared -> @mojaloop/inter-scheme-proxy-cache-lib
+    // (fix requires downgrade to central-services-shared@6.4.1, breaking).
+    "GHSA-44fc-8fm5-q62h",
+    "GHSA-hf2r-9gf9-rwch",
+
+    // form-data — via axios / httpsnippet (doc-generation + central-services-shared chain).
+    "GHSA-hmw2-7cc7-3qxx",
+
+    // ajv & lodash — via @mojaloop/ml-testing-toolkit-shared-lib (devDependency, test mocks only).
+    "GHSA-2g4f-4pwh-qvx6",
+    "GHSA-f23m-r3pf-42rh",
+    "GHSA-r5fr-rjxr-66jc",
+
+    // js-yaml — via jest/babel coverage tooling (@istanbuljs/load-nyc-config); devDependency only.
+    "GHSA-h67p-54hq-rp68",
+
+    // yaml — via oas-resolver / swagger2openapi (OpenAPI doc tooling).
+    "GHSA-48c2-rrv3-qjmp",
+
+    // markdown-it, minimatch, path-to-regexp — via the widdershins/shins doc-generation chain
+    // pulled in transitively by @mojaloop/central-services-shared.
+    "GHSA-38c4-r59v-3vqw",
+    "GHSA-6v5v-wf23-fmfq",
+    "GHSA-23c5-xmqv-rm74",
+    "GHSA-3ppc-4f35-3m26",
+    "GHSA-7r86-cg39-jmmj",
+    "GHSA-37ch-88jc-xwx2"
   ]
 }

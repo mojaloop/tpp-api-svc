@@ -51,8 +51,7 @@
     "docker:stop": "docker-compose -f docker-compose.yml -f docker-compose.base.yml stop",
     "audit:fix": "npm audit fix",
     "audit:check": "npx audit-ci --config ./audit-ci.jsonc",
-    "license:list": "license-checker . --excludePackages `cat .licenseignore | grep '^[^#;]' | awk 'BEGIN { ORS=\"\" } { print p$0\";\"; } END { print \n }'` --production --csv",
-    "license:check": "npm run license:list -- --failOn `cat .licensebanned | grep '^[^#;]' | awk 'BEGIN { ORS=\"\" } { print p$0\";\"; } END { print \n }'`",
+    "license:check": "npx @mojaloop/license-scanner-tool .",
     "dep:check": "npx ncu -e 2",
     "dep:update": "npx ncu -u",
     "release": "standard-version --releaseCommitMessageFormat 'chore(release): {{currentTag}} [skip ci]'",
@@ -62,13 +61,13 @@
     "@hapi/boom": "10.0.1",
     "@hapi/good": "9.0.1",
     "@hapi/hapi": "21.4.9",
-    "@hapi/inert": "7.1.0",
+    "@hapi/inert": "7.1.2",
     "@hapi/vision": "7.0.3",
     "@mojaloop/central-services-error-handling": "13.1.6",
     "@mojaloop/central-services-health": "15.2.2",
     "@mojaloop/central-services-logger": "11.10.4",
     "@mojaloop/central-services-metrics": "12.8.5",
-    "@mojaloop/central-services-shared": "18.36.0",
+    "@mojaloop/central-services-shared": "18.37.0",
     "@mojaloop/event-sdk": "14.8.4",
     "ajv": "8.20.0",
     "ajv-keywords": "5.1.0",
@@ -76,7 +75,7 @@
     "commander": "14.0.3",
     "docdash": "2.0.2",
     "hapi-swagger": "17.3.2",
-    "joi": "18.2.1",
+    "joi": "18.2.3",
     "mustache": "4.2.0",
     "parse-strings-in-object": "2.0.0",
     "rc": "1.2.8"
@@ -86,7 +85,7 @@
     "on-headers": "1.1.0",
     "glob": "11.1.0",
     "hapi-swagger": {
-      "joi": "18.2.1"
+      "joi": "18.2.3"
     },
     "json-schema-faker@0.5.9": {
       "json-schema-ref-parser": "npm:@apidevtools/json-schema-ref-parser@latest"
@@ -116,6 +115,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.5",
+    "@mojaloop/license-scanner-tool": "^1.1.1",
     "@mojaloop/ml-testing-toolkit-shared-lib": "14.3.3",
     "@types/jest": "30.0.0",
     "audit-ci": "^7.1.0",
@@ -124,9 +124,8 @@
     "jest": "^30.4.2",
     "jest-junit": "17.0.0",
     "jsdoc": "4.0.5",
-    "license-checker": "25.0.1",
     "npm-audit-resolver": "3.0.0-RC.0",
-    "npm-check-updates": "22.2.0",
+    "npm-check-updates": "22.2.7",
     "pre-commit": "2.0.0",
     "replace": "^1.2.2",
     "sinon": "22.0.0",
