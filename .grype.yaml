@@ -2,11 +2,27 @@ ignore:
   # Ignore cross-spawn vulnerabilities by CVE ID due to false positive
   # as grype looks at package-lock.json where it shows versions with
   # vulnerabilities, npm ls shows only 7.0.6 verion is used
-  - vulnerability: CVE-2025-9230
-  - vulnerability: CVE-2025-9231
-  - vulnerability: CVE-2025-9232
-  - vulnerability: GHSA-5j98-mcp5-4vw2
+  
+  # Package: @grpc/grpc-js
+  # Version: 1.14.3
+  # Level: High
+  # Description: A malformed request can cause a server crash
+  # Reason for Allowing: Sub-dependency of @mojaloop/event-sdk. Can't be upgrade directly to 1.14.4
+  - vulnerability: GHSA-5375-pq7m-f5r2
 
+  # Package: @grpc/grpc-js
+  # Version: 1.14.3
+  # Level: High
+  # Description: An incoming malformed compressed message can cause a client or server crash
+  # Reason for Allowing: Sub-dependency of @mojaloop/event-sdk. Can't be upgrade directly to 1.14.4
+  - vulnerability: GHSA-99f4-grh7-6pcq
+
+  # Package: form-data
+  # Version: 4.0.4
+  # Level: High
+  # Description:  CRLF injection in form-data via unescaped multipart field names and filenames
+  # Reason for Allowing: Sub-sub-dependency of @mojaloop/central-services-shared. Can't be upgrade directly to 4.0.4
+  - vulnerability: GHSA-hmw2-7cc7-3qxx
 
 # Set output format defaults
 output:
