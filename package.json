@@ -5,7 +5,8 @@
   "license": "Apache-2.0",
   "author": "Mojaloop",
   "contributors": [
-    "Shashikant Hirugade <shashi.mojaloop@gmail.com>"
+    "Shashikant Hirugade <shashi.mojaloop@gmail.com>",
+    "Yui T. <kanchalai.yui@gmail.com>"
   ],
   "repository": {
     "type": "git",
@@ -103,16 +104,19 @@
     },
     "shins": {
       "ejs": "3.1.10",
-      "path-to-regexp": "0.1.12",
-      "sanitize-html": "2.12.1",
-      "markdown-it": "12.3.2"
+      "sanitize-html": "2.12.1"
     },
     "widdershins": {
       "swagger2openapi": "7.0.8"
     },
     "yargs-parser": "21.1.1",
     "commander": "14.0.3",
-    "js-yaml": "4.2.0"
+    "js-yaml": "4.2.0",
+    "@mojaloop/ml-testing-toolkit-shared-lib": {
+      "ajv": "8.20.0"
+    },
+    "markdown-it": "14.2.0",
+    "lodash": "4.18.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
