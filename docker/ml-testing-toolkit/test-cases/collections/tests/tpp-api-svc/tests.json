@@ -437,6 +437,136 @@
               }
             ]
           }
+        },
+        {
+          "id": "10",
+          "description": "POST /tppTransfers - DFSP requests transfer execution",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppTransfers",
+          "path": "/tppTransfers",
+          "method": "post",
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppTransfers+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppTransfers+json;version=1.1",
+            "FSPIOP-Destination": "dfspb",
+            "FSPIOP-URI": "/tppTransfers"
+          },
+          "body": {
+            "executionRequestId": "b51ec534-ee48-4575-b6a9-ead2955b8069",
+            "transactionRequestId": "c51ec534-ee48-4575-b6a9-ead2955b8070"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": [
+                  "expect(response.status).to.equal(202)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "11",
+          "description": "GET /tppTransfers/{ID} - DFSP requests transfer status",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppTransfers/{ID}",
+          "path": "/tppTransfers/{$prev.10.request.body.executionRequestId}",
+          "method": "get",
+          "params": {
+            "ID": "{$prev.10.request.body.executionRequestId}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppTransfers+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppTransfers+json;version=1.1",
+            "FSPIOP-Destination": "dfspb",
+            "FSPIOP-URI": "/tppTransfers/{$prev.10.request.body.executionRequestId}"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": [
+                  "expect(response.status).to.equal(202)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "12",
+          "description": "POST /tppTransfers - missing required transactionRequestId (validation error)",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppTransfers",
+          "path": "/tppTransfers",
+          "method": "post",
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppTransfers+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppTransfers+json;version=1.1",
+            "FSPIOP-Destination": "dfspb",
+            "FSPIOP-URI": "/tppTransfers"
+          },
+          "body": {
+            "executionRequestId": "b51ec534-ee48-4575-b6a9-ead2955b8069"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 400 (validation error)",
+                "exec": [
+                  "expect(response.status).to.equal(400)"
+                ]
+              }
+            ]
+          }
         }
       ]
     }
