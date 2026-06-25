@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -193,6 +194,24 @@ const APIRoutes = (api) => [
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts error by ID'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/tppTransfers',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppTransfers', 'sampled'],
+      description: 'POST Thirdparty Transfer'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/tppTransfers/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppTransfers', 'sampled'],
+      description: 'GET Thirdparty Transfer by ID'
     }
   }
 ]
