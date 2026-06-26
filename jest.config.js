@@ -14,7 +14,8 @@ module.exports = {
   },
 
   testEnvironment: 'node',
-
+  maxWorkers: process.env.CI ? 2 : '50%',
+  workerIdleMemoryLimit: '512MB',
   // Transform JS files with babel-jest so ESM packages can be transpiled
   transform: {
     '^.+\\.[tj]s$': 'babel-jest'
