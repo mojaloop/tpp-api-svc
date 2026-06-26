@@ -1,25 +1,35 @@
 # tpp-api-svc
 The tpp-api-svc service handles HTTP Requests from the Mojaloop Third Party API
 
-## Contribute Guideline
+## PISP v2.0 Contribution Guide
 
-* [On Create New Feature](https://docs.mojaloop.io/community/standards/creating-new-features.html#creating-new-features)
-* [Open a Pull Request](https://docs.mojaloop.io/community/standards/creating-new-features.html#open-a-pull-request-pr)
+> <sub>_AI disclosure: this document was drafted with assistance from Claude._</sub>
 
+Thank you for your interest in contributing to Mojaloop and the PISP v2.0
+workstream — we're excited to have you join the mission to expand financial
+access for all! This is the entry point to the onboarding docs.
 
-## Integration Test
+> These are living documents. If you have feedback or suggestions, please create an issue in the repo or open a PR to help improve them. Thank you
 
-In addition to unit tests, here is a quick step to run integration tests on the endpoints using ml-testing-toolkit to mock third party and DFSP requests
+### 1. Technical Onboarding
 
-* For each enpoint, uncomment this line in src/domain/<endPointName.js>
+Engineering introduction to the PISP v2.0 workstream and its topics.
 
-```javascript
-endpoint = 'http://mojaloop-testing-toolkit:4040/tpp' // FOR TESTING PURPOSES WITH TTK
-```
+- [Technical Onboarding](./doc/Technical-Onboarding.md)
+  - [GitHub Repositories](./doc/Technical-Onboarding.md#1-github-repositories)
+  - [Issues and Board](./doc/Technical-Onboarding.md#2-issues-and-board)
+  - [Setting Up Local Development Tools and Environment](./doc/Technical-Onboarding.md#3-setting-up-local-development-tools-and-environment)
 
-* Run docker compose up --build in the terminal. This will launch ml-testing-toolkit and the tpp-api-svc
-* Open http://localhost:9660 in your web browser
-* From the right-hand navigation, select the "Test Runner" tab.
-* In Test Runner, click "Collections Manager". Select "Import Folder".
-* Navigate to your tpp-api-svc/docker/ml-testing-toolkit/testcases/collections/tpp-api-svc
-* From there, you will see all available test endpoints that you can send a mock request to tpp-api-svc
+### 2. Communication Onboarding
+
+How to reach the workstream — meetings and Slack channels.
+
+- [Communication Onboarding](./doc/Communication-Onboarding.md)
+  - [Workstream Meeting](./doc/Communication-Onboarding.md#1-workstream-meeting)
+  - [Slack Channels](./doc/Communication-Onboarding.md#2-slack-channels)
+
+### 3. Glossary
+
+Key terms and abbreviations used across the docs.
+
+- [Glossary](./doc/Glossary.md)
