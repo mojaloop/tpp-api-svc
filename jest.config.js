@@ -13,6 +13,14 @@ module.exports = {
     }
   },
 
+  coverageReporters: ['json', 'lcov', 'text'],
+
+  // Emit JUnit results into the same coverage/ dir the orb stores as test results.
+  reporters: [
+    'default',
+    ['jest-junit', { outputDirectory: '<rootDir>/coverage', outputName: 'junit.xml' }]
+  ],
+  
   testEnvironment: 'node',
   maxWorkers: process.env.CI ? 2 : '50%',
   workerIdleMemoryLimit: '512MB',
