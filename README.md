@@ -18,7 +18,7 @@ In addition to unit tests, here is a quick step to run integration tests on the 
 endpoint = 'http://mojaloop-testing-toolkit:4040/tpp' // FOR TESTING PURPOSES WITH TTK
 ```
 
-* Run `npm run test:integration` in the terminal. This will launch ml-testing-toolkit and the tpp-api-svc
+* Run `npm run local:ttk` in the terminal. This will launch ml-testing-toolkit and the tpp-api-svc
 * Open http://localhost:9660 in your web browser
 * From the right-hand navigation, select the "Test Runner" tab.
 * In Test Runner, click "Collections Manager". Select "Import Folder".
