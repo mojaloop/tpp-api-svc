@@ -1,7 +1,7 @@
 'use strict'
 
 const { Server } = require('@hapi/hapi')
-const registerPispSimulatorRoutes = require('../../dist/pisp-simulator').default
+const registerPispSimulatorRoutes = require('.').default
 
 async function createPispSimulatorServer (port = 5002) {
   const server = new Server({ port })
