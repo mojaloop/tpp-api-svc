@@ -1,7 +1,7 @@
 'use strict'
 
 const { Server } = require('@hapi/hapi')
-const registerDfspSimulatorRoutes = require('../../dist/dfsp-simulator').default
+const registerDfspSimulatorRoutes = require('.').default
 
 async function createDfspSimulatorServer (port = 5001) {
   const server = new Server({ port })
