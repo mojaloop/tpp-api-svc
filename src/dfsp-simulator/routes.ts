@@ -1,0 +1,252 @@
+import * as Health from './handlers/health'
+import * as Consents from './handlers/consents'
+import * as Authorizations from './handlers/authorizations'
+import * as Verifications from './handlers/verifications'
+import * as TransactionRequests from './handlers/transactionRequests'
+import * as Transfers from './handlers/transfers'
+
+import * as Accounts from './handlers/accounts'
+import {
+  tppAccountsRequestPostHeaders,
+  tppAccountsRequestPostPayload
+} from './schemas/tppAccountsRequest'
+import {
+  tppAccountsIdSignedChallengeGetHeaders,
+  tppAccountsIdSignedChallengeGetParams
+} from './schemas/tppAccountsIdSignedChallenge'
+import {
+  tppConsentRequestsPostHeaders,
+  tppConsentRequestsPostPayload
+} from './schemas/tppConsentRequests'
+import {
+  tppConsentRequestsIdPatchHeaders,
+  tppConsentRequestsIdPatchPayload,
+  tppConsentRequestsIdGetHeaders,
+  tppConsentRequestsIdGetParams
+} from './schemas/tppConsentRequestsId'
+import {
+  tppConsentsIdPutHeaders,
+  tppConsentsIdPutPayload,
+  tppConsentsIdPatchHeaders,
+  tppConsentsIdPatchPayload
+} from './schemas/tppConsentsId'
+import {
+  tppConsentsIdErrorPutHeaders,
+  tppConsentsIdErrorPutParams
+} from './schemas/tppConsentsIdError'
+import { ErrorInformationObject } from './schemas/common'
+import {
+  tppAuthorizationsIdPutHeaders,
+  tppAuthorizationsIdPutPayload
+} from './schemas/tppAuthorizationsId'
+import {
+  tppAuthorizationsIdErrorPutHeaders,
+  tppAuthorizationsIdErrorPutParams
+} from './schemas/tppAuthorizationsIdError'
+import {
+  tppVerificationsIdPutHeaders,
+  tppVerificationsIdPutPayload
+} from './schemas/tppVerificationsId'
+import {
+  tppVerificationsIdErrorPutHeaders,
+  tppVerificationsIdErrorPutParams
+} from './schemas/tppVerificationsIdError'
+import {
+  tppTransactionRequestsPostHeaders,
+  tppTransactionRequestsPostPayload,
+  tppTransactionRequestsIdGetHeaders,
+  tppTransactionRequestsIdGetParams
+} from './schemas/tppTransactionRequests'
+import {
+  tppTransfersPostHeaders,
+  tppTransfersPostPayload
+} from './schemas/tppTransfers'
+
+export default function registerDfspSimulatorRoutes(server: any) {
+  server.route([
+    {
+      method: 'GET',
+      path: '/health',
+      handler: Health.getHealth
+    },
+    {
+      method: 'POST',
+      path: '/tppAccountsRequest',
+      handler: Accounts.postTppAccountsRequest,
+      options: {
+        validate: {
+          headers: tppAccountsRequestPostHeaders,
+          payload: tppAccountsRequestPostPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppAccounts/{ID}/{SignedChallenge}',
+      handler: Accounts.getTppAccountsByIdAndSignedChallenge,
+      options: {
+        validate: {
+          headers: tppAccountsIdSignedChallengeGetHeaders,
+          params: tppAccountsIdSignedChallengeGetParams
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppConsentRequests',
+      handler: Consents.postConsentRequest,
+      options: {
+        validate: {
+          headers: tppConsentRequestsPostHeaders,
+          payload: tppConsentRequestsPostPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppConsentRequests/{ID}',
+      handler: Consents.getConsentRequest,
+      options: {
+        validate: {
+          headers: tppConsentRequestsIdGetHeaders,
+          params: tppConsentRequestsIdGetParams
+        }
+      }
+    },
+    {
+      method: 'PATCH',
+      path: '/tppConsentRequests/{ID}',
+      handler: Consents.patchConsentRequest,
+      options: {
+        validate: {
+          headers: tppConsentRequestsIdPatchHeaders,
+          payload: tppConsentRequestsIdPatchPayload
+        }
+      }
+    },
+    {
+      method: 'PATCH',
+      path: '/tppConsents/{ID}',
+      handler: Consents.patchConsent,
+      options: {
+        validate: {
+          headers: tppConsentsIdPatchHeaders,
+          payload: tppConsentsIdPatchPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppConsents/{ID}',
+      handler: Consents.putConsent,
+      options: {
+        validate: {
+          headers: tppConsentsIdPutHeaders,
+          payload: tppConsentsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppConsents/{ID}/error',
+      handler: Consents.putConsentError,
+      options: {
+        validate: {
+          headers: tppConsentsIdErrorPutHeaders,
+          params: tppConsentsIdErrorPutParams,
+          payload: ErrorInformationObject
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppConsents',
+      handler: Consents.putConsents,
+      options: {
+        validate: {
+          headers: tppConsentsIdPutHeaders,
+          payload: tppConsentsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppAuthorizations/{ID}',
+      handler: Authorizations.putAuthorization,
+      options: {
+        validate: {
+          headers: tppAuthorizationsIdPutHeaders,
+          payload: tppAuthorizationsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppAuthorizations/{ID}/error',
+      handler: Authorizations.putAuthorizationError,
+      options: {
+        validate: {
+          headers: tppAuthorizationsIdErrorPutHeaders,
+          params: tppAuthorizationsIdErrorPutParams,
+          payload: ErrorInformationObject
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppVerifications/{ID}',
+      handler: Verifications.putVerification,
+      options: {
+        validate: {
+          headers: tppVerificationsIdPutHeaders,
+          payload: tppVerificationsIdPutPayload
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/tppTransactionRequests/{ID}',
+      handler: TransactionRequests.getTransactionRequest,
+      options: {
+        validate: {
+          headers: tppTransactionRequestsIdGetHeaders,
+          params: tppTransactionRequestsIdGetParams
+        }
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/tppVerifications/{ID}/error',
+      handler: Verifications.putVerificationError,
+      options: {
+        validate: {
+          headers: tppVerificationsIdErrorPutHeaders,
+          params: tppVerificationsIdErrorPutParams,
+          payload: ErrorInformationObject
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppTransactionRequests',
+      handler: TransactionRequests.postTransactionRequest,
+      options: {
+        validate: {
+          headers: tppTransactionRequestsPostHeaders,
+          payload: tppTransactionRequestsPostPayload
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/tppTransfers',
+      handler: Transfers.postTransfer,
+      options: {
+        validate: {
+          headers: tppTransfersPostHeaders,
+          payload: tppTransfersPostPayload
+        }
+      }
+    }
+  ])
+}
