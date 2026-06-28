@@ -44,6 +44,8 @@ const Config = require('./lib/config.js')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 
+const { createPispSimulatorServer } = require('./pisp-simulator/server')
+
 /**
  * @function createServer
  *
@@ -89,6 +91,9 @@ const initialize = async (port = Config.PORT) => {
   Logger.info(`Server running on ${server.info.host}:${server.info.port}`)
   await Endpoints.initializeCache(Config.ENDPOINT_CACHE_CONFIG, { hubName: Config.HUB_NAME, hubNameRegex })
   initializeInstrumentation()
+
+  await createPispSimulatorServer(5002)
+
   return server
 }
 
