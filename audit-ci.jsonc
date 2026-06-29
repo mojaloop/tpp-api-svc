@@ -14,14 +14,6 @@
     **/
     "GHSA-5375-pq7m-f5r2",
     /**
-      Package: @grpc/grpc-js
-      Version: 1.14.3
-      Level: High
-      Description: An incoming malformed compressed message can cause a client or server crash
-      Reason for Allowing: Sub-dependency of @mojaloop/event-sdk. Can't be upgrade directly to 1.14.4
-    **/
-    "GHSA-99f4-grh7-6pcq",
-    /**
       Package: form-data
       Version: 4.0.4
       Level: High
