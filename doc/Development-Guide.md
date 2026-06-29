@@ -51,7 +51,7 @@ dependency-management standards.
 
 ## 3. Running Integration Tests
 
-Unit tests run with `npm run test`. To run integration tests against the
+Unit tests run with `npm run local:ttk`. To run integration tests against the
 endpoints, use `ml-testing-toolkit` (TTK) to mock third-party and DFSP requests:
 
 1. For each endpoint, uncomment this line in `src/domain/<endPointName>.js`:
