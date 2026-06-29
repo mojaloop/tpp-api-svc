@@ -29,6 +29,6 @@ module.exports = {
 
   // Do not ignore these node_modules packages — whitelist packages that ship ESM.
   transformIgnorePatterns: [
-    'node_modules/(?!(@faker-js/faker|@mojaloop/ml-testing-toolkit-shared-lib|json-schema-ref-parser|json-schema-faker)/)'
+    'node_modules/(?!(@faker-js/faker|@mojaloop/ml-testing-toolkit-shared-lib|json-schema-ref-parser|json-schema-faker|commander)/)'
   ]
 }
