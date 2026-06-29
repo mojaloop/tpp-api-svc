@@ -5,7 +5,8 @@
   "license": "Apache-2.0",
   "author": "Mojaloop",
   "contributors": [
-    "Shashikant Hirugade <shashi.mojaloop@gmail.com>"
+    "Shashikant Hirugade <shashi.mojaloop@gmail.com>",
+    "Yui T. <kanchalai.yui@gmail.com>"
   ],
   "repository": {
     "type": "git",
@@ -28,15 +29,15 @@
     "lint",
     "test:coverage-check"
   ],
-  "main": "./server",
   "scripts": {
-    "start": "node src/index.js api",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js api",
     "test": "npm run test:unit",
-    "test:unit": "jest --testMatch '**/test/unit/**/*.test.js'",
+    "test:unit": "jest --testMatch '**/test/unit/**/*.test.{js,ts}'",
     "test:xunit": "npm run test:unit",
-    "test:junit": "JEST_JUNIT_OUTPUT_DIR='./test/results' JEST_JUNIT_OUTPUT_NAME='junit.xml' jest --reporters=default --reporters=jest-junit --testMatch '**/test/unit/**/*.test.js'",
-    "test:coverage": "jest --coverage --coverageThreshold='{}' --testMatch '**/test/unit/**/*.test.js'",
-    "test:coverage-check": "jest --coverage --testMatch '**/test/unit/**/*.test.js'",
+    "test:junit": "JEST_JUNIT_OUTPUT_DIR='./test/results' JEST_JUNIT_OUTPUT_NAME='junit.xml' jest --reporters=default --reporters=jest-junit --testMatch '**/test/unit/**/*.test.{js,ts}'",
+    "test:coverage": "jest --coverage --coverageThreshold='{}' --testMatch '**/test/unit/**/*.test.{js,ts}'",
+    "test:coverage-check": "jest --coverage --testMatch '**/test/unit/**/*.test.{js,ts}'",
     "test:functional": "echo 'No functional tests defined'",
     "test:integration": "echo 'No integration tests defined'",
     "lint": "npm run standard",
@@ -44,11 +45,13 @@
     "generate-docs": "npx jsdoc -c jsdoc.json",
     "standard": "npx standard",
     "standard:fix": "npx standard --fix",
-    "build": "docker build -t tpp-api-svc:local -f ./Dockerfile ../",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "run": "docker run -p 3003:3003 --rm --link db:mysql tpp-api-svc:local",
+    "local:ttk": "docker compose up --build",
     "package-lock": "docker run --rm -it tpp-api-svc:local cat package-lock.json > package-lock.json",
-    "docker:up": "docker-compose -f docker-compose.yml -f docker-compose.base.yml up",
-    "docker:stop": "docker-compose -f docker-compose.yml -f docker-compose.base.yml stop",
+    "docker:build": "docker build -t tpp-api-svc:local -f ./Dockerfile .",
+    "docker:up": "docker compose up --build",
+    "docker:stop": "docker compose stop",
     "audit:fix": "npm audit fix",
     "audit:check": "npx audit-ci --config ./audit-ci.jsonc",
     "license:list": "license-checker . --excludePackages `cat .licenseignore | grep '^[^#;]' | awk 'BEGIN { ORS=\"\" } { print p$0\";\"; } END { print \n }'` --production --csv",
@@ -66,8 +69,8 @@
     "@hapi/vision": "7.0.3",
     "@mojaloop/central-services-error-handling": "13.1.6",
     "@mojaloop/central-services-health": "15.2.2",
-    "@mojaloop/central-services-logger": "11.10.4",
-    "@mojaloop/central-services-metrics": "12.8.5",
+    "@mojaloop/central-services-logger": "11.10.5",
+    "@mojaloop/central-services-metrics": "12.8.6",
     "@mojaloop/central-services-shared": "18.37.0",
     "@mojaloop/event-sdk": "14.8.4",
     "ajv": "8.20.0",
@@ -100,18 +103,22 @@
       "nanoid": "^3.3.8"
     },
     "shins": {
-      "ajv": "6.12.3",
       "ejs": "3.1.10",
-      "path-to-regexp": "0.1.12",
-      "sanitize-html": "2.12.1",
-      "markdown-it": "12.3.2"
+      "sanitize-html": "2.12.1"
     },
-    "undici": "6.21.2",
     "widdershins": {
-      "swagger2openapi": "7.0.8",
-      "markdown-it": "12.3.2"
+      "swagger2openapi": "7.0.8"
     },
-    "yargs-parser": "21.1.1"
+    "yargs-parser": "21.1.1",
+    "js-yaml": "4.2.0",
+    "@mojaloop/ml-testing-toolkit-shared-lib": {
+      "ajv": "8.20.0"
+    },
+    "markdown-it": "14.2.0",
+    "lodash": "4.18.1",
+    "convict": "6.2.5",
+    "protobufjs": "7.6.4",
+    "@babel/core": "^8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
@@ -128,10 +135,12 @@
     "npm-audit-resolver": "3.0.0-RC.0",
     "npm-check-updates": "22.2.7",
     "pre-commit": "2.0.0",
-    "replace": "^1.2.2",
     "sinon": "22.0.0",
     "standard": "17.1.2",
-    "standard-version": "^9.5.0"
+    "standard-version": "^9.5.0",
+    "@babel/preset-typescript": "^8.0.1",
+    "@types/node": "^26.0.1",
+    "typescript": "^6.0.3"
   },
   "nyc": {
     "temp-directory": "./.nyc_output",
@@ -155,7 +164,7 @@
   },
   "standard-version": {
     "scripts": {
-      "postchangelog": "replace '\\[mojaloop/#(\\d+)\\]\\(https://github.com/mojaloop/(.*)/issues/(\\d+)\\)' '[mojaloop/#$1](https://github.com/mojaloop/project/issues/$1)' CHANGELOG.md"
+      "postchangelog": "node -e 'const fs=require(\"fs\");const f=\"CHANGELOG.md\";fs.writeFileSync(f,fs.readFileSync(f,\"utf8\").replace(/\\[mojaloop\\/#(\\d+)\\]\\(https:\\/\\/github.com\\/mojaloop\\/(.*)\\/issues\\/(\\d+)\\)/g,\"[mojaloop/#$1](https://github.com/mojaloop/project/issues/$1)\"))'"
     }
   }
 }

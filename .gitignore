@@ -71,3 +71,6 @@ typings/
 node_modules
 
 .DS_Store
+
+# TypeScript build output
+dist/

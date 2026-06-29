@@ -11,7 +11,7 @@ ARG NODE_VERSION=lts-alpine
 #
 
 # Build Image
-FROM node:${NODE_VERSION} as builder
+FROM node:${NODE_VERSION} AS builder
 WORKDIR /opt/app
 
 RUN apk --no-cache add git
@@ -22,9 +22,13 @@ COPY package.json package-lock.json* /opt/app/
 
 RUN npm ci
 
+COPY tsconfig.json /opt/app/
 COPY src /opt/app/src
 COPY config /opt/app/config
-COPY test /opt/app/test
+
+RUN npm run build
+RUN cp -r src/interface dist/interface
+RUN find dist -name '*.map' -delete
 
 FROM node:${NODE_VERSION}
 WORKDIR /opt/app
@@ -34,11 +38,14 @@ RUN mkdir ./logs && touch ./logs/combined.log
 RUN ln -sf /dev/stdout ./logs/combined.log
 
 # Create a non-root user: ml-user
-RUN adduser -D ml-user 
+RUN adduser -D ml-user
+
+COPY --chown=ml-user --from=builder /opt/app/package.json /opt/app/package-lock.json* ./
+COPY --chown=ml-user --from=builder /opt/app/node_modules ./node_modules
+COPY --chown=ml-user --from=builder /opt/app/dist ./dist
+COPY --chown=ml-user --from=builder /opt/app/config ./config
+RUN npm prune --production
 USER ml-user
 
-COPY --chown=ml-user --from=builder /opt/app .
-RUN npm prune --production
-
-EXPOSE 4001
+EXPOSE 4003
 CMD ["npm", "run", "start"]
