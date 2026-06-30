@@ -22,35 +22,41 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- - Devarsh Shah <devarshshah2608@gmail.com>
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 'use strict'
+
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+import { type Span } from '@mojaloop/event-sdk'
+
+type TraceableRequest = Request & { span: Span }
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
-const tppConsents = require('../../domain/tppConsents')
+const tppAccountsRequest = require('../../domain/tppAccountsRequest')
 const LibUtil = require('../../lib/util')
 
 /**
- * Operations on /tppConsents/{ID}
+ * Operations on /tppAccountsRequest/{ID}
  */
 module.exports = {
   /**
-   * summary: GetConsent
-   * description: The `GET /tppConsents/{ID}` is used to request the status of a consent. The *{ID}* in the URI should contain the consentId. The result is returned via the PUT callback.
+   * summary: GetAccountRequest
+   * description: The `GET /tppAccountsRequest/{ID}` is used to request status of POST /tppAccountsRequest/ call. The *{ID}* in the URI should contain the accountRequestId that was assigned to the request by the PISP when the PISP originated the request. The result is return via the PUT callback.
    * parameters: accept
    * produces: application/json
    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  get: async (context, request, h) => {
+  get: async (context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_consents_get',
-      'Get tpp consents by Id',
+      'tpp_account_requests_get',
+      'Get tpp account request by Id',
       ['success']
     ).startTimer()
     const span = request.span
@@ -61,9 +67,9 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsents.forwardTppConsents(Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_CONSENTS_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppConsents takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppConsents: ${LibUtil.getStackOrInspect(err)}`)
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch((err: Error) => {
+        // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.ACCEPTED.CODE)
@@ -75,32 +81,32 @@ module.exports = {
     }
   },
   /**
-   * summary: DeleteConsentByID
-   * description: The `DELETE /tppConsents/{ID}` is used to request revocation of a previously agreed consent. The consent is marked as deleted without physical removal.
-   * parameters: accept
+   * summary: UpdateAccountRequest
+   * description: A DFSP uses this callback to (1) inform the PISP that the accountRequest has been accepted, and (2) communicate to the PISP which `authChannel` it should use to authenticate their user with.
+   * parameters: body, content-length
    * produces: application/json
-   * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
+   * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  delete: async (context, request, h) => {
+  put: async (context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_consents_delete',
-      'Delete tpp consents by Id',
+      'tpp_account_requests_put',
+      'Put tpp account request by Id',
       ['success']
     ).startTimer()
     const span = request.span
     try {
-      const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.DELETE)
+      const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.PUT)
       span.setTags(tags)
       await span.audit({
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsents.forwardTppConsents(Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_CONSENTS_DELETE, request.headers, Enum.Http.RestMethods.DELETE, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppConsents takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppConsents: ${LibUtil.getStackOrInspect(err)}`)
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch((err: Error) => {
+        // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
-      return h.response().code(Enum.Http.ReturnCodes.ACCEPTED.CODE)
+      return h.response().code(Enum.Http.ReturnCodes.OK.CODE)
     } catch (err) {
       const fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
       Logger.error(fspiopError)

@@ -23,26 +23,31 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
-
 'use strict'
 
-const Boom = require('@hapi/boom')
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
 
-const RequestLogger = require('../lib/requestLogger')
+const HealthCheck = require('@mojaloop/central-services-shared').HealthCheck.HealthCheck
+const packageJson = require('../../package.json')
 
-async function failActionHandler (request, h, err) {
-  throw Boom.boomify(err)
-}
+const healthCheck = new HealthCheck(packageJson, [])
 
-async function onPreHandler (request, h) {
-  RequestLogger.logResponse(request)
-  return h.continue
-}
-
+/**
+ * Operations on /health
+ */
 module.exports = {
-  failActionHandler,
-  onPreHandler
+  /**
+   * summary: Get Server
+   * description: The HTTP request GET /health is used to return the current status of the API.
+   * parameters:
+   * produces: application/json
+   * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
+   */
+  get: async (context: any, request: Request, h: ResponseToolkit) => {
+    return h.response(await healthCheck.getHealth()).code(200)
+  }
 }

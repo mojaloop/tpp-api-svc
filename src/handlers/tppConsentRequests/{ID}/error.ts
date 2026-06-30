@@ -22,35 +22,42 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Devarsh Shah <devarshshah2608@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
+
 'use strict'
+
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+import { type Span } from '@mojaloop/event-sdk'
+
+type TraceableRequest = Request & { span: Span }
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
-const tppAccounts = require('../../../domain/tppAccounts')
-const LibUtil = require('../../../lib/util')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
+const tppConsentRequests = require('../../../domain/tppConsentRequests')
+const LibUtil = require('../../../lib/util')
 
 /**
- * Operations on /tppAccounts/{ID}/error
+ * Operations on /tppConsentRequests/{ID}/error
  */
 module.exports = {
   /**
-     * summary: UpdateAccountsByUserIdError
-     * description: The HTTP request PUT /ttpAccounts/{ID}/error is used to return error information
-     * parameters: ID, body, content-length, content-type, date, x-forwarded-for, fspiop-source, fspiop-destination, fspiop-encryption, fspiop-signature, fspiop-uri, fspiop-http-method
-     * produces: application/json
-     * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
-     */
-  put: async (context, request, h) => {
+   * summary: ConsentRequestError
+   * description: If the DFSP is unable to process the consent request, or another processing error occurs, the error callback PUT /tppConsentRequests/{ID}/error is used.
+   * parameters: body, content-length
+   * produces: application/json
+   * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
+   */
+  put: async (context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_accounts_error_put',
-      'Put tpp accounts error by Id',
+      'tpp_consent_requests_error_put',
+      'Put tpp consent request error by Id',
       ['success']
     ).startTimer()
     const span = request.span
@@ -61,9 +68,9 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccounts.forwardTppAccountsError(request.headers, request.headers['fspiop-destination'], Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR, Enum.Http.RestMethods.PUT, request.params.ID, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppAccountsError takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppAccountsError: ${LibUtil.getStackOrInspect(err)}`)
+      tppConsentRequests.forwardTppConsentRequestsError(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch((err: Error) => {
+        // Do nothing with the error - forwardTppConsentRequests takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.OK.CODE)
