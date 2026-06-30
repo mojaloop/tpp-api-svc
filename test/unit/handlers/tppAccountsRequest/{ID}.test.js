@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -43,7 +44,7 @@ const Hapi = require('@hapi/hapi')
 const Mockgen = require('../../../util/mockgen.js')
 const Helper = require('../../../util/helper.js')
 const Handler = require('../../../../src/domain/tppAccountsRequest')
-const Config = require('../../../../src/lib/config.js')
+const Config = require('../../../../src/lib/config.ts')
 
 let sandbox
 const server = new Hapi.Server()
@@ -201,7 +202,7 @@ describe('/tppAccountsRequest/{ID}', () => {
       expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
     })
     it('returns an error response and logs when getSpanTags throws', async () => {
-      const LibUtil = require('../../../../src/lib/util.js')
+      const LibUtil = require('../../../../src/lib/util.ts')
       // Make getSpanTags throw so the handler's try block fails and goes to the catch
       const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
         throw new Error('forced getSpanTags error')

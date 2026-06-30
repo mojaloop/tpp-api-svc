@@ -23,28 +23,22 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
-'use strict'
-
-const HealthCheck = require('@mojaloop/central-services-shared').HealthCheck.HealthCheck
-const packageJson = require('../../package.json')
-
-const healthCheck = new HealthCheck(packageJson, [])
 
 /**
- * Operations on /health
+ * @name getArgs
+ *
+ * @description Provide a mockable way to override the process.argv
+ *
+ * @returns {Array<String>} - A list of the process args
  */
+const getArgs = (): string[] => {
+  return process.argv
+}
+
 module.exports = {
-  /**
-   * summary: Get Server
-   * description: The HTTP request GET /health is used to return the current status of the API.
-   * parameters:
-   * produces: application/json
-   * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
-   */
-  get: async (context, request, h) => {
-    return h.response(await healthCheck.getHealth()).code(200)
-  }
+  getArgs
 }

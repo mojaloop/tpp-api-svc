@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -36,7 +37,7 @@
  * @param {object} req Request
  * @param {object} h   Response handle
  */
-const handleRequest = (api, req, h) => api.handleRequest(
+const handleRequest = (api: any, req: any, h: any) => api.handleRequest(
   {
     method: req.method,
     path: req.path,
@@ -50,11 +51,11 @@ const handleRequest = (api, req, h) => api.handleRequest(
  *
  * @param {object} api OpenAPIBackend instance
  */
-const APIRoutes = (api) => [
+const APIRoutes = (api: any) => [
   {
     method: 'GET',
     path: '/health',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'health'],
       description: 'GET health'
@@ -63,7 +64,7 @@ const APIRoutes = (api) => [
   {
     method: 'POST',
     path: '/tppConsents',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsents', 'sampled'],
       description: 'POST Thirdparty Consents'
@@ -72,7 +73,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppConsents/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsents', 'sampled'],
       description: 'GET Thirdparty Consent by ID'
@@ -81,7 +82,7 @@ const APIRoutes = (api) => [
   {
     method: 'DELETE',
     path: '/tppConsents/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsents', 'sampled'],
       description: 'DELETE Thirdparty Consent by ID'
@@ -90,7 +91,7 @@ const APIRoutes = (api) => [
   {
     method: 'POST',
     path: '/tppConsentRequests',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'POST Thirdparty Consent Request'
@@ -99,7 +100,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppConsentRequests/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'GET Thirdparty Consent Request by ID'
@@ -108,7 +109,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppConsentRequests/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PUT Thirdparty Consent Request by ID'
@@ -117,7 +118,7 @@ const APIRoutes = (api) => [
   {
     method: 'PATCH',
     path: '/tppConsentRequests/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PATCH Thirdparty Consent Request by ID'
@@ -126,7 +127,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppConsentRequests/{ID}/error',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PUT Thirdparty Consent Request error by ID'
@@ -135,7 +136,7 @@ const APIRoutes = (api) => [
   {
     method: 'POST',
     path: '/tppAccountsRequest',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'POST Thirdparty Account Request'
@@ -144,7 +145,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccountsRequest/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request by ID'
@@ -153,7 +154,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccountsRequest/{ID}/error',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request error by ID'
@@ -162,7 +163,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppAccountsRequest/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'GET Thirdparty Account Requests by ID'
@@ -171,7 +172,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppAccounts/{ID}/{SignedChallenge}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'GET Thirdparty Accounts by ID'
@@ -180,7 +181,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccounts/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts by ID'
@@ -189,7 +190,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccounts/{ID}/error',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: any, h: any) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts error by ID'

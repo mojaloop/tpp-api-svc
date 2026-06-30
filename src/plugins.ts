@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -39,7 +40,7 @@ const EventPlugin = require('@mojaloop/central-services-shared').Util.Hapi.HapiE
 const OpenapiBackendValidator = require('@mojaloop/central-services-shared').Util.Hapi.OpenapiBackendValidator
 const MetricsPlugin = require('@mojaloop/central-services-metrics').plugin
 
-const registerPlugins = async (server, openAPIBackend) => {
+const registerPlugins = async (server: any, openAPIBackend: any) => {
   await server.register(OpenapiBackendValidator)
 
   await server.register({
@@ -66,7 +67,7 @@ const registerPlugins = async (server, openAPIBackend) => {
       name: 'openapi',
       version: '1.0.0',
       multiple: true,
-      register: function (server, options) {
+      register: function (server: any, options: any) {
         server.expose('openapi', options.openapi)
       }
     },

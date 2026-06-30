@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -55,8 +56,8 @@ describe('Base Tests', () => {
     const mockInitStub = sandbox.stub()
     const helpStub = sandbox.stub(Command.prototype, 'help').returns(true)
 
-    jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
+    jest.mock('../../src/server.ts', () => ({ initialize: mockInitStub }))
+    jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => []
     }))
 
@@ -75,13 +76,13 @@ describe('Base Tests', () => {
       'src/index.js',
       'api'
     ]
-    jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
+    jest.mock('../../src/server.ts', () => ({ initialize: mockInitStub }))
+    jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => mockArgs
     }))
 
     // Act
-    require('../../src/index.js')
+    require('../../src/index.ts')
 
     // Assert
     expect(mockInitStub.callCount).toBe(1)
