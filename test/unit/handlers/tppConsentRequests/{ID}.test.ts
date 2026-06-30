@@ -23,7 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
 
@@ -40,20 +40,20 @@ jest.mock('@mojaloop/central-services-logger', () => {
 const Sinon = require('sinon')
 const Hapi = require('@hapi/hapi')
 
-const Mockgen = require('../../../util/mockgen.js')
-const Helper = require('../../../util/helper.js')
-const Handler = require('../../../../src/domain/tppAccountsRequest')
+const Mockgen = require('../../../util/mockgen')
+const Helper = require('../../../util/helper')
+const Handler = require('../../../../src/domain/tppConsentRequests.js')
 const Config = require('../../../../src/lib/config.js')
 
 let sandbox
 const server = new Hapi.Server()
 
 /**
- * Tests for /tppAccountsRequest/{ID}
+ * Tests for /TppConsentRequests/{ID}
  */
-describe('/tppAccountsRequest/{ID}', () => {
+describe('/tppConsentRequests/{ID}', () => {
   // URI
-  const resource = 'tppAccountsRequest'
+  const resource = 'tppConsentRequests'
   const path = `/${resource}/{ID}`
 
   beforeAll(async () => {
@@ -66,7 +66,7 @@ describe('/tppAccountsRequest/{ID}', () => {
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountsRequest = jest.fn().mockResolvedValue()
+    Handler.forwardTppConsentRequests = jest.fn().mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -74,85 +74,61 @@ describe('/tppAccountsRequest/{ID}', () => {
   })
 
   describe('GET', () => {
-    // HTTP Method
     const method = 'get'
 
     it('returns a 202 response code', async () => {
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, Config.PROTOCOL_VERSIONS)
-      // Arrange
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
       const options = {
         method,
         url: path,
-        headers
+        headers: request.headers
       }
 
-      // Act
       const response = await server.inject(options)
 
-      // Assert
       expect(response.statusCode).toBe(202)
     })
 
-    it('returns a 406 with invalid protocol version for content-type', async () => {
-      const tempProtocolVersion = JSON.parse(JSON.stringify(Config.PROTOCOL_VERSIONS)) // We want to make a deep clone of the config
-      tempProtocolVersion.CONTENT.DEFAULT = '0.1' // This is an invalid FSPIOP protocol version
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, tempProtocolVersion)
+    it('handles when forwardTppConsentRequests throws error', async () => {
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
 
-      // Arrange
       const options = {
         method,
         url: path,
-        headers
+        headers: request.headers
       }
 
-      // Act
-      const response = await server.inject(options)
-
-      // Assert
-      expect(response.statusCode).toBe(406)
-      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorCode).toBe('3001')
-      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorDescription).toBe('Unacceptable version requested - Client supplied a protocol version which is not supported by the server')
-    })
-
-    it('returns a 406 with invalid protocol version for accept-type', async () => {
-      const tempProtocolVersion = JSON.parse(JSON.stringify(Config.PROTOCOL_VERSIONS)) // We want to make a deep clone of the config
-      tempProtocolVersion.ACCEPT.DEFAULT = '0.1' // This is an invalid FSPIOP protocol version
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, tempProtocolVersion)
-
-      // Arrange
-      const options = {
-        method,
-        url: path,
-        headers
-      }
-
-      // Act
-      const response = await server.inject(options)
-
-      // Assert
-      expect(response.statusCode).toBe(406)
-      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorCode).toBe('3001')
-      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorDescription).toBe('Unacceptable version requested - The Client requested an unsupported version, see extension list for supported version(s).')
-    })
-
-    it('handles when error is thrown', async () => {
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, Config.PROTOCOL_VERSIONS)
-      // Arrange
-      const options = {
-        method,
-        url: path,
-        headers
-      }
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppConsentRequests.mockImplementation(async () => { throw err })
 
-      // Act
       const response = await server.inject(options)
 
-      // Assert
-      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
       expect(response.statusCode).toBe(202)
+      expect(Handler.forwardTppConsentRequests).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppConsentRequests.mock.results[0].value).rejects.toThrow(err)
+    })
+
+    it('returns an error response and logs when getSpanTags throws', async () => {
+      const LibUtil = require('../../../../src/lib/util')
+      const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
+        throw new Error('forced getSpanTags error')
+      })
+
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).not.toBe(202)
+      expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
+
+      spy.mockRestore()
     })
   })
 
@@ -190,18 +166,18 @@ describe('/tppAccountsRequest/{ID}', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountsRequest.mockImplementation(async () => { throw err })
+      Handler.forwardTppConsentRequests.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
       expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountsRequest).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountsRequest.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppConsentRequests).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppConsentRequests.mock.results[0].value).rejects.toThrow(err)
     })
     it('returns an error response and logs when getSpanTags throws', async () => {
-      const LibUtil = require('../../../../src/lib/util.js')
+      const LibUtil = require('../../../../src/lib/util')
       // Make getSpanTags throw so the handler's try block fails and goes to the catch
       const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
         throw new Error('forced getSpanTags error')
@@ -223,6 +199,67 @@ describe('/tppAccountsRequest/{ID}', () => {
       expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
 
       // cleanup
+      spy.mockRestore()
+    })
+  })
+
+  describe('PATCH', () => {
+    const method = 'patch'
+
+    it('returns a 202 response code', async () => {
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers,
+        payload: request.body
+      }
+
+      const response = await server.inject(options)
+      expect(response.statusCode).toBe(202)
+    })
+
+    it('handles when forwardTppConsentRequests throws error', async () => {
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers,
+        payload: request.body
+      }
+
+      const err = new Error('Error occurred')
+      Handler.forwardTppConsentRequests.mockImplementation(async () => { throw err })
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).toBe(202)
+      expect(Handler.forwardTppConsentRequests).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppConsentRequests.mock.results[0].value).rejects.toThrow(err)
+    })
+
+    it('returns an error response and logs when getSpanTags throws', async () => {
+      const LibUtil = require('../../../../src/lib/util')
+      const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
+        throw new Error('forced getSpanTags error')
+      })
+
+      const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
+
+      const options = {
+        method,
+        url: path,
+        headers: request.headers,
+        payload: request.body
+      }
+
+      const response = await server.inject(options)
+
+      expect(response.statusCode).not.toBe(202)
+      expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
+
       spy.mockRestore()
     })
   })

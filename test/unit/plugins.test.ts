@@ -23,67 +23,37 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
+'use strict'
 
-/*
-  For testing the server imports, we need to use jest.resetModules() between tests
-  This means specifying future imports here and actually doing the importing in `beforeEach`
-*/
-let Sinon
-let Command
+const Sinon = require('sinon')
+
+const { registerPlugins } = require('../../src/plugins')
+
 let sandbox
-
-describe('Base Tests', () => {
-  beforeEach(() => {
-    jest.resetModules()
-
-    Sinon = require('sinon')
-    Command = require('commander').Command
-
+describe('plugins', () => {
+  beforeAll(() => {
     sandbox = Sinon.createSandbox()
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    sandbox.restore()
   })
 
-  it('should display help if called with no args', () => {
-    // Arrange
-    const sandbox = Sinon.createSandbox()
-    const mockInitStub = sandbox.stub()
-    const helpStub = sandbox.stub(Command.prototype, 'help').returns(true)
+  describe('registerPlugins', () => {
+    it('registers the plugins', async () => {
+      // Arrange
+      const serverStub = {
+        register: sandbox.stub()
+      }
 
-    jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
-      getArgs: () => []
-    }))
+      // Act
+      await registerPlugins(serverStub)
 
-    // Act
-    require('../../src/index')
-    // Assert
-    // When starting with help, the help() method gets called
-    expect(helpStub.callCount).toBe(1)
-  })
-
-  it('should start the server with the default config', () => {
-    // Arrange
-    const mockInitStub = sandbox.stub()
-    const mockArgs = [
-      'node',
-      'src/index.js',
-      'api'
-    ]
-    jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
-      getArgs: () => mockArgs
-    }))
-
-    // Act
-    require('../../src/index.js')
-
-    // Assert
-    expect(mockInitStub.callCount).toBe(1)
+      // Assert
+      expect(serverStub.register.callCount).toBe(6)
+    })
   })
 })

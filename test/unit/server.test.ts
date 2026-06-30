@@ -23,37 +23,69 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Ernest Tan <ernesttanjianyu@gmail.com>
 
  --------------
  ******/
 'use strict'
 
-const Sinon = require('sinon')
+jest.mock('@mojaloop/central-services-logger', () => {
+  return {
+    info: jest.fn(), // suppress info output
+    debug: jest.fn()
+  }
+})
 
-const { registerPlugins } = require('../../src/plugins')
+jest.mock('@mojaloop/central-services-metrics', () => {
+  return {
+    setup: jest.fn()
+  }
+})
 
-let sandbox
-describe('plugins', () => {
-  beforeAll(() => {
-    sandbox = Sinon.createSandbox()
-  })
-
-  afterEach(() => {
-    sandbox.restore()
-  })
-
-  describe('registerPlugins', () => {
-    it('registers the plugins', async () => {
-      // Arrange
-      const serverStub = {
-        register: sandbox.stub()
+/* Mock out the Hapi Server */
+const mockStart = jest.fn()
+jest.mock('@hapi/hapi', () => ({
+  Server: jest.fn().mockImplementation(() => ({
+    register: jest.fn(),
+    ext: jest.fn(),
+    route: jest.fn(),
+    start: mockStart,
+    plugins: {
+      openapi: {
+        setHost: jest.fn()
       }
+    },
+    info: {
+      host: 'localhost',
+      port: 3000
+    }
+  }))
+}))
 
+const { initialize } = require('../../src/server')
+
+describe('server', () => {
+  afterEach(() => {
+    mockStart.mockClear()
+  })
+
+  describe('initialize', () => {
+    it('initializes the server', async () => {
+      // Arrange
       // Act
-      await registerPlugins(serverStub)
+      await initialize(3000)
 
       // Assert
-      expect(serverStub.register.callCount).toBe(6)
+      expect(mockStart).toHaveBeenCalled()
+    })
+
+    it('initializes the server when no port is set', async () => {
+      // Arrange
+      // Act
+      await initialize()
+
+      // Assert
+      expect(mockStart).toHaveBeenCalled()
     })
   })
 })

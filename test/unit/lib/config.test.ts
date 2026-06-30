@@ -23,7 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
 'use strict'
@@ -44,10 +44,10 @@ describe('Config tests', () => {
 
   it('should load successfully', async () => {
     // Setup
-    let Config = null
+    let Config: any = null
     let isSuccess
     // set env var
-    process.env.ES_ENDPOINT_SECURITY__JWS__JWS_SIGN = false
+    process.env.ES_ENDPOINT_SECURITY__JWS__JWS_SIGN = 'false'
 
     // Act
     try {
@@ -64,7 +64,7 @@ describe('Config tests', () => {
 
   it('should parse ENV var ALS_PROTOCOL_VERSIONS__ACCEPT__VALIDATELIST as a string', async () => {
     // Setup
-    let Config = null
+    let Config: any = null
     let isSuccess
     const validateList = ['1']
     // set env var

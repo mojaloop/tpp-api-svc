@@ -22,22 +22,29 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
 
 'use strict'
 
-const Argv = require('../../../src/lib/argv')
+/**
+ * Shared types for the test utilities.
+ */
 
-describe('Argv', () => {
-  it('getArgs returns the args', async () => {
-    // Arrange
-    // Act
-    const result = Argv.getArgs()
+/**
+ * One section (CONTENT or ACCEPT) of the protocol-version config.
+ * Shape mirrors config/default.json. We don't derive this from src/lib/config
+ * because it processes the config through untyped libs (rc, parse-strings-in-object),
+ * so TS infers `any` there. Typing here keeps the test utils type-safe and stays
+ * within the test-migration scope (no src/ changes).
+ */
+export interface ProtocolVersionSection {
+  DEFAULT: string
+  VALIDATELIST: string[]
+}
 
-    // Assert
-    expect(result.length > 0).toBe(true)
-  })
-})
+export interface ProtocolVersions {
+  CONTENT: ProtocolVersionSection
+  ACCEPT: ProtocolVersionSection
+}
