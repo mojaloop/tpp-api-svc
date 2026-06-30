@@ -48,7 +48,7 @@ const responseType = Enum.Http.ResponseTypes.JSON
  *
  * @returns {boolean}
  */
-const forwardTppAccounts = async (path, headers, method, params, payload, span = null) => {
+const forwardTppAccounts = async (path: string, headers: any, method: string, params: any, payload: any, span: any = null) => {
   const childSpan = span ? span.getChild('forwardTppAccounts') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
@@ -102,7 +102,7 @@ const forwardTppAccounts = async (path, headers, method, params, payload, span =
  *
  * @returns {undefined}
  */
-const forwardTppAccountsError = async (headers, to, path, method, accountRequestId, payload, span = null) => {
+const forwardTppAccountsError = async (headers: any, to: string, path: string, method: string, accountRequestId: any, payload: any, span: any = null) => {
   const childSpan = span ? span.getChild('forwardTppAccountsError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]

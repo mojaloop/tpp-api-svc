@@ -49,7 +49,7 @@ const responseType = Enum.Http.ResponseTypes.JSON
  *
  * @returns {boolean}
  */
-const forwardTppConsentRequests = async (path, headers, method, params, payload, span = null) => {
+const forwardTppConsentRequests = async (path: string, headers: any, method: string, params: any, payload: any, span: any = null) => {
   const childSpan = span ? span.getChild('forwardTppConsentRequests') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
@@ -100,7 +100,7 @@ const forwardTppConsentRequests = async (path, headers, method, params, payload,
  *
  * @returns {boolean}
  */
-const forwardTppConsentRequestsError = async (headers, to, path, method, consentRequestId, payload, span = null) => {
+const forwardTppConsentRequestsError = async (headers: any, to: string, path: string, method: string, consentRequestId: any, payload: any, span: any = null) => {
   const childSpan = span ? span.getChild('forwardTppConsentRequestsError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]

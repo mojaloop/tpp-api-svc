@@ -43,7 +43,7 @@ const Hapi = require('@hapi/hapi')
 
 const Mockgen = require('../../../util/mockgen.js')
 const Helper = require('../../../util/helper.js')
-const Handler = require('../../../../src/domain/tppConsentRequests.js')
+const Handler = require('../../../../src/domain/tppConsentRequests.ts')
 const Config = require('../../../../src/lib/config.ts')
 
 let sandbox
