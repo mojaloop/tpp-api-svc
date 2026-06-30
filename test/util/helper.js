@@ -61,7 +61,8 @@ function defaultHeaders (resource, protocolVersions) {
 }
 
 const serverSetup = async (server) => {
-  const api = await OpenapiBackend.initialise(Path.resolve(__dirname, '../../src/interface/openapi.yaml'), Handlers)
+  const openApiPath = require.resolve('@mojaloop/api-snippets/thirdparty/v1_0/openapi3/openapi.yaml')
+  const api = await OpenapiBackend.initialise(Path.resolve(__dirname, openApiPath), Handlers)
   await Plugins.registerPlugins(server, api)
 
   // patch span for unit tests

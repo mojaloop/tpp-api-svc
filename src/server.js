@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  * Shashikant Hiruagde <shashi.mojaloop@gmail.com>
+ - Alexander Koh
 
  --------------
  ******/
@@ -62,7 +63,8 @@ const createServer = async (port) => {
       }
     }
   })
-  const api = await OpenapiBackend.initialise(Path.resolve(__dirname, './interface/openapi.yaml'), Handlers)
+  const openApiPath = require.resolve('@mojaloop/api-snippets/thirdparty/v1_0/openapi3/openapi.yaml')
+  const api = await OpenapiBackend.initialise(Path.resolve(__dirname, openApiPath), Handlers)
   await Plugins.registerPlugins(server, api)
   await server.ext([
     {
