@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  * Rajiv Mothilal <rajiv.mothilal@modusbox.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -51,7 +52,7 @@ const DEFAULT_PROTOCOL_VERSION = {
   }
 }
 
-const getProtocolVersions = (defaultProtocolVersions, overrideProtocolVersions) => {
+const getProtocolVersions = (defaultProtocolVersions: any, overrideProtocolVersions: any) => {
   const T_PROTOCOL_VERSION = {
     ...defaultProtocolVersions,
     ...overrideProtocolVersions

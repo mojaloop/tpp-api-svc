@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Devarsh Shah <devarshshah2608@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -43,7 +44,7 @@ const Hapi = require('@hapi/hapi')
 const Mockgen = require('../../../util/mockgen.js')
 const Helper = require('../../../util/helper.js')
 const Handler = require('../../../../src/domain/tppConsents')
-const Config = require('../../../../src/lib/config.js')
+const Config = require('../../../../src/lib/config.ts')
 
 let sandbox
 const server = new Hapi.Server()

@@ -23,11 +23,17 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Devarsh Shah <devarshshah2608@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 
 'use strict'
+
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+import { type Span } from '@mojaloop/event-sdk'
+
+type TraceableRequest = Request & { span: Span }
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
@@ -48,7 +54,7 @@ module.exports = {
    * produces: application/json
    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  get: async (context, request, h) => {
+  get: async (context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_consent_requests_get',
       'Get tpp consent request by Id',
@@ -62,7 +68,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch((err: Error) => {
         // Do nothing with the error - forwardTppConsentRequests takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })
@@ -82,7 +88,7 @@ module.exports = {
    * produces: application/json
    * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  put: async (context, request, h) => {
+  put: async (context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_consent_requests_put',
       'Put tpp consent request by Id',
@@ -96,7 +102,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch((err: Error) => {
         // Do nothing with the error - forwardTppConsentRequests takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })
@@ -116,7 +122,7 @@ module.exports = {
    * produces: application/json
    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  patch: async (context, request, h) => {
+  patch: async (context: any, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_consent_requests_patch',
       'Patch tpp consent request by Id',
@@ -130,7 +136,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PATCH, request.headers, Enum.Http.RestMethods.PATCH, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PATCH, request.headers, Enum.Http.RestMethods.PATCH, request.params, request.payload, span).catch((err: Error) => {
         // Do nothing with the error - forwardTppConsentRequests takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })
