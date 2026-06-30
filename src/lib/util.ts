@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -31,12 +32,20 @@
 const util = require('util')
 const Enum = require('@mojaloop/central-services-shared').Enum
 
+interface SpanTags {
+  operationType: string
+  operationAction: string
+  accountRequestId: string | undefined
+  source?: string
+  destination?: string
+}
+
 /**
  * @function getStackOrInspect
  * @description Gets the error stack, or uses util.inspect to inspect the error
  * @param {*} err - An error object
  */
-function getStackOrInspect (err) {
+function getStackOrInspect (err: any): string {
   return err.stack || util.inspect(err)
 }
 
@@ -48,8 +57,8 @@ function getStackOrInspect (err) {
  * @param {string} operationAction
  * @returns {Object}
  */
-const getSpanTags = ({ headers, payload, params }, operationType, operationAction) => {
-  const tags = {
+const getSpanTags = ({ headers, payload, params }: { headers?: any, payload?: any, params?: any }, operationType: string, operationAction: string): SpanTags => {
+  const tags: SpanTags = {
     operationType,
     operationAction,
     accountRequestId: (payload && payload.accountRequestId) || (params && params.ID) || (headers && headers.ID) || undefined

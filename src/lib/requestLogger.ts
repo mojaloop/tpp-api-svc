@@ -22,7 +22,8 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
-- Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -32,7 +33,7 @@
 const Logger = require('@mojaloop/central-services-logger')
 const Util = require('util')
 
-const logResponse = function (request) {
+const logResponse = function (request: any) {
   if (request && request.response) {
     let response
     try {
