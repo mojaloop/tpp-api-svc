@@ -23,7 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
 
@@ -40,27 +40,27 @@ jest.mock('@mojaloop/central-services-logger', () => {
 const Sinon = require('sinon')
 const Hapi = require('@hapi/hapi')
 
-const Mockgen = require('../../../../util/mockgen.js')
-const Helper = require('../../../../util/helper.js')
-const Handler = require('../../../../../src/domain/tppAccounts.js')
-const Config = require('../../../../../src/lib/config.js')
+const Mockgen = require('../../../../util/mockgen')
+const Helper = require('../../../../util/helper')
+const Handler = require('../../../../../src/domain/tppAccountsRequest')
+const Config = require('../../../../../src/lib/config')
 
 let sandbox
 const server = new Hapi.Server()
 
-describe('/tppAccounts/{ID}/error', () => {
+describe('/tppAccountsRequest/{ID}/error', () => {
   // URI
-  const resource = 'tppAccounts'
+  const resource = 'tppAccountsRequest'
   const path = `/${resource}/{ID}/error`
 
   beforeAll(async () => {
     sandbox = Sinon.createSandbox()
-    // sandbox.stub(Handler, 'forwardTppAccountsError').returns(Promise.resolve())
+    // sandbox.stub(Handler, 'forwardTppAccountsRequestError').returns(Promise.resolve())
     await Helper.serverSetup(server)
   })
 
   beforeEach(() => {
-    Handler.forwardTppAccountsError = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccountsRequestError = jest.fn().mockResolvedValue(undefined)
   })
 
   afterAll(() => {
@@ -105,15 +105,15 @@ describe('/tppAccounts/{ID}/error', () => {
       }
 
       const err = new Error('Error occurred')
-      Handler.forwardTppAccountsError.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccountsRequestError.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
       expect(response.statusCode).toBe(200)
-      expect(Handler.forwardTppAccountsError).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppAccountsError.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccountsRequestError).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccountsRequestError.mock.results[0].value).rejects.toThrow(err)
     })
   })
 })

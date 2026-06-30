@@ -23,68 +23,50 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
+
 'use strict'
 
-jest.mock('@mojaloop/central-services-logger', () => {
-  return {
-    info: jest.fn(), // suppress info output
-    debug: jest.fn()
-  }
-})
-
-jest.mock('@mojaloop/central-services-metrics', () => {
-  return {
-    setup: jest.fn()
-  }
-})
-
-/* Mock out the Hapi Server */
-const mockStart = jest.fn()
-jest.mock('@hapi/hapi', () => ({
-  Server: jest.fn().mockImplementation(() => ({
-    register: jest.fn(),
-    ext: jest.fn(),
-    route: jest.fn(),
-    start: mockStart,
-    plugins: {
-      openapi: {
-        setHost: jest.fn()
-      }
-    },
-    info: {
-      host: 'localhost',
-      port: 3000
-    }
-  }))
+const mockRequestLogger = jest.fn()
+jest.mock('../../../src/lib/requestLogger', () => ({
+  logResponse: mockRequestLogger
 }))
 
-const { initialize } = require('../../src/server')
+const { failActionHandler, onPreHandler } = require('../../../src/handlers/server')
 
-describe('server', () => {
+describe('Server Handlers', () => {
   afterEach(() => {
-    mockStart.mockClear()
+    mockRequestLogger.mockClear()
   })
 
-  describe('initialize', () => {
-    it('initializes the server', async () => {
+  describe('failActionHandler', () => {
+    it('throws the reformatted error', async () => {
       // Arrange
+      const input = new Error('Generic error')
+
       // Act
-      await initialize(3000)
+      const action = async () => failActionHandler(null, null, input)
 
       // Assert
-      expect(mockStart).toHaveBeenCalled()
+      await expect(action()).rejects.toThrow('Generic error')
     })
+  })
 
-    it('initializes the server when no port is set', async () => {
+  describe('onPreHandler', () => {
+    it('logs the response', async () => {
       // Arrange
+      const request = {}
+      const h = jest.fn().mockImplementation(() => ({
+        continue: jest.fn()
+      }))
+
       // Act
-      await initialize()
+      await onPreHandler(request, h)
 
       // Assert
-      expect(mockStart).toHaveBeenCalled()
+      expect(mockRequestLogger).toHaveBeenCalled()
     })
   })
 })

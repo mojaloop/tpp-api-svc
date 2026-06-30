@@ -23,50 +23,21 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
-
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
 
 'use strict'
 
-const mockRequestLogger = jest.fn()
-jest.mock('../../../src/lib/requestLogger', () => ({
-  logResponse: mockRequestLogger
-}))
+const Argv = require('../../../src/lib/argv')
 
-const { failActionHandler, onPreHandler } = require('../../../src/handlers/server')
+describe('Argv', () => {
+  it('getArgs returns the args', async () => {
+    // Arrange
+    // Act
+    const result = Argv.getArgs()
 
-describe('Server Handlers', () => {
-  afterEach(() => {
-    mockRequestLogger.mockClear()
-  })
-
-  describe('failActionHandler', () => {
-    it('throws the reformatted error', async () => {
-      // Arrange
-      const input = new Error('Generic error')
-
-      // Act
-      const action = async () => failActionHandler(null, null, input)
-
-      // Assert
-      await expect(action()).rejects.toThrow('Generic error')
-    })
-  })
-
-  describe('onPreHandler', () => {
-    it('logs the response', async () => {
-      // Arrange
-      const request = {}
-      const h = jest.fn().mockImplementation(() => ({
-        continue: jest.fn()
-      }))
-
-      // Act
-      await onPreHandler(request, h)
-
-      // Assert
-      expect(mockRequestLogger).toHaveBeenCalled()
-    })
+    // Assert
+    expect(result.length > 0).toBe(true)
   })
 })

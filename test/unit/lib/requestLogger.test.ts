@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Ernest Tan <ernesttanjianyu@gmail.com>
  --------------
  ******/
 'use strict'
@@ -84,7 +85,7 @@ describe('requestLogger', () => {
         }
       }
       // make it circular
-      input.response.source.nested = input
+      ;(input.response.source as Record<string, unknown>).nested = input
 
       // Act
       logResponse(input)

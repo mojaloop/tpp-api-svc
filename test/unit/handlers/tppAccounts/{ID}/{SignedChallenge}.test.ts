@@ -22,7 +22,7 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- - Devarsh Shah <devarshshah2608@gmail.com>
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
 
  --------------
  ******/
@@ -40,21 +40,21 @@ jest.mock('@mojaloop/central-services-logger', () => {
 const Sinon = require('sinon')
 const Hapi = require('@hapi/hapi')
 
-const Mockgen = require('../../../util/mockgen.js')
-const Helper = require('../../../util/helper.js')
-const Handler = require('../../../../src/domain/tppConsents')
-const Config = require('../../../../src/lib/config.js')
+const Mockgen = require('../../../../util/mockgen')
+const Helper = require('../../../../util/helper')
+const Handler = require('../../../../../src/domain/tppAccounts.js')
+const Config = require('../../../../../src/lib/config.js')
 
 let sandbox
 const server = new Hapi.Server()
 
 /**
- * Tests for /tppConsents/{ID}
- */
-describe('/tppConsents/{ID}', () => {
+  * Tests for /TppAccounts/{ID}
+  */
+describe('/tppAccounts/{ID}/{SignedChallenge}', () => {
   // URI
-  const resource = 'tppConsents'
-  const path = `/${resource}/{ID}`
+  const resource = 'tppAccounts'
+  const path = `/${resource}/{ID}/{SignedChallenge}`
 
   beforeAll(async () => {
     sandbox = Sinon.createSandbox()
@@ -66,7 +66,7 @@ describe('/tppConsents/{ID}', () => {
   })
 
   beforeEach(() => {
-    Handler.forwardTppConsents = jest.fn().mockResolvedValue()
+    Handler.forwardTppAccounts = jest.fn().mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -93,6 +93,48 @@ describe('/tppConsents/{ID}', () => {
       expect(response.statusCode).toBe(202)
     })
 
+    it('returns a 406 with invalid protocol version for content-type', async () => {
+      const tempProtocolVersion = JSON.parse(JSON.stringify(Config.PROTOCOL_VERSIONS)) // We want to make a deep clone of the config
+      tempProtocolVersion.CONTENT.DEFAULT = '0.1' // This is an invalid FSPIOP protocol version
+      const headers = await Mockgen.generateRequestHeaders(path, method, resource, tempProtocolVersion)
+
+      // Arrange
+      const options = {
+        method,
+        url: path,
+        headers
+      }
+
+      // Act
+      const response = await server.inject(options)
+
+      // Assert
+      expect(response.statusCode).toBe(406)
+      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorCode).toBe('3001')
+      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorDescription).toBe('Unacceptable version requested - Client supplied a protocol version which is not supported by the server')
+    })
+
+    it('returns a 406 with invalid protocol version for accept-type', async () => {
+      const tempProtocolVersion = JSON.parse(JSON.stringify(Config.PROTOCOL_VERSIONS)) // We want to make a deep clone of the config
+      tempProtocolVersion.ACCEPT.DEFAULT = '0.1' // This is an invalid FSPIOP protocol version
+      const headers = await Mockgen.generateRequestHeaders(path, method, resource, tempProtocolVersion)
+
+      // Arrange
+      const options = {
+        method,
+        url: path,
+        headers
+      }
+
+      // Act
+      const response = await server.inject(options)
+
+      // Assert
+      expect(response.statusCode).toBe(406)
+      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorCode).toBe('3001')
+      expect(response.result && response.result.errorInformation && response.result.errorInformation.errorDescription).toBe('Unacceptable version requested - The Client requested an unsupported version, see extension list for supported version(s).')
+    })
+
     it('handles when error is thrown', async () => {
       const headers = await Mockgen.generateRequestHeaders(path, method, resource, Config.PROTOCOL_VERSIONS)
       // Arrange
@@ -102,82 +144,15 @@ describe('/tppConsents/{ID}', () => {
         headers
       }
       const err = new Error('Error occurred')
-      Handler.forwardTppConsents.mockImplementation(async () => { throw err })
+      Handler.forwardTppAccounts.mockImplementation(async () => { throw err })
 
       // Act
       const response = await server.inject(options)
 
       // Assert
-      expect(Handler.forwardTppConsents).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppConsents.mock.results[0].value).rejects.toThrow(err)
+      expect(Handler.forwardTppAccounts).toHaveBeenCalledTimes(1)
+      expect(Handler.forwardTppAccounts.mock.results[0].value).rejects.toThrow(err)
       expect(response.statusCode).toBe(202)
-    })
-  })
-
-  describe('DELETE', () => {
-    // HTTP Method
-    const method = 'delete'
-
-    it('returns a 202 response code', async () => {
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, Config.PROTOCOL_VERSIONS)
-
-      // Arrange
-      const options = {
-        method,
-        url: path,
-        headers
-      }
-
-      // Act
-      const response = await server.inject(options)
-
-      // Assert
-      expect(response.statusCode).toBe(202)
-    })
-
-    it('handles when error is thrown', async () => {
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, Config.PROTOCOL_VERSIONS)
-
-      // Arrange
-      const options = {
-        method,
-        url: path,
-        headers
-      }
-
-      const err = new Error('Error occurred')
-      Handler.forwardTppConsents.mockImplementation(async () => { throw err })
-
-      // Act
-      const response = await server.inject(options)
-
-      // Assert
-      expect(response.statusCode).toBe(202)
-      expect(Handler.forwardTppConsents).toHaveBeenCalledTimes(1)
-      expect(Handler.forwardTppConsents.mock.results[0].value).rejects.toThrow(err)
-    })
-    it('returns an error response and logs when getSpanTags throws', async () => {
-      const LibUtil = require('../../../../src/lib/util')
-      const spy = jest.spyOn(LibUtil, 'getSpanTags').mockImplementation(() => {
-        throw new Error('forced getSpanTags error')
-      })
-
-      const headers = await Mockgen.generateRequestHeaders(path, method, resource, Config.PROTOCOL_VERSIONS)
-
-      const options = {
-        method,
-        url: path,
-        headers
-      }
-
-      const response = await server.inject(options)
-
-      // The handler re-formats and re-throws as an FSPIOP error; assert non-200 and that we logged the error
-      expect(response.statusCode).not.toBe(200)
-      expect(require('@mojaloop/central-services-logger').error).toHaveBeenCalled()
-
-      // cleanup
-      spy.mockRestore()
     })
   })
 })

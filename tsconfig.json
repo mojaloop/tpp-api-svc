@@ -1,28 +1,15 @@
 {
+  // Umbrella config used by the editor and `npm run typecheck` — covers both
+  // src and test. Implicit `any` is relaxed here because test code relies on
+  // untyped require()s and Jest mock reassignment. The production build stays
+  // strict via tsconfig.src.json (used by `npm run build` and the first
+  // typecheck step).
+  "extends": "./tsconfig.src.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "node20",
-    "types": ["node"],
-
-    "rootDir": "src",
-    "outDir": "dist",
-
-    "allowJs": true,
-
-    "strict": true,
-    "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "exactOptionalPropertyTypes": true,
-
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-
-    "sourceMap": true
+    "noEmit": true,
+    "rootDir": ".",
+    "types": ["node", "jest"],
+    "noImplicitAny": false
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }

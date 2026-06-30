@@ -22,7 +22,7 @@ COPY package.json package-lock.json* /opt/app/
 
 RUN npm ci
 
-COPY tsconfig.json /opt/app/
+COPY tsconfig.src.json /opt/app/
 COPY src /opt/app/src
 COPY config /opt/app/config
 

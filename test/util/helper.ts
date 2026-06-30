@@ -25,30 +25,40 @@
  * ModusBox
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
 
+ - Ernest Tan <ernesttanjianyu@gmail.com>
+
  --------------
  ******/
 'use strict'
 
-const Path = require('path')
-const OpenapiBackend = require('@mojaloop/central-services-shared').Util.OpenapiBackend
-const EventSdk = require('@mojaloop/event-sdk')
+import Path from 'path';
+import { type Server, type Request, type ResponseToolkit } from '@hapi/hapi';
+import { Util } from '@mojaloop/central-services-shared';
+import { type Span } from '@mojaloop/event-sdk';
+import Plugins from '../../src/plugins';
+import Handlers from '../../src/handlers';
+import { type ProtocolVersions } from './types';
 
-const Plugins = require('../../src/plugins')
-const Handlers = require('../../src/handlers')
+// @mojaloop/event-sdk exposes Tracer as a top-level export, which a default
+// import resolves to `undefined` under this babel/CJS interop. Require it for
+// the runtime value (matches src/handlers/tppAccountsRequest.ts); the Span type
+// comes from the type-only import above.
+const EventSdk = require('@mojaloop/event-sdk');
+const OpenapiBackend = Util.OpenapiBackend;
 
-const destinationFsp = 'dfsp2'
-const sourceFsp = 'dfsp1'
+const destinationFsp = 'dfsp2';
+const sourceFsp = 'dfsp1';
 
 /**
  * @function defaultHeaders
  * @description This returns a set of default headers used for requests
  *   see https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_message_headers
- * @param {string} resource - the version for the accept and content-type headers
- * @param {object} protocolVersions - object containing the protocol versions config (see default.json)
- * @returns {object} Returns the default headers
+ * @param resource - the version for the accept and content-type headers
+ * @param protocolVersions - object containing the protocol versions config (see default.json)
+ * @returns Returns the default headers
  */
 
-function defaultHeaders (resource, protocolVersions) {
+function defaultHeaders (resource: string, protocolVersions: ProtocolVersions) {
   // TODO: See API section 3.2.1; what should we do about X-Forwarded-For? Also, should we
   // add/append to this field in all 'queueResponse' calls?
   return {
@@ -60,14 +70,18 @@ function defaultHeaders (resource, protocolVersions) {
   }
 }
 
-const serverSetup = async (server) => {
+// matches the TraceableRequest pattern in src/handlers/tppAccountsRequest.ts
+type TraceableRequest = Request & { span: Span }
+
+const serverSetup = async (server: Server) => {
   const api = await OpenapiBackend.initialise(Path.resolve(__dirname, '../../src/interface/openapi.yaml'), Handlers)
   await Plugins.registerPlugins(server, api)
 
   // patch span for unit tests
-  server.ext('onRequest', (req, h) => {
-    if (!req.span) {
-      req.span = EventSdk.Tracer.createSpan('test-span')
+  server.ext('onRequest', (req: Request, h: ResponseToolkit) => {
+    const traceable = req as TraceableRequest
+    if (!traceable.span) {
+      traceable.span = EventSdk.Tracer.createSpan('test-span')
     }
     return h.continue
   })
@@ -76,7 +90,7 @@ const serverSetup = async (server) => {
   server.route({
     method: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     path: '/{path*}',
-    handler: (req, h) => {
+    handler: (req: Request, h: ResponseToolkit) => {
       return api.handleRequest(
         {
           method: req.method,
