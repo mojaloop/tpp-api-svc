@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -56,7 +57,7 @@ describe('Base Tests', () => {
     const helpStub = sandbox.stub(Command.prototype, 'help').returns(true)
 
     jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
+    jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => []
     }))
 
@@ -76,7 +77,7 @@ describe('Base Tests', () => {
       'api'
     ]
     jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
+    jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => mockArgs
     }))
 
