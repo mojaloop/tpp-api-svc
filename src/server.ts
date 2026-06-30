@@ -53,7 +53,7 @@ const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
  * @param {number} port Port to register the Server against
  * @returns {Promise<Server>} Returns the Server object
  */
-const createServer = async (port) => {
+const createServer = async (port: number) => {
   const server = await new Server({
     port,
     routes: {
