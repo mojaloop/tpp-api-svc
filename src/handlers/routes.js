@@ -24,6 +24,8 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
 
+ - Miguel Missetcho DEKAKPOEVOU <miguel.dekakpoevou@bftgroup.co>
+
  --------------
  ******/
 
@@ -193,6 +195,24 @@ const APIRoutes = (api) => [
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts error by ID'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/tppAuthorizations',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppAuthorizations', 'sampled'],
+      description: 'POST Thirdparty Authorization'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/tppAuthorizations/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppAuthorizations', 'sampled'],
+      description: 'GET Thirdparty Authorization by ID'
     }
   }
 ]
