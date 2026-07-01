@@ -53,14 +53,17 @@ module.exports = {
     ).startTimer()
     const span = request.span
     try {
+      // LOOKUP action: used when the DFSP polls for the status of a previously sent authorization request
       const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.LOOKUP)
       span.setTags(tags)
       await span.audit({
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
+      // Fire-and-forget: the FSPIOP async pattern requires 202 before the forward completes.
+      // Errors from the forward are caught here only for logging; forwardTppAuthorizations
+      // already handles the error callback to the source FSP internally.
       tppAuthorizations.forwardTppAuthorizations(Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_AUTHORIZATIONS_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppAuthorizations takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAuthorizations: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })

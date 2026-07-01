@@ -46,6 +46,7 @@ const Handler = require('../../../src/domain/tppAuthorizations')
 const Config = require('../../../src/lib/config.js')
 
 let sandbox
+// A single Hapi server instance is shared across all handler tests to avoid repeated boot overhead
 const server = new Hapi.Server()
 
 describe('/tppAuthorizations', () => {
@@ -57,6 +58,7 @@ describe('/tppAuthorizations', () => {
   })
 
   beforeEach(() => {
+    // Replace the real domain function with a jest mock so handler tests never make real HTTP calls
     Handler.forwardTppAuthorizations = jest.fn().mockResolvedValue()
   })
 
@@ -71,6 +73,8 @@ describe('/tppAuthorizations', () => {
   describe('POST /tppAuthorizations', () => {
     const method = 'post'
     const path = `/${resource}`
+    // Mockgen cannot generate a valid body for the complex tppAuthorizationsPostRequest schema
+    // (UUIDs, Money, PartyIdInfo, Party, TransactionType all required), so we use a hardcoded payload
     const validPayload = {
       authorizationRequestId: 'b51ec534-ee48-4575-b6a9-ead2955b8069',
       transactionRequestId: 'a8323bc6-c228-4df2-ae82-e5a997baf898',
@@ -114,6 +118,8 @@ describe('/tppAuthorizations', () => {
     })
 
     it('handles when forwardTppAuthorizations throws error', async () => {
+      // Even when the domain throws asynchronously, the handler must still return 202
+      // because the forward is fire-and-forget (FSPIOP async pattern)
       const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
 
       const options = {
@@ -154,6 +160,7 @@ describe('/tppAuthorizations', () => {
     })
 
     it('handles when forwardTppAuthorizations throws error', async () => {
+      // Same as POST: async errors from the domain must not change the 202 response
       const request = await Mockgen.generateRequest(path, method, resource, Config.PROTOCOL_VERSIONS)
 
       const options = {

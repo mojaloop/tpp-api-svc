@@ -43,31 +43,46 @@ const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
 /**
- * Forwards tppAuthorizations endpoint requests to destination FSP for processing
+ * Forwards a POST or GET /tppAuthorizations request to the destination FSP via the Mojaloop switch.
  *
- * @returns {boolean}
+ * Mojaloop uses an async pattern: the HTTP handler returns 202 immediately and the real
+ * response arrives later via a PUT /tppAuthorizations/{ID} callback from the destination FSP.
+ * On any forwarding failure, this function notifies the source FSP using forwardTppAuthorizationsError,
+ * then re-throws so the handler can log the incident.
+ *
+ * @param {string} path - Mustache URL template (e.g. /tppAuthorizations/{{ID}})
+ * @param {object} headers - FSPIOP headers from the incoming request
+ * @param {string} method - HTTP method: POST or GET
+ * @param {object} params - Path parameters (e.g. { ID: 'auth-123' })
+ * @param {object|null} payload - Request body (null for GET requests)
+ * @param {object|null} span - OpenTelemetry span for distributed tracing
+ * @returns {boolean} true on success
  */
 const forwardTppAuthorizations = async (path, headers, method, params, payload, span = null) => {
   const childSpan = span ? span.getChild('forwardTppAuthorizations') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
+  // Fallback ensures authorizationId is always available even when payload is absent (e.g. GET)
   const payloadLocal = payload || { authorizationId: params.ID }
   const authorizationId = (payload && payload.authorizationId) || params.ID
   let fspiopError
 
   try {
+    // Resolve the destination FSP's callback base URL from the central switch registry
     endpoint = await Endpoints.getEndpoint(Config.SWITCH_ENDPOINT, destination, Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE)
     Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppAuthorizations ${authorizationId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
     if (!endpoint) {
       throw ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_FSP_ERROR, `No ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint found for tppAuthorizations ${authorizationId} for ${Enum.Http.Headers.FSPIOP.DESTINATION}`, method.toUpperCase() !== Enum.Http.RestMethods.GET ? payloadLocal : undefined, source)
     }
+    // Combine the base endpoint URL with the path template and render the {ID} placeholder
     const url = Mustache.render(endpoint + path, {
       ID: authorizationId
     })
 
     Logger.info(`Forwarding tpp authorizations to endpoint: ${url}`)
 
+    // GET requests must not carry a body per the FSPIOP specification
     const response = await Request.sendRequest({ url, headers, source, destination, method, payload: method.toUpperCase() !== Enum.Http.RestMethods.GET ? payloadLocal : undefined, responseType, span: childSpan, hubNameRegex })
 
     Logger.info(`Forwarded tpp authorizations ${authorizationId} from ${source} to ${destination} got response ${response.status} ${response.statusText}`)
@@ -80,6 +95,7 @@ const forwardTppAuthorizations = async (path, headers, method, params, payload, 
   } catch (err) {
     Logger.info(`Error forwarding tpp authorizations to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
+    // Notify the source FSP of the failure via PUT /tppAuthorizations/{ID}/error before re-throwing
     await forwardTppAuthorizationsError(headers, source, Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_AUTHORIZATIONS_PUT_ERROR, Enum.Http.RestMethods.PUT, authorizationId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
@@ -92,9 +108,17 @@ const forwardTppAuthorizations = async (path, headers, method, params, payload, 
 }
 
 /**
- * Forwards tppAuthorizations errors to error endpoint
+ * Sends a FSPIOP error back to the source FSP via PUT /tppAuthorizations/{ID}/error.
+ * Called automatically by forwardTppAuthorizations when the forward fails.
  *
- * @returns {undefined}
+ * @param {object} headers - Original FSPIOP headers
+ * @param {string} to - FSP ID of the error recipient (the original source)
+ * @param {string} path - Mustache error path template (e.g. /tppAuthorizations/{{ID}}/error)
+ * @param {string} method - HTTP method (always PUT for error callbacks)
+ * @param {string|undefined} authorizationId - ID of the failed authorization request
+ * @param {object|undefined} payload - FSPIOP error object to send
+ * @param {object|null} span - OpenTelemetry span for distributed tracing
+ * @returns {boolean} true on success
  */
 const forwardTppAuthorizationsError = async (headers, to, path, method, authorizationId, payload, span = null) => {
   const childSpan = span ? span.getChild('forwardTppAuthorizationsError') : undefined
@@ -102,6 +126,7 @@ const forwardTppAuthorizationsError = async (headers, to, path, method, authoriz
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
   const destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
   try {
+    // Use the same switch registry to resolve the error callback URL for the recipient FSP
     endpoint = await Endpoints.getEndpoint(Config.SWITCH_ENDPOINT, to, Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE)
     Logger.info(`Resolved party ${Enum.EndPoints.FspEndpointTypes.FSPIOP_CALLBACK_URL_TPP_REQ_SERVICE} endpoint for tppAuthorizations ${authorizationId || 'error.test.js'} to: ${util.inspect(endpoint)}`)
 

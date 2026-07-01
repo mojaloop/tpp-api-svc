@@ -61,8 +61,10 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
+      // Fire-and-forget: the FSPIOP async pattern requires 202 before the forward completes.
+      // Errors from the forward are caught here only for logging; forwardTppAuthorizations
+      // already handles the error callback to the source FSP internally.
       tppAuthorizations.forwardTppAuthorizations(Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_AUTHORIZATIONS_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppAuthorizations takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAuthorizations: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
