@@ -1,0 +1,77 @@
+openapi: 3.0.2
+info:
+  title: Mojaloop Thirdparty API Adapter
+  version: '2.0'
+  description: >-
+    A Mojaloop API for thirdparty interactions between `PISPs` (Payment
+    Initiation Service Providers) and `DFSPs` (Digital Financial Service Providers)
+  license:
+    name: TBD
+    url: TBD
+servers:
+  - url: /
+paths:
+  /health:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/health.yaml'
+  /metrics:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/metrics.yaml'
+  /tppAccountRequest:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAccountRequest.yaml'
+  /tppAccountRequest/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAccountRequest_ID.yaml'
+  /tppAccountRequest/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAccountRequest_ID_error.yaml'
+  /tppAccounts/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAccounts_ID.yaml'
+  /tppAccounts/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAccounts_ID_error.yaml'
+  /tppConsentRequests:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppConsentRequests.yaml'
+  /tppConsentRequests/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppConsentRequests_ID.yaml'
+  /tppConsentRequests/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppConsentRequests_ID_error.yaml'
+  /tppConsents:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppConsents.yaml'
+  /tppConsents/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppConsents_ID.yaml'
+  /tppConsents/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppConsents_ID_error.yaml'
+  /participants:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/participants.yaml'
+  /participants/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/participants_ID.yaml'
+  /participants/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/participants_ID_error.yaml'
+  /participants/{Type}/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/participants_Type_ID.yaml'
+  /participants/{Type}/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/participants_Type_ID_error.yaml'
+  /services/{ServiceType}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/services_ServiceType.yaml'
+  /services/{ServiceType}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/services_ServiceType_error.yaml'
+  /tppAuthorizations:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAuthorizations.yaml'
+  /tppAuthorizations/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAuthorizations_ID.yaml'
+  /tppAuthorizations/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppAuthorizations_ID_error.yaml'
+  /tppVerifications:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppVerifications.yaml'
+  /tppVerifications/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppVerifications_ID.yaml'
+  /tppVerifications/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppVerifications_ID_error.yaml'
+  /tppTransactionRequests:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppTransactionRequests.yaml'
+  /tppTransactionRequests/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppTransactionRequests_ID.yaml'
+  /tppTransactionRequests/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppTransactionRequests_ID_error.yaml'
+  /tppTransfers:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppTransfers.yaml'
+  /tppTransfers/{ID}:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppTransfers_ID.yaml'
+  /tppTransfers/{ID}/error:
+    $ref: '../../node_modules/@mojaloop/api-snippets/thirdparty/v2_0/openapi3/paths/tppTransfers_ID_error.yaml'
