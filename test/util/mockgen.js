@@ -73,7 +73,7 @@ let openApiMockGenerator
 const init = async () => {
   if (!openApiMockGenerator) {
     openApiMockGenerator = new OpenApiMockGenerator()
-    const openApiPath = require.resolve('../../interface/api.yaml')
+    const openApiPath = require.resolve('../../interface/openapi.yaml')
     await openApiMockGenerator.load(openApiPath)
   }
   return openApiMockGenerator
