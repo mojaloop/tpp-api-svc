@@ -63,7 +63,7 @@ const createServer = async (port) => {
       }
     }
   })
-  const openApiPath = require.resolve('../../interface/openapi.yaml')
+  const openApiPath = require.resolve('./interface/openapi.yaml')
   const api = await OpenapiBackend.initialise(Path.resolve(__dirname, openApiPath), Handlers)
   await Plugins.registerPlugins(server, api)
   await server.ext([
