@@ -437,6 +437,124 @@
               }
             ]
           }
+        },
+        {
+          "id": "10",
+          "description": "POST /tppAuthorizations - DFSP requests authorization from PISP",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppAuthorizations",
+          "path": "/tppAuthorizations",
+          "method": "post",
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppAuthorizations+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppAuthorizations+json;version=1.1",
+            "FSPIOP-Destination": "pisp",
+            "FSPIOP-URI": "/tppAuthorizations"
+          },
+          "body": {
+            "authorizationRequestId": "{$function.generic.generateUUID}",
+            "transactionRequestId": "{$function.generic.generateUUID}",
+            "challenge": "OTk4MjMxMjM0MjM0MjM0MjM0MjM0MjM0MjM0",
+            "transferAmount": {
+              "amount": "100",
+              "currency": "USD"
+            },
+            "payeeReceiveAmount": {
+              "amount": "99",
+              "currency": "USD"
+            },
+            "fees": {
+              "amount": "1",
+              "currency": "USD"
+            },
+            "payer": {
+              "partyIdType": "MSISDN",
+              "partyIdentifier": "16135551212",
+              "fspId": "dfspa"
+            },
+            "payee": {
+              "partyIdInfo": {
+                "partyIdType": "MSISDN",
+                "partyIdentifier": "16135551234",
+                "fspId": "dfspb"
+              }
+            },
+            "transactionType": {
+              "scenario": "TRANSFER",
+              "initiator": "PAYER",
+              "initiatorType": "CONSUMER"
+            },
+            "expiration": "2027-12-31T00:00:00.000Z"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": [
+                  "expect(response.status).to.equal(202)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "11",
+          "description": "GET /tppAuthorizations/{ID} - DFSP retrieves authorization request status",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppAuthorizations/{ID}",
+          "path": "/tppAuthorizations/{$prev.10.request.body.authorizationRequestId}",
+          "method": "get",
+          "params": {
+            "ID": "{$prev.10.request.body.authorizationRequestId}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppAuthorizations+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "Accept": "application/vnd.interoperability.tppAuthorizations+json;version=1.1",
+            "FSPIOP-Destination": "pisp",
+            "FSPIOP-URI": "/tppAuthorizations/{$prev.10.request.body.authorizationRequestId}"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 202",
+                "exec": [
+                  "expect(response.status).to.equal(202)"
+                ]
+              }
+            ]
+          }
         }
       ]
     }

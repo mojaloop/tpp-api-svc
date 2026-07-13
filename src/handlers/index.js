@@ -24,6 +24,8 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
 
+ - Miguel Missetcho DEKAKPOEVOU <miguel.dekakpoevou@bftgroup.co>
+
  --------------
  ******/
 
@@ -41,6 +43,8 @@ const tppConsentRequestsId = require('./tppConsentRequests/{ID}')
 const tppConsentRequestsErrorByID = require('./tppConsentRequests/{ID}/error')
 const tppConsents = require('./tppConsents')
 const tppConsentsId = require('./tppConsents/{ID}')
+const tppAuthorizations = require('./tppAuthorizations')
+const tppAuthorizationsId = require('./tppAuthorizations/{ID}')
 const health = require('./health')
 
 module.exports = {
@@ -52,6 +56,8 @@ module.exports = {
   GetAccountsByUserId: tppAccountsIdGet.get,
   UpdateAccountsByUserId: tppAccountsId.put,
   UpdateAccountsByUserIdError: tppAccountsErrorByID.put,
+  tppPostAuthorizations: tppAuthorizations.post,
+  tppGetAuthorizationsById: tppAuthorizationsId.get,
   PostConsents: tppConsents.post,
   GetConsent: tppConsentsId.get,
   DeleteConsentByID: tppConsentsId.delete,
