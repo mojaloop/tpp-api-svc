@@ -638,6 +638,100 @@ paths:
           $ref: '#/components/responses/501'
         '503':
           $ref: '#/components/responses/503'
+  /tppTransactionRequests/{ID}:
+    parameters:
+      - $ref: '#/components/parameters/ID'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Date'
+      - $ref: '#/components/parameters/X-Forwarded-For'
+      - $ref: '#/components/parameters/FSPIOP-Source'
+      - $ref: '#/components/parameters/FSPIOP-Destination'
+      - $ref: '#/components/parameters/FSPIOP-Encryption'
+      - $ref: '#/components/parameters/FSPIOP-Signature'
+      - $ref: '#/components/parameters/FSPIOP-URI'
+      - $ref: '#/components/parameters/FSPIOP-HTTP-Method'
+    put:
+      tags:
+        - transactionRequests
+      operationId: UpdateTransactionRequest
+      summary: UpdateTransactionRequest
+      description: |
+        The HTTP request **PUT /tppTransactionRequests/{ID}** is used by the DFSP to inform the PISP about the result of a transaction request.
+        The {ID} in the request should match the transactionRequestId which was given when the transaction request was created.
+      parameters:
+        - $ref: '#/components/parameters/Content-Length'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TppTransactionRequestsIDPutResponse'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+  /tppTransactionRequests/{ID}/error:
+    parameters:
+      - $ref: '#/components/parameters/ID'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Date'
+      - $ref: '#/components/parameters/X-Forwarded-For'
+      - $ref: '#/components/parameters/FSPIOP-Source'
+      - $ref: '#/components/parameters/FSPIOP-Destination'
+      - $ref: '#/components/parameters/FSPIOP-Encryption'
+      - $ref: '#/components/parameters/FSPIOP-Signature'
+      - $ref: '#/components/parameters/FSPIOP-URI'
+      - $ref: '#/components/parameters/FSPIOP-HTTP-Method'
+    put:
+      tags:
+        - transactionRequests
+      operationId: NotifyErrorTransactionRequest
+      summary: NotifyErrorTransactionRequest
+      description: |
+        DFSP responds to the PISP if something went wrong with processing a transaction request.
+      parameters:
+        - $ref: '#/components/parameters/Content-Length'
+      requestBody:
+        description: Error information returned.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorInformationObject'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
   /tppConsents:
     parameters:
       - $ref: '#/components/parameters/Content-Type'
@@ -3508,6 +3602,51 @@ components:
           $ref: '#/components/schemas/ExtensionList'
       required:
         - authenticationResponse
+      additionalProperties: false
+    TppTransactionRequestsIDPutResponse:
+      title: TppTransactionRequestsIDPutResponse
+      type: object
+      description: |
+        Used by: DFSP
+        The HTTP request PUT /tppTransactionRequests/{ID} is used by the DFSP to inform the PISP about the result of a transaction request.
+        The {ID} in the request should match the transactionRequestId which was given when the transaction request was created.
+      properties:
+        transactionRequestId:
+          $ref: '#/components/schemas/CorrelationId'
+        challenge:
+          $ref: '#/components/schemas/BinaryString'
+        transactionId:
+          $ref: '#/components/schemas/CorrelationId'
+        transferAmount:
+          $ref: '#/components/schemas/Money'
+        payeeReceiveAmount:
+          $ref: '#/components/schemas/Money'
+        fees:
+          $ref: '#/components/schemas/Money'
+        payer:
+          $ref: '#/components/schemas/Party'
+        payee:
+          $ref: '#/components/schemas/Party'
+        transactionType:
+          $ref: '#/components/schemas/TransactionType'
+        condition:
+          $ref: '#/components/schemas/IlpCondition'
+        expiration:
+          $ref: '#/components/schemas/DateTime'
+        extensionList:
+          $ref: '#/components/schemas/ExtensionList'
+      required:
+        - transactionRequestId
+        - challenge
+        - transactionId
+        - transferAmount
+        - payeeReceiveAmount
+        - fees
+        - payer
+        - payee
+        - transactionType
+        - condition
+        - expiration
       additionalProperties: false
   parameters:
     Content-Type:

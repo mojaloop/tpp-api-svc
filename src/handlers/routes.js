@@ -194,6 +194,24 @@ const APIRoutes = (api) => [
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts error by ID'
     }
+  },
+  {
+    method: 'PUT',
+    path: '/tppTransactionRequests/{ID}',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppTransactionRequests', 'sampled'],
+      description: 'PUT Thirdparty Transaction Request by ID'
+    }
+  },
+  {
+    method: 'PUT',
+    path: '/tppTransactionRequests/{ID}/error',
+    handler: (req, h) => handleRequest(api, req, h),
+    config: {
+      tags: ['api', 'tppTransactionRequests', 'sampled'],
+      description: 'PUT Thirdparty Transaction Request error by ID'
+    }
   }
 ]
 

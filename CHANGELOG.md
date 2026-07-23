@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. See [standa
 * added tppAccounts endpoints ([0ee46fb](https://github.com/mojaloop/tpp-api-svc/commit/0ee46fb9695fd2f03bc95b8a05f673072b77bc18))
 * added tppAccounts endpoints ([fab5198](https://github.com/mojaloop/tpp-api-svc/commit/fab5198c7b3f81f372037b491143183e53dfea17))
 * added tppAccounts endpoints ([834225c](https://github.com/mojaloop/tpp-api-svc/commit/834225cec24af83a8f1a40079bdfe4037a59b52a))
+* added tppTransactionRequests endpoints for PUT /tppTransactionRequests/{ID} and PUT /tppTransactionRequests/{ID}/error according to Mojaloop spec sections 3.9.3 and 3.9.4
 
 
 ### Bug Fixes

@@ -41,6 +41,8 @@ const tppConsentRequestsId = require('./tppConsentRequests/{ID}')
 const tppConsentRequestsErrorByID = require('./tppConsentRequests/{ID}/error')
 const tppConsents = require('./tppConsents')
 const tppConsentsId = require('./tppConsents/{ID}')
+const tppTransactionRequestId = require('./tppTransactionRequests/{ID}')
+const tppTransactionRequestsErrorByID = require('./tppTransactionRequests/{ID}/error')
 const health = require('./health')
 
 module.exports = {
@@ -60,6 +62,8 @@ module.exports = {
   UpdateConsentRequest: tppConsentRequestsId.put,
   PatchConsentRequest: tppConsentRequestsId.patch,
   NotifyErrorConsentRequests: tppConsentRequestsErrorByID.put,
+  UpdateTransactionRequest: tppTransactionRequestId.put,
+  NotifyErrorTransactionRequest: tppTransactionRequestsErrorByID.put,
   validationFail: OpenapiBackend.validationFail,
   notFound: OpenapiBackend.notFound,
   methodNotAllowed: OpenapiBackend.methodNotAllowed

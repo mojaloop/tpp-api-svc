@@ -437,6 +437,128 @@
               }
             ]
           }
+        },
+        {
+          "id": "10",
+          "description": "PUT /tppTransactionRequests/{ID} - DFSP sends transaction request response to tpp-api-svc",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppTransactionRequests/{ID}",
+          "path": "/tppTransactionRequests/{$function.generic.generateUUID}",
+          "method": "put",
+          "params": {
+            "ID": "{$function.generic.generateUUID}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppTransactionRequests+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "FSPIOP-Destination": "pisp",
+            "FSPIOP-URI": "/tppTransactionRequests/{$function.generic.generateUUID}"
+          },
+          "body": {
+            "transactionRequestId": "{$function.generic.generateUUID}",
+            "challenge": "YWJjMTIz",
+            "transactionId": "{$function.generic.generateUUID}",
+            "transferAmount": {
+              "amount": "100",
+              "currency": "USD"
+            },
+            "payeeReceiveAmount": {
+              "amount": "100",
+              "currency": "USD"
+            },
+            "fees": {
+              "amount": "1",
+              "currency": "USD"
+            },
+            "payer": {
+              "partyIdInfo": {
+                "partyIdType": "MSISDN",
+                "partyIdentifier": "+1234567890123"
+              }
+            },
+            "payee": {
+              "partyIdInfo": {
+                "partyIdType": "MSISDN",
+                "partyIdentifier": "+1234567890123"
+              }
+            },
+            "transactionType": {
+              "scenario": "TRANSFER",
+              "initiator": "PAYER",
+              "initiatorType": "CONSUMER"
+            },
+            "condition": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq",
+            "expiration": "2026-06-29T12:42:00.000Z"
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 200",
+                "exec": ["expect(response.status).to.equal(200)"]
+              }
+            ]
+          }
+        },
+        {
+          "id": "11",
+          "description": "PUT /tppTransactionRequests/{ID}/error - DFSP sends error to tpp-api-svc",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "mojaloop_pisp_admin",
+            "asynchronous": true,
+            "prefix": "/tpp",
+            "additionalApi": true,
+            "specFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/api_spec.yaml",
+            "callbackMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/callback_map.json",
+            "responseMapFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/response_map.json",
+            "jsfRefFile": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/mockRef.json",
+            "triggerTemplatesFolder": "/opt/app/spec_files/api_definitions/mojaloop_pisp_admin_0.1/trigger_templates"
+          },
+          "operationPath": "/tppTransactionRequests/{ID}/error",
+          "path": "/tppTransactionRequests/{$function.generic.generateUUID}/error",
+          "method": "put",
+          "params": {
+            "ID": "{$function.generic.generateUUID}"
+          },
+          "url": "http://tpp-api-svc:4003",
+          "headers": {
+            "Content-Type": "application/vnd.interoperability.tppTransactionRequests+json;version=1.1",
+            "Date": "{$function.generic.curDate}",
+            "FSPIOP-Source": "dfspa",
+            "FSPIOP-Destination": "pisp",
+            "FSPIOP-URI": "/tppTransactionRequests/{$function.generic.generateUUID}/error"
+          },
+          "body": {
+            "errorInformation": {
+              "errorCode": "7200",
+              "errorDescription": "Generic Thirdparty transaction request error"
+            }
+          },
+          "tests": {
+            "assertions": [
+              {
+                "id": 1,
+                "description": "Status code should be 200",
+                "exec": ["expect(response.status).to.equal(200)"]
+              }
+            ]
+          }
         }
       ]
     }
