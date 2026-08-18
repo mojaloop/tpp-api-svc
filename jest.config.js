@@ -25,10 +25,5 @@ module.exports = {
   // Transform JS files with babel-jest so ESM packages can be transpiled
   transform: {
     '^.+\\.[tj]s$': 'babel-jest'
-  },
-
-  // Do not ignore these node_modules packages — whitelist packages that ship ESM.
-  transformIgnorePatterns: [
-    //    'node_modules/(?!(@faker-js/faker|@mojaloop/ml-testing-toolkit-shared-lib|@apidevtools/json-schema-ref-parser|json-schema-faker|commander|serialize-error|non-error)/)'
-  ]
+  }
 }
