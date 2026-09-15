@@ -15,6 +15,7 @@
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
+    "noUnusedParameters": true,
     "exactOptionalPropertyTypes": true,
 
     "esModuleInterop": true,
@@ -24,5 +25,17 @@
 
     "sourceMap": true
   },
+
+  // Scope is deliberately production-only, and is what keeps test artifacts out of
+  // the Docker image: with "include" and "rootDir" both pinned to src, `tsc`
+  // (npm run build / npm run typecheck, and the Dockerfile builder stage) can only
+  // ever emit from src into dist. The builder stage copies just package.json,
+  // tsconfig.json, src and config, so test/ is never in its build context, and the
+  // runtime stage copies only dist, config and node_modules back out of it.
+  //
+  // The tests are still fully type-checked despite living outside this list:
+  // ts-jest applies the compilerOptions above to whatever files Jest feeds it,
+  // which bypasses "include". So the tests are gated at `npm test` time rather
+  // than by `npm run typecheck` — see the transform block in jest.config.js.
   "include": ["src"]
 }

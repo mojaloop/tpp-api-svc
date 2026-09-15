@@ -119,12 +119,21 @@ const init = async () => {
   return openApiMockGenerator
 }
 
+/**
+ * NOTE: `_overrideRefs` is accepted but deliberately unused. This function builds its
+ * own jsfRefs (Content-Type / Accept / Date) below and passes those to the generator,
+ * so caller-supplied header overrides are NOT plumbed through. This mirrors the
+ * pre-migration JavaScript behaviour and no caller passes header overrides today —
+ * every generateRequest call site supplies only `request` refs.
+ * TODO: either wire it through to the generator or drop it from this signature and
+ * from the generateRequest call site.
+ */
 const generateRequestHeaders = async (
   path: string,
   httpMethod: string,
   resource: string,
   protocolVersions: ProtocolVersions,
-  overrideRefs: JsfRef[] | null = null
+  _overrideRefs: JsfRef[] | null = null
 ) => {
   const generator = await init()
   // Default header override refs
