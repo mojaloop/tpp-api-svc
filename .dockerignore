@@ -1,4 +1,5 @@
 coverage/
+test/
 node_modules/
 .dockerignore
 .eslintignore
