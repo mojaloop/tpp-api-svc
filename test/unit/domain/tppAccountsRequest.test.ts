@@ -74,7 +74,7 @@ describe('tppAccountsRequest', () => {
         statusText: 'Accepted'
       })
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -99,7 +99,7 @@ describe('tppAccountsRequest', () => {
         statusText: 'Accepted'
       })
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -117,9 +117,9 @@ describe('tppAccountsRequest', () => {
     it('handles when the the request fails', async () => {
       // Arrange
       sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
-      sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
+      const sendRequestStub = sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },
@@ -132,6 +132,8 @@ describe('tppAccountsRequest', () => {
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
+      expect(sendRequestStub.getCall(0).args[0].url).toBe('http://localhost:3000/tppAccountsRequest')
+      expect(sendRequestStub.getCall(1).args[0].url).toBe('http://localhost:3000/tppAccountsRequest/12345/error')
     })
 
     it('handles missing payload and params.ID', async () => {
@@ -187,7 +189,7 @@ describe('tppAccountsRequest', () => {
       sandbox.stub(Request, 'sendRequest').throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host', new Error(), '', [{ key: 'cause', value: {} }]))
       sandbox.stub(TppAccountsRequest, 'forwardTppAccountsRequestError').resolves(true)
       const options = [
-        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_POST,
+        Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_POST,
         TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
         'post',
         { ID: '12345' },

@@ -49,7 +49,7 @@ module.exports = {
    */
   get: async (context, request, h) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_account_requests_get',
+      'tpp_accounts_requests_get',
       'Get tpp account request by Id',
       ['success']
     ).startTimer()
@@ -61,7 +61,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
@@ -83,7 +83,7 @@ module.exports = {
    */
   put: async (context, request, h) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_account_requests_put',
+      'tpp_accounts_requests_put',
       'Put tpp account request by Id',
       ['success']
     ).startTimer()
@@ -95,7 +95,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+      tppAccountsRequest.forwardTppAccountsRequest(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_PUT, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppAccountsRequest takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAccountsRequest: ${LibUtil.getStackOrInspect(err)}`)
       })
