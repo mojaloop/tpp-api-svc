@@ -24,12 +24,15 @@
 
  * Rajiv Mothilal <rajiv.mothilal@modusbox.com>
 
+ - Paul Tsai <paul@socialcashier.com>
+
  --------------
  ******/
 
 'use strict'
 
 const RC = require('parse-strings-in-object')(require('rc')('ES', require('../../config/default.json')))
+const { validateSandboxConfig } = require('./sandboxConfig')
 
 const DEFAULT_PROTOCOL_VERSION = {
   CONTENT: {
@@ -95,5 +98,6 @@ module.exports = {
   INSTRUMENTATION_METRICS_DISABLED: RC.INSTRUMENTATION.METRICS.DISABLED,
   INSTRUMENTATION_METRICS_LABELS: RC.INSTRUMENTATION.METRICS.labels,
   INSTRUMENTATION_METRICS_CONFIG: RC.INSTRUMENTATION.METRICS.config,
-  PROTOCOL_VERSIONS: getProtocolVersions(DEFAULT_PROTOCOL_VERSION, RC.PROTOCOL_VERSIONS)
+  PROTOCOL_VERSIONS: getProtocolVersions(DEFAULT_PROTOCOL_VERSION, RC.PROTOCOL_VERSIONS),
+  ML_TESTING_TOOLKIT_CONFIG: validateSandboxConfig(RC.ML_TESTING_TOOLKIT_CONFIG)
 }
