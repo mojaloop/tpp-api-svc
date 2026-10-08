@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Ernest Tan <ernesttanjianyu@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
  --------------
  ******/
 
@@ -59,7 +60,7 @@ describe('Base Tests', () => {
     const helpStub = sandbox.stub(Command.prototype, 'help').returns(true as never)
 
     jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
+    jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => []
     }))
 
@@ -79,7 +80,7 @@ describe('Base Tests', () => {
       'api'
     ]
     jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
-    jest.mock('../../src/lib/argv.js', () => ({
+    jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => mockArgs
     }))
 

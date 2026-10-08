@@ -22,32 +22,23 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
-- Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 
-'use strict'
-
-const Logger = require('@mojaloop/central-services-logger')
-const Util = require('util')
-
-const logResponse = function (request) {
-  if (request && request.response) {
-    let response
-    try {
-      response = JSON.stringify(request.response.source)
-    } catch (e) {
-      response = Util.inspect(request.response.source)
-    }
-    if (!response) {
-      Logger.info(`TR-Trace - Response: ${request.response}`)
-    } else {
-      Logger.info(`TR-Trace - Response: ${response} Status: ${request.response.statusCode}`)
-    }
-  }
+/**
+ * @name getArgs
+ *
+ * @description Provide a mockable way to override the process.argv
+ *
+ * @returns {Array<String>} - A list of the process args
+ */
+const getArgs = (): string[] => {
+  return process.argv
 }
 
 module.exports = {
-  logResponse
+  getArgs
 }

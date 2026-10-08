@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Ernest Tan <ernesttanjianyu@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -46,7 +47,7 @@ const Hapi = require('@hapi/hapi')
 const Mockgen = require('../../util/mockgen')
 const Helper = require('../../util/helper')
 const Handler = require('../../../src/domain/tppAccountsRequest')
-const Config = require('../../../src/lib/config.js')
+const Config = require('../../../src/lib/config.ts')
 
 let sandbox: SinonSandbox
 const server = new Hapi.Server()

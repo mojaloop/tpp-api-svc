@@ -23,20 +23,37 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
+
  --------------
  ******/
 
-/**
- * @name getArgs
- *
- * @description Provide a mockable way to override the process.argv
- *
- * @returns {Array<String>} - A list of the process args
- */
-const getArgs = () => {
-  return process.argv
+'use strict'
+
+import { type Request } from '@hapi/hapi'
+
+const Logger = require('@mojaloop/central-services-logger')
+const Util = require('util')
+
+const logResponse = function (request: Request): void {
+  if (request && request.response) {
+    // request.response is a ResponseObject once handled; a Boom error carries neither field
+    const source = 'source' in request.response ? request.response.source : undefined
+    const statusCode = 'statusCode' in request.response ? request.response.statusCode : undefined
+    let response: string | undefined
+    try {
+      response = JSON.stringify(source)
+    } catch (e) {
+      response = Util.inspect(source)
+    }
+    if (!response) {
+      Logger.info(`TR-Trace - Response: ${request.response}`)
+    } else {
+      Logger.info(`TR-Trace - Response: ${response} Status: ${statusCode}`)
+    }
+  }
 }
 
 module.exports = {
-  getArgs
+  logResponse
 }

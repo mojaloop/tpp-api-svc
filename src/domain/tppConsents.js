@@ -23,6 +23,8 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Devarsh Shah <devarshshah2608@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
+
  --------------
  ******/
 'use strict'
@@ -35,8 +37,8 @@ const EventSdk = require('@mojaloop/event-sdk')
 const Mustache = require('mustache')
 const util = require('util')
 
-const Config = require('../lib/config.js')
-const { getStackOrInspect } = require('../lib/util.js')
+const Config = require('../lib/config')
+const { getStackOrInspect } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
