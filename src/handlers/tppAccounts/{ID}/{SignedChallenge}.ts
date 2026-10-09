@@ -22,49 +22,56 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
- - Devarsh Shah <devarshshah2608@gmail.com>
+ - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
-
 'use strict'
+
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+import { type Context } from 'openapi-backend'
+import { type Span } from '@mojaloop/event-sdk'
+
+type TraceableRequest = Request & { span: Span }
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
-const tppConsentRequests = require('../domain/tppConsentRequests')
-const LibUtil = require('../lib/util')
+const tppAccounts = require('../../../domain/tppAccounts')
+const LibUtil = require('../../../lib/util')
 
 /**
- * Operations on /tppConsentRequests
- */
+  * Operations on /tppAccounts/{ID}/{SignedChallenge}
+  */
 module.exports = {
   /**
-   * summary: ConsentRequest
-   * description: The HTTP request POST /tppConsentRequests is used to request a DFSP to grant access to one or more accounts owned by a customer of the DFSP for the PISP who sends the request.
-   * parameters: body, accept, content-length, content-type, date, x-forwarded-for, fspiop-source, fspiop-destination, fspiop-encryption, fspiop-signature, fspiop-uri, fspiop-http-method
-   * produces: application/json
-   * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
-   */
-  post: async (context, request, h) => {
+    * summary: GetAccountsByUserId
+    * description: The HTTP request GET /tppAccounts/{ID}/{SignedChallenge} is used to retrieve the list of potential accounts available for linking.
+    * The request {ID} is the accountRequestID and the {SignedChallenge} is the signed challenge that resulted from the POST /tppAccountsRequest/ callback.
+    * parameters: accept
+    * produces: application/json
+    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
+    */
+  get: async (_context: Context, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
-      'tpp_consent_requests_post',
-      'Post tpp consent request',
+      'tpp_accounts__get',
+      'Get tpp accounts by Id',
       ['success']
     ).startTimer()
     const span = request.span
     try {
-      const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.POST)
+      const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.LOOKUP)
       span.setTags(tags)
       await span.audit({
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequests(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_POST, request.headers, Enum.Http.RestMethods.POST, request.params, request.payload, span).catch(err => {
-        // Do nothing with the error - forwardTppConsentRequests takes care of async errors
-        request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
+      tppAccounts.forwardTppAccounts(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch((err: Error) => {
+        // Do nothing with the error - forwardTppAccounts takes care of async errors
+        request.server.log(['error'], `ERROR - forwardTppAccounts: ${LibUtil.getStackOrInspect(err)}`)
       })
       histTimerEnd({ success: true })
       return h.response().code(Enum.Http.ReturnCodes.ACCEPTED.CODE)
