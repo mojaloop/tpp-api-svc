@@ -23,18 +23,15 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 'use strict'
 import { Enum } from '@mojaloop/central-services-shared';
-import { 
-  type Request,
-  type ResponseToolkit
-} from '@hapi/hapi';
-import {
-  type Span
-} from '@mojaloop/event-sdk';
+import { type ResponseToolkit } from '@hapi/hapi';
+import { type Context } from 'openapi-backend'
+import { type TraceableRequest } from '../lib/types'
 
 const EventSdk = require('@mojaloop/event-sdk')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
@@ -43,7 +40,12 @@ const Metrics = require('@mojaloop/central-services-metrics')
 const tppAccountsRequest = require('../domain/tppAccountsRequest')
 const LibUtil = require('../lib/util')
 
-type TraceableRequest = Request & { span: Span }
+// central-services-shared does not declare the TPP_* endpoint templates in its type
+// definitions, even though they are present at runtime.
+// TODO: remove once the service moves to central-services-shared 19, which declares them.
+type FspEndpointTemplatesWithTpp = typeof Enum.EndPoints.FspEndpointTemplates & {
+  TPP_ACCOUNTS_REQUEST_POST: string
+}
 /**
  * Operations on /tppAccountsRequest
  */
@@ -57,7 +59,7 @@ module.exports = {
    * produces: application/json
    * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  post: async (_context: any, request: TraceableRequest, h: ResponseToolkit) => {
+  post: async (_context: Context, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_accounts_requests_post',
       'Post tpp accounts request',
@@ -72,7 +74,7 @@ module.exports = {
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
       tppAccountsRequest.forwardTppAccountsRequest(
-        (<any> Enum.EndPoints.FspEndpointTemplates).TPP_ACCOUNTS_REQUEST_POST,
+        (Enum.EndPoints.FspEndpointTemplates as FspEndpointTemplatesWithTpp).TPP_ACCOUNTS_REQUEST_POST,
         request.headers,
         Enum.Http.RestMethods.POST,
         request.params,

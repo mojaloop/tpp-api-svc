@@ -23,40 +23,29 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 
 'use strict'
 
-const Server = require('./server')
-const PJson = require('../package.json')
-const { Command } = require('commander')
-const Config = require('./lib/config')
-const argv = require('./lib/argv').getArgs()
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
 
-const Program = new Command()
+const Boom = require('@hapi/boom')
 
-Program
-  .version(PJson.version)
-  .description('CLI to manage Servers')
+const RequestLogger = require('../lib/requestLogger')
 
-Program.command('api')
-  .alias('a')
-  .description('Start the tpp api svc. Use options to specify server type of none to run both') // command description
+async function failActionHandler (_request: Request, _h: ResponseToolkit, err?: Error) {
+  throw Boom.boomify(err)
+}
 
-  // function to execute when command is used
-  .action(async () => {
-    const options = {
-      port: Config.PORT
-    }
-    module.exports = Server.initialize(options.port)
-  })
+async function onPreHandler (request: Request, h: ResponseToolkit) {
+  RequestLogger.logResponse(request)
+  return h.continue
+}
 
-if (Array.isArray(argv) && argv.length > 1) {
-  // parse command line vars
-  Program.parse(argv)
-} else {
-  // display default help
-  Program.help()
+module.exports = {
+  failActionHandler,
+  onPreHandler
 }

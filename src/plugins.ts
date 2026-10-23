@@ -23,10 +23,14 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 'use strict'
+
+import { type Server } from '@hapi/hapi'
+import { type OpenAPIBackend } from 'openapi-backend'
 
 const Config = require('./lib/config')
 const Package = require('../package')
@@ -39,7 +43,7 @@ const EventPlugin = require('@mojaloop/central-services-shared').Util.Hapi.HapiE
 const OpenapiBackendValidator = require('@mojaloop/central-services-shared').Util.Hapi.OpenapiBackendValidator
 const MetricsPlugin = require('@mojaloop/central-services-metrics').plugin
 
-const registerPlugins = async (server, openAPIBackend) => {
+const registerPlugins = async (server: Server, openAPIBackend: OpenAPIBackend) => {
   await server.register(OpenapiBackendValidator)
 
   await server.register({
@@ -66,7 +70,7 @@ const registerPlugins = async (server, openAPIBackend) => {
       name: 'openapi',
       version: '1.0.0',
       multiple: true,
-      register: function (server, options) {
+      register: function (server: Server, options: { openapi: OpenAPIBackend }) {
         server.expose('openapi', options.openapi)
       }
     },
@@ -111,6 +115,6 @@ const registerPlugins = async (server, openAPIBackend) => {
   await server.register([Inert, Vision, Blipp, ErrorHandling, EventPlugin, MetricsPlugin])
 }
 
-module.exports = {
+export = {
   registerPlugins
 }

@@ -59,7 +59,7 @@ describe('Base Tests', () => {
     // Command.prototype.help is typed `(): never` (it process.exits), so cast the stubbed return.
     const helpStub = sandbox.stub(Command.prototype, 'help').returns(true as never)
 
-    jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
+    jest.mock('../../src/server.ts', () => ({ initialize: mockInitStub }))
     jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => []
     }))
@@ -79,13 +79,13 @@ describe('Base Tests', () => {
       'src/index.js',
       'api'
     ]
-    jest.mock('../../src/server.js', () => ({ initialize: mockInitStub }))
+    jest.mock('../../src/server.ts', () => ({ initialize: mockInitStub }))
     jest.mock('../../src/lib/argv.ts', () => ({
       getArgs: () => mockArgs
     }))
 
     // Act
-    require('../../src/index.js')
+    require('../../src/index.ts')
 
     // Assert
     expect(mockInitStub.callCount).toBe(1)
