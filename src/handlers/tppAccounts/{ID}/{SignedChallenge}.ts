@@ -23,10 +23,15 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 'use strict'
+
+import { type ResponseToolkit } from '@hapi/hapi'
+import { type Context } from 'openapi-backend'
+import { type TraceableRequest } from '../../../lib/types'
 
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
@@ -48,7 +53,7 @@ module.exports = {
     * produces: application/json
     * responses: 202, 400, 401, 403, 404, 405, 406, 501, 503
     */
-  get: async (context, request, h) => {
+  get: async (_context: Context, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_accounts__get',
       'Get tpp accounts by Id',
@@ -62,7 +67,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppAccounts.forwardTppAccounts(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch(err => {
+      tppAccounts.forwardTppAccounts(Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_GET, request.headers, Enum.Http.RestMethods.GET, request.params, request.payload, span).catch((err: Error) => {
         // Do nothing with the error - forwardTppAccounts takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppAccounts: ${LibUtil.getStackOrInspect(err)}`)
       })

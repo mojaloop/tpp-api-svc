@@ -23,21 +23,24 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 
 'use strict'
 
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+
 const Boom = require('@hapi/boom')
 
 const RequestLogger = require('../lib/requestLogger')
 
-async function failActionHandler (request, h, err) {
+async function failActionHandler (_request: Request, _h: ResponseToolkit, err?: Error) {
   throw Boom.boomify(err)
 }
 
-async function onPreHandler (request, h) {
+async function onPreHandler (request: Request, h: ResponseToolkit) {
   RequestLogger.logResponse(request)
   return h.continue
 }

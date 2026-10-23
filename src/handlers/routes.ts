@@ -23,11 +23,15 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 
 'use strict'
+
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+import { type OpenAPIBackend } from 'openapi-backend'
 
 /**
  * Request handler
@@ -36,13 +40,15 @@
  * @param {object} req Request
  * @param {object} h   Response handle
  */
-const handleRequest = (api, req, h) => api.handleRequest(
+const handleRequest = (api: OpenAPIBackend, req: Request, h: ResponseToolkit) => api.handleRequest(
   {
     method: req.method,
     path: req.path,
     body: req.payload,
-    query: req.query,
-    headers: req.headers
+    // Under noUncheckedIndexedAccess hapi types these values as possibly undefined, while
+    // openapi-backend requires them defined. Keys present on the request always have a value.
+    query: req.query as Record<string, string | string[]>,
+    headers: req.headers as Record<string, string | string[]>
   }, req, h)
 
 /**
@@ -50,11 +56,11 @@ const handleRequest = (api, req, h) => api.handleRequest(
  *
  * @param {object} api OpenAPIBackend instance
  */
-const APIRoutes = (api) => [
+const APIRoutes = (api: OpenAPIBackend) => [
   {
     method: 'GET',
     path: '/health',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'health'],
       description: 'GET health'
@@ -63,7 +69,7 @@ const APIRoutes = (api) => [
   {
     method: 'POST',
     path: '/tppConsents',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsents', 'sampled'],
       description: 'POST Thirdparty Consents'
@@ -72,7 +78,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppConsents/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsents', 'sampled'],
       description: 'GET Thirdparty Consent by ID'
@@ -81,7 +87,7 @@ const APIRoutes = (api) => [
   {
     method: 'DELETE',
     path: '/tppConsents/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsents', 'sampled'],
       description: 'DELETE Thirdparty Consent by ID'
@@ -90,7 +96,7 @@ const APIRoutes = (api) => [
   {
     method: 'POST',
     path: '/tppConsentRequests',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'POST Thirdparty Consent Request'
@@ -99,7 +105,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppConsentRequests/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'GET Thirdparty Consent Request by ID'
@@ -108,7 +114,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppConsentRequests/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PUT Thirdparty Consent Request by ID'
@@ -117,7 +123,7 @@ const APIRoutes = (api) => [
   {
     method: 'PATCH',
     path: '/tppConsentRequests/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PATCH Thirdparty Consent Request by ID'
@@ -126,7 +132,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppConsentRequests/{ID}/error',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppConsentRequests', 'sampled'],
       description: 'PUT Thirdparty Consent Request error by ID'
@@ -135,7 +141,7 @@ const APIRoutes = (api) => [
   {
     method: 'POST',
     path: '/tppAccountsRequest',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'POST Thirdparty Account Request'
@@ -144,7 +150,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccountsRequest/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request by ID'
@@ -153,7 +159,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccountsRequest/{ID}/error',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'PUT Thirdparty Account Request error by ID'
@@ -162,7 +168,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppAccountsRequest/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccountsRequest', 'sampled'],
       description: 'GET Thirdparty Account Requests by ID'
@@ -171,7 +177,7 @@ const APIRoutes = (api) => [
   {
     method: 'GET',
     path: '/tppAccounts/{ID}/{SignedChallenge}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'GET Thirdparty Accounts by ID'
@@ -180,7 +186,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccounts/{ID}',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts by ID'
@@ -189,7 +195,7 @@ const APIRoutes = (api) => [
   {
     method: 'PUT',
     path: '/tppAccounts/{ID}/error',
-    handler: (req, h) => handleRequest(api, req, h),
+    handler: (req: Request, h: ResponseToolkit) => handleRequest(api, req, h),
     config: {
       tags: ['api', 'tppAccounts', 'sampled'],
       description: 'PUT Thirdparty Accounts error by ID'
