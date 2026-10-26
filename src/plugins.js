@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -92,7 +93,8 @@ const registerPlugins = async (server, openAPIBackend) => {
     // configure FSPIOP resources (must match first path segment, e.g. /tppAccountsRequest/...)
     const resources = [
       'tppAccountsRequest',
-      'tppAccounts'
+      'tppAccounts',
+      'tppTransfers'
     ]
 
     // return FSPIOPHeaderValidation plugin options

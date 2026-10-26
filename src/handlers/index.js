@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -41,6 +42,8 @@ const tppConsentRequestsId = require('./tppConsentRequests/{ID}')
 const tppConsentRequestsErrorByID = require('./tppConsentRequests/{ID}/error')
 const tppConsents = require('./tppConsents')
 const tppConsentsId = require('./tppConsents/{ID}')
+const tppTransfers = require('./tppTransfers')
+const tppTransfersId = require('./tppTransfers/{ID}')
 const health = require('./health')
 
 module.exports = {
@@ -60,6 +63,8 @@ module.exports = {
   UpdateConsentRequest: tppConsentRequestsId.put,
   PatchConsentRequest: tppConsentRequestsId.patch,
   NotifyErrorConsentRequests: tppConsentRequestsErrorByID.put,
+  PostTransfers: tppTransfers.post,
+  GetTransfer: tppTransfersId.get,
   validationFail: OpenapiBackend.validationFail,
   notFound: OpenapiBackend.notFound,
   methodNotAllowed: OpenapiBackend.methodNotAllowed

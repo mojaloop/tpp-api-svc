@@ -1,0 +1,8 @@
+{
+  "exceptions": {
+    "seq-queue@0.0.5": {
+      "reason": "MIT per bundled LICENSE file (Netease/pomelo contributors); package.json declares an empty license field. Transitive dependency via @mojaloop/central-services-shared -> mysql2.",
+      "expires": "2027-06-24"
+    }
+  }
+}
