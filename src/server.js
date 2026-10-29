@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  * Shashikant Hiruagde <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -40,7 +41,7 @@ const Handlers = require('./handlers')
 const Plugins = require('./plugins')
 const ServerHandler = require('./handlers/server')
 const Routes = require('./handlers/routes')
-const Config = require('./lib/config.js')
+const Config = require('./lib/config')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 

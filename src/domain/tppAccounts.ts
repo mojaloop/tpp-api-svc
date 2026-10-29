@@ -23,10 +23,14 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 'use strict'
+
+import { type Span } from '@mojaloop/event-sdk'
+import { type FspiopHeaders } from '../lib/types'
 
 const Logger = require('@mojaloop/central-services-logger')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
@@ -36,18 +40,27 @@ const EventSdk = require('@mojaloop/event-sdk')
 const Mustache = require('mustache')
 const util = require('util')
 
-const Config = require('../lib/config.js')
-const { getStackOrInspect } = require('../lib/util.js')
+const Config = require('../lib/config')
+const { getStackOrInspect } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
+// TODO: replace with types generated from the API spec (.d.ts) once @mojaloop/api-snippets can be used here
+interface TppAccountsParams {
+  ID?: string
+  SignedChallenge?: string
+}
+
+// TODO: replace with types generated from the API spec (.d.ts) once @mojaloop/api-snippets can be used here
+interface TppAccountsPayload {
+  accountRequestId?: string
+}
+
 /**
  * Forwards tppAccounts endpoint requests to destination FSP for processing
- *
- * @returns {boolean}
  */
-const forwardTppAccounts = async (path, headers, method, params, payload, span = null) => {
+const forwardTppAccounts = async (path: string, headers: FspiopHeaders, method: string, params: TppAccountsParams, payload: TppAccountsPayload | null, span: Span | null = null): Promise<boolean> => {
   const childSpan = span ? span.getChild('forwardTppAccounts') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
@@ -85,7 +98,7 @@ const forwardTppAccounts = async (path, headers, method, params, payload, span =
   } catch (err) {
     Logger.info(`Error forwarding tpp account request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppAccountsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppAccountsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -98,10 +111,8 @@ const forwardTppAccounts = async (path, headers, method, params, payload, span =
 
 /**
  * Forwards tppAccounts errors to error endpoint
- *
- * @returns {undefined}
  */
-const forwardTppAccountsError = async (headers, to, path, method, accountRequestId, payload, span = null) => {
+const forwardTppAccountsError = async (headers: FspiopHeaders, to: string | undefined, path: string, method: string, accountRequestId: string | undefined, payload: unknown, span: Span | null = null): Promise<boolean> => {
   const childSpan = span ? span.getChild('forwardTppAccountsError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]

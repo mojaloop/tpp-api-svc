@@ -22,32 +22,9 @@
  * Mojaloop Foundation
  - Name Surname <name.surname@mojaloop.io>
 
-- Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
 
-'use strict'
-
-const Logger = require('@mojaloop/central-services-logger')
-const Util = require('util')
-
-const logResponse = function (request) {
-  if (request && request.response) {
-    let response
-    try {
-      response = JSON.stringify(request.response.source)
-    } catch (e) {
-      response = Util.inspect(request.response.source)
-    }
-    if (!response) {
-      Logger.info(`TR-Trace - Response: ${request.response}`)
-    } else {
-      Logger.info(`TR-Trace - Response: ${response} Status: ${request.response.statusCode}`)
-    }
-  }
-}
-
-module.exports = {
-  logResponse
-}
+export type FspiopHeaders = Record<string, string>

@@ -23,6 +23,8 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
+
  --------------
  ******/
 
@@ -33,7 +35,7 @@
  *
  * @returns {Array<String>} - A list of the process args
  */
-const getArgs = () => {
+const getArgs = (): string[] => {
   return process.argv
 }
 

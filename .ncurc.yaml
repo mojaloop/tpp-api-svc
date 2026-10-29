@@ -4,5 +4,9 @@ reject: [
   "get-port",
   # TODO: held at 5.4.5 (matches mojaloop/typescript-svc-template) because ts-jest's peer is typescript ">=4.3 <7" — no TS7-compatible ts-jest release exists yet. Bump to 7.x once ts-jest supports TypeScript 7.
   "typescript",
+  # TODO: 14.3.5 pulls @apidevtools/json-schema-ref-parser 16, which needs the js-yaml 5 API, but the js-yaml override pins 4.x. Held at 14.3.4 until the override can move to js-yaml 5.
+  "@mojaloop/ml-testing-toolkit-shared-lib",
+  # TODO: 18.39.4 bumps openapi-backend to 5.21.x, which pulls ESM-only @apidevtools/json-schema-ref-parser 16 (needs js-yaml 5; the js-yaml override pins 4.x). Held at 18.39.3 until the override can move to js-yaml 5.
+  "@mojaloop/central-services-shared",
 ]
 

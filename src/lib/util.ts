@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
 
  --------------
  ******/
@@ -31,13 +32,34 @@
 const util = require('util')
 const Enum = require('@mojaloop/central-services-shared').Enum
 
+interface SpanTags {
+  operationType: string
+  operationAction: string
+  accountRequestId?: string | undefined
+  source?: string
+  destination?: string
+}
+
+/**
+ * The subset of a request that span tags are derived from. Headers, payload and
+ * params are all optional because callers may only have some of them available.
+ */
+interface SpanTagsSource {
+  headers?: Record<string, string | undefined> | null
+  payload?: { accountRequestId?: string } | null
+  params?: { ID?: string } | null
+}
+
+const hasStack = (err: unknown): err is { stack: string } =>
+  typeof err === 'object' && err !== null && typeof (err as { stack?: unknown }).stack === 'string'
+
 /**
  * @function getStackOrInspect
  * @description Gets the error stack, or uses util.inspect to inspect the error
  * @param {*} err - An error object
  */
-function getStackOrInspect (err) {
-  return err.stack || util.inspect(err)
+function getStackOrInspect (err: unknown): string {
+  return hasStack(err) && err.stack ? err.stack : util.inspect(err)
 }
 
 /**
@@ -48,17 +70,19 @@ function getStackOrInspect (err) {
  * @param {string} operationAction
  * @returns {Object}
  */
-const getSpanTags = ({ headers, payload, params }, operationType, operationAction) => {
-  const tags = {
+const getSpanTags = ({ headers, payload, params }: SpanTagsSource, operationType: string, operationAction: string): SpanTags => {
+  const tags: SpanTags = {
     operationType,
     operationAction,
     accountRequestId: (payload && payload.accountRequestId) || (params && params.ID) || (headers && headers.ID) || undefined
   }
-  if (headers && headers[Enum.Http.Headers.FSPIOP.SOURCE]) {
-    tags.source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
+  const source = headers && headers[Enum.Http.Headers.FSPIOP.SOURCE]
+  if (source) {
+    tags.source = source
   }
-  if (headers && headers[Enum.Http.Headers.FSPIOP.DESTINATION]) {
-    tags.destination = headers[Enum.Http.Headers.FSPIOP.DESTINATION]
+  const destination = headers && headers[Enum.Http.Headers.FSPIOP.DESTINATION]
+  if (destination) {
+    tags.destination = destination
   }
   return tags
 }

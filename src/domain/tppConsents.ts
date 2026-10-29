@@ -23,9 +23,14 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Devarsh Shah <devarshshah2608@gmail.com>
+ - Justin Theodorus <justin.theodorus@gmail.com>
+
  --------------
  ******/
 'use strict'
+
+import { type Span } from '@mojaloop/event-sdk'
+import { type FspiopHeaders } from '../lib/types'
 
 const Logger = require('@mojaloop/central-services-logger')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
@@ -35,17 +40,25 @@ const EventSdk = require('@mojaloop/event-sdk')
 const Mustache = require('mustache')
 const util = require('util')
 
-const Config = require('../lib/config.js')
-const { getStackOrInspect } = require('../lib/util.js')
+const Config = require('../lib/config')
+const { getStackOrInspect } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
+
+// TODO: replace with types generated from the API spec (.d.ts) once @mojaloop/api-snippets can be used here
+interface TppConsentsParams {
+  ID?: string
+}
+
+// TODO: replace with types generated from the API spec (.d.ts) once @mojaloop/api-snippets can be used here
+interface TppConsentsPayload {
+  consentId?: string
+}
 /**
  * Forwards tppConsents endpoint requests to destination FSP for processing
- *
- * @returns {boolean}
  */
-const forwardTppConsents = async (path, headers, method, params, payload, span = null) => {
+const forwardTppConsents = async (path: string, headers: FspiopHeaders, method: string, params: TppConsentsParams, payload: TppConsentsPayload | null, span: Span | null = null): Promise<boolean> => {
   const childSpan = span ? span.getChild('forwardTppConsents') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
@@ -94,10 +107,8 @@ const forwardTppConsents = async (path, headers, method, params, payload, span =
 
 /**
  * Forwards tppConsents errors to error endpoint
- *
- * @returns {undefined}
  */
-const forwardTppConsentsError = async (headers, to, path, method, consentId, payload, span = null) => {
+const forwardTppConsentsError = async (headers: FspiopHeaders, to: string | undefined, path: string, method: string, consentId: string | undefined, payload: unknown, span: Span | null = null): Promise<boolean> => {
   const childSpan = span ? span.getChild('forwardTppConsentsError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
