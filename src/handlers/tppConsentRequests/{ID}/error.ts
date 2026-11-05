@@ -23,19 +23,26 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Devarsh Shah <devarshshah2608@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
 
 'use strict'
 
+import { type Request, type ResponseToolkit } from '@hapi/hapi'
+import { type Span } from '@mojaloop/event-sdk'
+import { forwardTppConsentRequestsError } from '../../../domain/tppConsentRequests'
+import { type FspiopHeaders } from '../../../lib/types'
+
 const EventSdk = require('@mojaloop/event-sdk')
 const Enum = require('@mojaloop/central-services-shared').Enum
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Logger = require('@mojaloop/central-services-logger')
 const Metrics = require('@mojaloop/central-services-metrics')
-const tppConsentRequests = require('../../../domain/tppConsentRequests')
 const LibUtil = require('../../../lib/util')
+
+type TraceableRequest = Request & { span: Span }
 
 /**
  * Operations on /tppConsentRequests/{ID}/error
@@ -48,13 +55,14 @@ module.exports = {
    * produces: application/json
    * responses: 200, 400, 401, 403, 404, 405, 406, 501, 503
    */
-  put: async (context, request, h) => {
+  put: async (_context: unknown, request: TraceableRequest, h: ResponseToolkit) => {
     const histTimerEnd = Metrics.getHistogram(
       'tpp_consent_requests_error_put',
       'Put tpp consent request error by Id',
       ['success']
     ).startTimer()
     const span = request.span
+    const headers = request.headers as FspiopHeaders
     try {
       const tags = LibUtil.getSpanTags(request, Enum.Events.Event.Type.THIRDPARTY, Enum.Events.Event.Action.PUT)
       span.setTags(tags)
@@ -62,7 +70,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequestsError(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+      forwardTppConsentRequestsError(headers, headers['fspiop-destination'], Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, request.params['ID'] as string, request.payload, span).catch((err: Error) => {
         // Do nothing with the error - forwardTppConsentRequests takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })

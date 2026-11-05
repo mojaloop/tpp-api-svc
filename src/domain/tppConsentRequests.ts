@@ -24,6 +24,7 @@
 
  - Devarsh Shah <devarshshah2608@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -150,7 +151,7 @@ const forwardTppConsentRequestsError = async (headers: FspiopHeaders, to: string
   }
 }
 
-module.exports = {
+export {
   forwardTppConsentRequests,
   forwardTppConsentRequestsError
 }
