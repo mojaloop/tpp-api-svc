@@ -24,6 +24,7 @@
 
  - Devarsh Shah <devarshshah2608@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -129,7 +130,7 @@ const forwardTppConsentsError = async (headers: FspiopHeaders, to: string | unde
 
     Logger.info(`Forwarding tpp consents error to endpoint: ${url}`)
 
-    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, childSpan, hubNameRegex })
+    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex })
 
     Logger.info(`Forwarding tpp consents error for ${consentId} from ${source} to ${to} got response ${response.status} ${response.statusText}`)
 
