@@ -24,6 +24,7 @@
 
  - Devarsh Shah <devarshshah2608@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -94,7 +95,7 @@ const forwardTppConsents = async (path: string, headers: FspiopHeaders, method: 
   } catch (err) {
     Logger.info(`Error forwarding tpp consents to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppConsentsError(headers, source, Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    await forwardTppConsentsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
