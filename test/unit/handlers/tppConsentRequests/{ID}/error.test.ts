@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Ernest Tan <ernesttanjianyu@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
  --------------
  ******/
 
@@ -93,6 +94,18 @@ describe('/tppConsentRequests/{ID}/error', () => {
 
       // Assert
       expect(response.statusCode).toBe(200)
+      expect(Handler.forwardTppConsentRequestsError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          'fspiop-source': request.headers['FSPIOP-Source'],
+          'fspiop-destination': request.headers['FSPIOP-Destination']
+        }),
+        request.headers['FSPIOP-Destination'],
+        '/tppConsentRequests/{{ID}}/error',
+        'PUT',
+        '{ID}',
+        request.body,
+        expect.anything()
+      )
     })
 
     it('handles when error is thrown', async () => {

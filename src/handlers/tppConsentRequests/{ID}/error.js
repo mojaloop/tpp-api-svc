@@ -23,6 +23,7 @@
  - Name Surname <name.surname@mojaloop.io>
 
  - Devarsh Shah <devarshshah2608@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -62,7 +63,7 @@ module.exports = {
         headers: request.headers,
         payload: request.payload
       }, EventSdk.AuditEventAction.start)
-      tppConsentRequests.forwardTppConsentRequestsError(Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, request.headers, Enum.Http.RestMethods.PUT, request.params, request.payload, span).catch(err => {
+      tppConsentRequests.forwardTppConsentRequestsError(request.headers, request.headers['fspiop-destination'], Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, request.params.ID, request.payload, span).catch(err => {
         // Do nothing with the error - forwardTppConsentRequests takes care of async errors
         request.server.log(['error'], `ERROR - forwardTppConsentRequests: ${LibUtil.getStackOrInspect(err)}`)
       })
