@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -100,7 +101,12 @@ const forwardTppAccountsRequest = async (path: string, headers: FspiopHeaders, m
   } catch (err) {
     Logger.info(`Error forwarding tpp account request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppAccountsRequestError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    const errorHeaders: FspiopHeaders = {
+      ...headers,
+      [Enum.Http.Headers.FSPIOP.SOURCE]: Config.HUB_NAME,
+      [Enum.Http.Headers.FSPIOP.DESTINATION]: source as string
+    }
+    await forwardTppAccountsRequestError(errorHeaders, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -140,7 +146,8 @@ const forwardTppAccountsRequestError = async (headers: FspiopHeaders, to: string
 
     Logger.info(`Forwarding tpp account request error to endpoint: ${url}`)
 
-    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex })
+    const protocolVersions = { content: Config.PROTOCOL_VERSIONS.CONTENT.DEFAULT, accept: Config.PROTOCOL_VERSIONS.ACCEPT.DEFAULT }
+    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex, protocolVersions })
 
     Logger.info(`Forwarding tpp account request error for ${accountRequestId} from ${source} to ${to} got response ${response.status} ${response.statusText}`)
 
