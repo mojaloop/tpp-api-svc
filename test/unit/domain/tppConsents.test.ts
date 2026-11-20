@@ -24,6 +24,7 @@
 
  - Devarsh Shah <devarshshah2608@gmail.com>
  - Ernest Tan <ernesttanjianyu@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
  --------------
  ******/
 
@@ -132,6 +133,24 @@ describe('tppConsents', () => {
 
       // Assert
       await expect(action()).rejects.toThrow(/Failed to send HTTP request to host/)
+    })
+
+    it('sends the error callback to the /tppConsents/{ID}/error path when the request fails', async () => {
+      sandbox.stub(Endpoint, 'getEndpoint').resolves('http://localhost:3000')
+      const sendRequest = sandbox.stub(Request, 'sendRequest')
+      sendRequest.onFirstCall().throws(ErrorHandler.Factory.createFSPIOPError(ErrorHandler.Enums.FSPIOPErrorCodes.DESTINATION_COMMUNICATION_ERROR, 'Failed to send HTTP request to host'))
+      sendRequest.onSecondCall().resolves({ ok: true, status: 200, statusText: 'OK' })
+      const options = [
+        Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_POST,
+        TestHelper.defaultHeaders(resource, Config.PROTOCOL_VERSIONS),
+        'post',
+        { ID: '12345' },
+        { consentId: '12345' },
+        SpanMock
+      ]
+
+      await expect(TppConsents.forwardTppConsents(...options)).rejects.toThrow(/Failed to send HTTP request to host/)
+      expect(sendRequest.secondCall.args[0].url).toBe('http://localhost:3000/tppConsents/12345/error')
     })
 
     it('handles missing payload and params.ID', async () => {

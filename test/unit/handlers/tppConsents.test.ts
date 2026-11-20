@@ -25,6 +25,7 @@
  - Devarsh Shah <devarshshah2608@gmail.com>
  - Ernest Tan <ernesttanjianyu@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
  --------------
  ******/
 
@@ -113,6 +114,7 @@ describe('/tppConsents', () => {
 
       // Assert
       expect(response.statusCode).toBe(202)
+      expect(Handler.forwardTppConsents.mock.calls[0][0]).toBe('/tppConsents')
     })
 
     it('handles when forwardTppConsents throws error', async () => {
