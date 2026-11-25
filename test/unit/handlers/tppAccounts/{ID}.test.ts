@@ -45,7 +45,7 @@ const Hapi = require('@hapi/hapi')
 
 const Mockgen = require('../../../util/mockgen')
 const Helper = require('../../../util/helper')
-const Handler = require('../../../../src/domain/tppAccounts.js')
+const Handler = require('../../../../src/domain/tppAccounts')
 const Config = require('../../../../src/lib/config.ts')
 
 let sandbox: SinonSandbox

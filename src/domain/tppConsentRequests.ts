@@ -30,6 +30,9 @@
 
 'use strict'
 
+import { type Span } from '@mojaloop/event-sdk'
+import { type FspiopHeaders } from '../lib/types'
+
 const Logger = require('@mojaloop/central-services-logger')
 const ErrorHandler = require('@mojaloop/central-services-error-handling')
 const Enum = require('@mojaloop/central-services-shared').Enum
@@ -44,12 +47,20 @@ const { getStackOrInspect } = require('../lib/util')
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
 
+// TODO: replace with types generated from the API spec (.d.ts) once @mojaloop/api-snippets can be used here
+interface TppConsentRequestsParams {
+  ID?: string
+}
+
+// TODO: replace with types generated from the API spec (.d.ts) once @mojaloop/api-snippets can be used here
+interface TppConsentRequestsPayload {
+  consentRequestId?: string
+}
+
 /**
  * Forwards tppConsentRequests endpoint requests to destination FSP for processing
- *
- * @returns {boolean}
  */
-const forwardTppConsentRequests = async (path, headers, method, params, payload, span = null) => {
+const forwardTppConsentRequests = async (path: string, headers: FspiopHeaders, method: string, params: TppConsentRequestsParams, payload: TppConsentRequestsPayload | null, span: Span | null = null): Promise<boolean> => {
   const childSpan = span ? span.getChild('forwardTppConsentRequests') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
@@ -97,10 +108,8 @@ const forwardTppConsentRequests = async (path, headers, method, params, payload,
 
 /**
  * Forwards tppConsentRequests errors to error endpoint
- *
- * @returns {boolean}
  */
-const forwardTppConsentRequestsError = async (headers, to, path, method, consentRequestId, payload, span = null) => {
+const forwardTppConsentRequestsError = async (headers: FspiopHeaders, to: string | undefined, path: string, method: string, consentRequestId: string | undefined, payload: unknown, span: Span | null = null): Promise<boolean> => {
   const childSpan = span ? span.getChild('forwardTppConsentRequestsError') : undefined
   let endpoint
   const source = headers[Enum.Http.Headers.FSPIOP.SOURCE]
