@@ -1,0 +1,8 @@
+{
+  "partyIdInfo": { "partyIdType": "MSISDN", "partyIdentifier": "16135551212" },
+  "scopes": [
+    { "address": "dfspa.username.1234", "actions": ["ACCOUNTS_TRANSFER", "ACCOUNTS_GET_BALANCE"] }
+  ],
+  "authChannels": ["WEB"],
+  "callbackUri": "pisp-app://callback"
+}
