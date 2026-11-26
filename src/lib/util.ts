@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -31,6 +32,8 @@
 
 const util = require('util')
 const Enum = require('@mojaloop/central-services-shared').Enum
+
+const Config = require('./config')
 
 interface SpanTags {
   operationType: string
@@ -87,7 +90,15 @@ const getSpanTags = ({ headers, payload, params }: SpanTagsSource, operationType
   return tags
 }
 
+const getHubErrorHeaders = (resource: string, destination: string): Record<string, string> => ({
+  [Enum.Http.Headers.FSPIOP.SOURCE]: Config.HUB_NAME,
+  [Enum.Http.Headers.FSPIOP.DESTINATION]: destination,
+  [Enum.Http.Headers.GENERAL.CONTENT_TYPE.value]: `application/vnd.interoperability.${resource}+json;version=${Config.PROTOCOL_VERSIONS.CONTENT.DEFAULT}`,
+  [Enum.Http.Headers.GENERAL.DATE]: new Date().toUTCString()
+})
+
 module.exports = {
   getStackOrInspect,
-  getSpanTags
+  getSpanTags,
+  getHubErrorHeaders
 }

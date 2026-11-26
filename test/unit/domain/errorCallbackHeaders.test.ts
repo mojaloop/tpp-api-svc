@@ -66,6 +66,9 @@ describe('error callback headers', () => {
       'fspiop-source': 'pispa',
       'fspiop-destination': 'dfspa',
       'fspiop-signature': 'original-pisp-signature',
+      'fspiop-uri': `/${resource}/request-123`,
+      'fspiop-http-method': 'GET',
+      date: 'Thu, 01 Jan 2026 00:00:00 GMT',
       'content-type': `application/vnd.interoperability.${resource}+json;version=1.1`,
       accept: `application/vnd.interoperability.${resource}+json;version=1`
     })
@@ -99,8 +102,10 @@ describe('error callback headers', () => {
     expect(transformed).toEqual({
       'fspiop-source': Config.HUB_NAME,
       'fspiop-destination': 'pispa',
-      'content-type': `application/vnd.interoperability.${resource}+json;version=1.1`
+      'content-type': `application/vnd.interoperability.${resource}+json;version=1.1`,
+      date: expect.any(String)
     })
+    expect(Date.now() - Date.parse(transformed.date)).toBeLessThan(60000)
     expect(headers['fspiop-source']).toBe('pispa')
     expect(headers['fspiop-destination']).toBe('dfspa')
     expect(headers['fspiop-signature']).toBe('original-pisp-signature')

@@ -42,7 +42,7 @@ const Mustache = require('mustache')
 const util = require('util')
 
 const Config = require('../lib/config')
-const { getStackOrInspect } = require('../lib/util')
+const { getStackOrInspect, getHubErrorHeaders } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
@@ -95,11 +95,7 @@ const forwardTppConsents = async (path: string, headers: FspiopHeaders, method: 
   } catch (err) {
     Logger.info(`Error forwarding tpp consents to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    const errorHeaders: FspiopHeaders = {
-      ...headers,
-      [Enum.Http.Headers.FSPIOP.SOURCE]: Config.HUB_NAME,
-      [Enum.Http.Headers.FSPIOP.DESTINATION]: source as string
-    }
+    const errorHeaders: FspiopHeaders = getHubErrorHeaders('tppConsents', source as string)
     await forwardTppConsentsError(errorHeaders, source, Enum.EndPoints.FspEndpointTypes.TPP_CB_URL_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {

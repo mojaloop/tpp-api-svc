@@ -42,7 +42,7 @@ const Mustache = require('mustache')
 const util = require('util')
 
 const Config = require('../lib/config')
-const { getStackOrInspect } = require('../lib/util')
+const { getStackOrInspect, getHubErrorHeaders } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
@@ -101,11 +101,7 @@ const forwardTppAccountsRequest = async (path: string, headers: FspiopHeaders, m
   } catch (err) {
     Logger.info(`Error forwarding tpp account request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    const errorHeaders: FspiopHeaders = {
-      ...headers,
-      [Enum.Http.Headers.FSPIOP.SOURCE]: Config.HUB_NAME,
-      [Enum.Http.Headers.FSPIOP.DESTINATION]: source as string
-    }
+    const errorHeaders: FspiopHeaders = getHubErrorHeaders('tppAccountsRequest', source as string)
     await forwardTppAccountsRequestError(errorHeaders, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
