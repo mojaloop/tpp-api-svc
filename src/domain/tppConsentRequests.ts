@@ -153,7 +153,7 @@ const forwardTppConsentRequestsError = async (headers: FspiopHeaders, to: string
   }
 }
 
-module.exports = {
+export {
   forwardTppConsentRequests,
   forwardTppConsentRequestsError
 }
