@@ -136,7 +136,7 @@
       "minimatch": "11.0.9"
     },
     "openapi-backend": {
-      "js-yaml": "5.5.0"
+      "js-yaml": "5.4.3"
     }
   },
   "devDependencies": {
