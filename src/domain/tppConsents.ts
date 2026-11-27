@@ -42,7 +42,7 @@ const Mustache = require('mustache')
 const util = require('util')
 
 const Config = require('../lib/config')
-const { getStackOrInspect } = require('../lib/util')
+const { getStackOrInspect, getHubErrorHeaders } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
@@ -95,7 +95,8 @@ const forwardTppConsents = async (path: string, headers: FspiopHeaders, method: 
   } catch (err) {
     Logger.info(`Error forwarding tpp consents to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppConsentsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    const errorHeaders: FspiopHeaders = getHubErrorHeaders('tppConsents', source as string)
+    await forwardTppConsentsError(errorHeaders, source, Enum.EndPoints.FspEndpointTemplates.TPP_CONSENTS_PUT_ERROR, Enum.Http.RestMethods.PUT, consentId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -130,7 +131,8 @@ const forwardTppConsentsError = async (headers: FspiopHeaders, to: string | unde
 
     Logger.info(`Forwarding tpp consents error to endpoint: ${url}`)
 
-    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, childSpan, hubNameRegex })
+    const protocolVersions = { content: Config.PROTOCOL_VERSIONS.CONTENT.DEFAULT, accept: Config.PROTOCOL_VERSIONS.ACCEPT.DEFAULT }
+    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex, protocolVersions })
 
     Logger.info(`Forwarding tpp consents error for ${consentId} from ${source} to ${to} got response ${response.status} ${response.statusText}`)
 

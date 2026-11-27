@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Justin Theodorus <justin.theodorus@gmail.com>
+ - Paul Tsai <paultsai.id@gmail.com>
 
  --------------
  ******/
@@ -41,7 +42,7 @@ const Mustache = require('mustache')
 const util = require('util')
 
 const Config = require('../lib/config')
-const { getStackOrInspect } = require('../lib/util')
+const { getStackOrInspect, getHubErrorHeaders } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
@@ -98,7 +99,8 @@ const forwardTppAccounts = async (path: string, headers: FspiopHeaders, method: 
   } catch (err) {
     Logger.info(`Error forwarding tpp account request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppAccountsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    const errorHeaders: FspiopHeaders = getHubErrorHeaders('tppAccounts', source as string)
+    await forwardTppAccountsError(errorHeaders, source, Enum.EndPoints.FspEndpointTemplates.TPP_ACCOUNTS_PUT_ERROR, Enum.Http.RestMethods.PUT, accountRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -133,7 +135,8 @@ const forwardTppAccountsError = async (headers: FspiopHeaders, to: string | unde
 
     Logger.info(`Forwarding tpp account request error to endpoint: ${url}`)
 
-    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex })
+    const protocolVersions = { content: Config.PROTOCOL_VERSIONS.CONTENT.DEFAULT, accept: Config.PROTOCOL_VERSIONS.ACCEPT.DEFAULT }
+    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex, protocolVersions })
 
     Logger.info(`Forwarding tpp account request error for ${accountRequestId} from ${source} to ${to} got response ${response.status} ${response.statusText}`)
 

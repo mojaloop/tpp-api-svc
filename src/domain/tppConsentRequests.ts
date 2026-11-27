@@ -43,7 +43,7 @@ const Mustache = require('mustache')
 const util = require('util')
 
 const Config = require('../lib/config')
-const { getStackOrInspect } = require('../lib/util')
+const { getStackOrInspect, getHubErrorHeaders } = require('../lib/util')
 
 const hubNameRegex = HeaderValidation.getHubNameRegex(Config.HUB_NAME)
 const responseType = Enum.Http.ResponseTypes.JSON
@@ -96,7 +96,8 @@ const forwardTppConsentRequests = async (path: string, headers: FspiopHeaders, m
   } catch (err) {
     Logger.info(`Error forwarding tpp consent request to endpoint ${endpoint}: ${getStackOrInspect(err)}`)
     fspiopError = ErrorHandler.Factory.reformatFSPIOPError(err)
-    await forwardTppConsentRequestsError(headers, source, Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, consentRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
+    const errorHeaders: FspiopHeaders = getHubErrorHeaders('tppConsentRequests', source as string)
+    await forwardTppConsentRequestsError(errorHeaders, source, Enum.EndPoints.FspEndpointTemplates.TPP_CONSENT_REQUEST_PUT_ERROR, Enum.Http.RestMethods.PUT, consentRequestId, fspiopError.toApiErrorObject(Config.ERROR_HANDLING), childSpan)
     throw fspiopError
   } finally {
     if (childSpan && !childSpan.isFinished && fspiopError) {
@@ -130,7 +131,8 @@ const forwardTppConsentRequestsError = async (headers: FspiopHeaders, to: string
 
     Logger.info(`Forwarding tpp consent request error to endpoint: ${url}`)
 
-    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex })
+    const protocolVersions = { content: Config.PROTOCOL_VERSIONS.CONTENT.DEFAULT, accept: Config.PROTOCOL_VERSIONS.ACCEPT.DEFAULT }
+    const response = await Request.sendRequest({ url, headers, source, destination, method, payload, responseType, span: childSpan, hubNameRegex, protocolVersions })
 
     Logger.info(`Forwarding tpp consent request error for ${consentRequestId} from ${source} to ${to} got response ${response.status} ${response.statusText}`)
 
