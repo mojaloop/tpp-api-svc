@@ -1,0 +1,8 @@
+{
+  "SWITCH_ENDPOINT": "http://mojaloop-testing-toolkit:4040",
+  "ML_TESTING_TOOLKIT_CONFIG": {
+    "TEST_MODE": "PISP",
+    "PISP_CALLBACK_ENDPOINT": "http://<pisp-specified-callback-endpoint>:<port-number>",
+    "DFSP_CALLBACK_ENDPOINT": "http://<dfsp-specified-callback-endpoint>:<port-number>"
+  }
+}

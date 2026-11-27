@@ -24,6 +24,7 @@
 
  - Shashikant Hirugade <shashi.mojaloop@gmail.com>
  - Ernest Tan <ernesttanjianyu@gmail.com>
+ - Paul Tsai <paul@socialcashier.com>
  --------------
  ******/
 'use strict'
@@ -93,5 +94,34 @@ describe('Config tests', () => {
     expect(isSuccess).toBe(true)
     expect(Config!.PROTOCOL_VERSIONS.CONTENT.VALIDATELIST).toMatchObject(validateList)
     expect(Config!.PROTOCOL_VERSIONS.ACCEPT.VALIDATELIST).toMatchObject(validateList)
+  })
+
+  it('should expose ML_TESTING_TOOLKIT_CONFIG when the sandbox block is set', async () => {
+    process.env.ES_ML_TESTING_TOOLKIT_CONFIG__TEST_MODE = 'SERVICE'
+
+    try {
+      const Config = jest.requireActual<ConfigModule>(configImport)
+
+      expect(Config.ML_TESTING_TOOLKIT_CONFIG).toEqual({ TEST_MODE: 'SERVICE' })
+    } finally {
+      delete process.env.ES_ML_TESTING_TOOLKIT_CONFIG__TEST_MODE
+    }
+  })
+
+  it('should leave ML_TESTING_TOOLKIT_CONFIG undefined outside the sandbox', async () => {
+    const Config = jest.requireActual<ConfigModule>(configImport)
+
+    expect(Config.ML_TESTING_TOOLKIT_CONFIG).toBeUndefined()
+  })
+
+  it('should fail to load when the sandbox block is incomplete', async () => {
+    process.env.ES_ML_TESTING_TOOLKIT_CONFIG__TEST_MODE = 'PISP'
+
+    try {
+      expect(() => jest.requireActual<ConfigModule>(configImport))
+        .toThrow(/PISP_CALLBACK_ENDPOINT is required/)
+    } finally {
+      delete process.env.ES_ML_TESTING_TOOLKIT_CONFIG__TEST_MODE
+    }
   })
 })
