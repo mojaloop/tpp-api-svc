@@ -370,6 +370,97 @@ paths:
           $ref: '#/components/responses/501'
         '503':
           $ref: '#/components/responses/503'
+  /tppTransfers:
+    parameters:
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Date'
+      - $ref: '#/components/parameters/X-Forwarded-For'
+      - $ref: '#/components/parameters/FSPIOP-Source'
+      - $ref: '#/components/parameters/FSPIOP-Destination'
+      - $ref: '#/components/parameters/FSPIOP-Encryption'
+      - $ref: '#/components/parameters/FSPIOP-Signature'
+      - $ref: '#/components/parameters/FSPIOP-URI'
+      - $ref: '#/components/parameters/FSPIOP-HTTP-Method'
+    post:
+      tags:
+        - transfers
+      operationId: PostTransfers
+      summary: PostTransfers
+      description: |
+        The `POST /tppTransfers` resource is used by a DFSP to request the validation and
+        execution of a transfer that was authorized by the customer through the PISP.
+        The result is returned asynchronously via the PUT /tppTransfers/{ID} callback.
+      parameters:
+        - $ref: '#/components/parameters/Accept'
+        - $ref: '#/components/parameters/Content-Length'
+      requestBody:
+        description: The transfer to validate and execute
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tppTransfersPostRequest'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+  /tppTransfers/{ID}:
+    parameters:
+      - $ref: '#/components/parameters/ID'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Date'
+      - $ref: '#/components/parameters/X-Forwarded-For'
+      - $ref: '#/components/parameters/FSPIOP-Source'
+      - $ref: '#/components/parameters/FSPIOP-Destination'
+      - $ref: '#/components/parameters/FSPIOP-Encryption'
+      - $ref: '#/components/parameters/FSPIOP-Signature'
+      - $ref: '#/components/parameters/FSPIOP-URI'
+      - $ref: '#/components/parameters/FSPIOP-HTTP-Method'
+    get:
+      operationId: GetTransfer
+      summary: GetTransfer
+      description: |
+        The `GET /tppTransfers/{ID}` is used to request the status of a previously issued
+        transfer authorization request. The ID in the URI is the executionRequestId that
+        was assigned to the request. The result is returned via the PUT callback.
+      tags:
+        - transfers
+      parameters:
+        - $ref: '#/components/parameters/Accept'
+      responses:
+        '202':
+          $ref: '#/components/responses/202'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
   /health:
     get:
       tags:
@@ -2586,6 +2677,29 @@ components:
         - partyIdentifier
         - authChannels
         - callbackUri
+      additionalProperties: false
+    tppTransfersPostRequest:
+      title: TppTransfersPostRequest
+      type: object
+      description: |-
+        Used by: DFSP
+        The /tppTransfers resource is used by a DFSP to request the validation and execution of
+        a transfer that was authorized by the customer through the PISP.
+        Callback and data model for POST /tppTransfers:
+        Callback: PUT /tppTransfers/{ID} Error callback: PUT /tppTransfers/{ID}/error
+      properties:
+        executionRequestId:
+          $ref: '#/components/schemas/CorrelationId'
+        transactionRequestId:
+          $ref: '#/components/schemas/CorrelationId'
+        authenticationInfo:
+          type: object
+          description: Evidence that the challenge issued by the DFSP was correctly signed by the PISP application, and therefore that the customer has authorized the transfer.
+        extensionList:
+          $ref: '#/components/schemas/ExtensionList'
+      required:
+        - executionRequestId
+        - transactionRequestId
       additionalProperties: false
     ErrorInformationResponse:
       title: ErrorInformationResponse
